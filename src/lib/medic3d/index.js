@@ -1,10 +1,13 @@
 import JSZIP from 'jszip';
 import * as THREE from 'three';
-import Medic3D from '../../../../Medic3D/dist/medic3d'
+// import Medic3D from '../../../../Medic3D/dist/medic3d'
 // for release
-// import Medic3D from '../../../static/lib/Medic3D/medic3d'
+import Medic3D from '../../../static/lib/Medic3D/medic3d'
 import Request from 'request';
+import shaders from '../../../static/lib/shaders';
+import dat from '../../../static/lib/dat.gui.min';
 var PNG = require('pngjs').PNG;
+
 
 // standard global variables
 let ready = false;
@@ -83,6 +86,25 @@ const r3 = {
   offset: null
 };
 
+const segR1 = {
+  domElement: null,
+  targetID: 11,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 24
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null
+}
+
 let gDicomStack = null;
 function getDicomStack () {
   return gDicomStack;
@@ -116,12 +138,18 @@ export function init () {
       renderDo(r1);
       renderDo(r2);
       renderDo(r3);
+      renderSeg();
+
     }
     // request new frame
     requestAnimationFrame(function () {
       animate();
     });
   }
+
+  function renderSeg() {
+    segR1.renderer.render( segR1.scene, segR1.camera );
+  };
 
   function renderDo (render) {
     render.renderer.clear();
@@ -140,6 +168,8 @@ export function init () {
     clearThree(r1.scene);
     clearThree(r2.scene);
     clearThree(r3.scene);
+
+    clearThree(segR1.scene);
   } else {
     // console.log('First time');
   }
@@ -148,6 +178,7 @@ export function init () {
   initRenderer2D(r2);
   initRenderer2D(r1);
 
+  initSegment();
   // start rendering loop
   animate();
 }
@@ -411,9 +442,52 @@ function extractZip (zip, type, sort) {
     })
 }
 
+export function loadSegmentation (uploadedFile) {
+  JSZIP.loadAsync(uploadedFile)
+    .then(function (zip) {
+      return extractZip(zip, 'arraybuffer', true);
+    })
+    .then(function (buffer) {
+      return loadZipPngs(buffer)
+    })
+    .then(function (data) {
+      // console.log('Loaded seg. ' + data.length);
+
+      var stack = getDicomStack();
+      if (stack !== null) {
+        // console.log('rawdata size ' + stack.rawData.length);
+        // console.log('stack._frame.length ' + stack._frame.length);
+        // console.log('stack.rawData.length ' + stack.rawData.length);
+
+        var newVal;
+        for (var fr = 0; fr < stack._frame.length; fr++) {
+          for (var y = 0; y < 256; y++) {
+            for (var x = 0; x < 256; x++) {
+              var po = (y * 255 + x) * 4;
+              if (data[fr].data[po] !== 0 ||
+                data[fr].data[po + 1] !== 0 ||
+                data[fr].data[po + 2] !== 0) {
+                newVal = (data[fr].data[po] + data[fr].data[po + 1] + data[fr].data[po + 2]) / 3
+                stack._frame[fr]._pixelData[y * 255 + x] = newVal;
+              }
+            }
+          }
+        }
+
+        removeSceneByName(r1);
+        removeSceneByName(r2);
+        removeSceneByName(r3);
+
+        combineMpr(r0, r1, getDicomStack());
+        combineMpr(r0, r2, getDicomStack());
+        combineMpr(r0, r3, getDicomStack());
+      }
+    });
+}
+
 // Todo : to create slice mesh for display segmentation.
 // Slice has to be transference
-export function loadSegmentation (uploadedFile) {
+export function loadSegmentation_org (uploadedFile) {
   JSZIP.loadAsync(uploadedFile)
     .then(function (zip) {
       return extractZip(zip, 'arraybuffer', true);
@@ -973,3 +1047,169 @@ function clearWidgets () {
     widget.hide();
   }
 }
+
+function initSegment(){
+  // var domElement = document.getElementById('layout-area');
+  segR1.domElement = document.getElementsByClassName("layout-area")[0];
+  // init renderer
+  segR1.renderer = new THREE.WebGLRenderer( { antialias: false } );
+  // segR1.renderer.setPixelRatio( window.devicePixelRatio );
+  segR1.renderer.localClippingEnabled = true;
+  segR1.renderer.setSize(segR1.domElement.clientWidth, segR1.domElement.clientHeight);
+  segR1.renderer.setClearColor(0x121212, 1);
+  segR1.renderer.domElement.id = segR1.targetID;
+  segR1.domElement.appendChild( segR1.renderer.domElement );
+
+  // THREE environment
+  segR1.scene = new THREE.Scene();
+//    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+//   segR1.camera = new THREE.OrthographicCamera(
+//     segR1.renderer.domElement.clientWidth / -2,
+//     segR1.renderer.domElement.clientWidth / 2,
+//     segR1.renderer.domElement.clientHeight / -2,
+//     segR1.renderer.domElement.clientHeight / 2,
+//     1,
+//     1000);
+
+  // var orbit = new THREE.OrbitControls( segR1.camera, segR1.renderer.domElement );
+//    var orbit = new THREE.TrackballControls( segR1.camera, segR1.renderer.domElement );
+  // camera
+  segR1.camera = new Medic3D.Cameras.Orthographic(
+    segR1.domElement.clientWidth / -2,
+    segR1.domElement.clientWidth / 2,
+    segR1.domElement.clientHeight / 2,
+    segR1.domElement.clientHeight / -2,
+    1, 1000);
+
+  // controls
+  segR1.controls = new Medic3D.Controls.TrackballOrtho(segR1.camera, segR1.domElement);
+  segR1.controls.staticMoving = true;
+  segR1.controls.noRotate = true;
+  segR1.camera.controls = segR1.controls;
+
+  segR1.container = new THREE.Object3D();
+  segR1.scene.add( segR1.container );
+
+  initGui();
+  initScreen();
+  initBox();
+
+
+}
+
+
+function initGui(){
+  segR1.gui = new dat.GUI();
+  segR1.guiParam.sliceIndex = 5;
+  segR1.gui.add(segR1.guiParam, 'sliceIndex', 0, 24)
+    .step(1)
+    .name("Slice")
+    .onChange(function(indexSliceToDisplay){
+      var uniforms = segR1.shaderMat.uniforms;
+      uniforms.indexSliceToDisplay.value = indexSliceToDisplay;
+
+    })
+
+}
+
+/**
+ * Initialize the ouside box
+ */
+function initBox(xspaceLength, yspaceLength, zspaceLength){
+  var boxMaterial = new THREE.MeshBasicMaterial();
+  var boxGeom = new THREE.CubeGeometry(
+    segR1.spaceLength.x,
+    segR1.spaceLength.y,
+    segR1.spaceLength.z
+  );
+  var boxMesh = new THREE.Mesh( boxGeom, boxMaterial )
+//    boxHelper = new THREE.EdgesHelper( boxMesh, 0xff9999 );
+//    container.add( boxHelper );
+  // adjust the camera to the box
+  segR1.camera.position.z = segR1.spaceLength.z;
+}
+
+
+function initScreen(){
+  segR1.screenContainer = new THREE.Object3D();
+
+  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/merge_from_ofoct.png" )
+  mosaicTexture.magFilter = THREE.NearestFilter;
+  mosaicTexture.minFilter = THREE.NearestFilter;
+  //mosaicTexture.flipY = false;
+
+  segR1.shaderMat = new THREE.ShaderMaterial( {
+    uniforms: {
+      // the textures
+      nbOfTextureUsed: {
+        type: "i",
+        value: 1
+      },
+      // the number of slice per row
+      nbSlicePerRow: {
+        type: "f",
+        value: 1.0
+      },
+      // the number of slice per column
+      nbSlicePerCol: {
+        type: "f",
+        value: 24.0
+      },
+      // the number of slice in total
+      nbSliceTotal: {
+        type: "f",
+        value: segR1.spaceLength.z  // because along zspace
+      },
+      // the index of the slice to display
+      indexSliceToDisplay: {
+        type: "f",
+        value: segR1.guiParam.sliceIndex
+      },
+      // xspace length
+      xspaceLength: {
+        type: "f",
+        value: segR1.spaceLength.x
+      },
+      // yspace length
+      yspaceLength: {
+        type: "f",
+        value: segR1.spaceLength.y
+      },
+      // zspace length
+      zspaceLength: {
+        type: "f",
+        value: segR1.spaceLength.z
+      },
+      textures: {
+        type: "t",
+        value:  [mosaicTexture]
+      }
+    }
+    ,
+    vertexShader: shaders.vertex,
+    fragmentShader: shaders.fragment,
+    side: THREE.DoubleSide,
+    transparent: true
+  });
+
+
+  var geometry = new THREE.PlaneBufferGeometry( segR1.spaceLength.x, segR1.spaceLength.y, 1 );
+  var plane = new THREE.Mesh( geometry, segR1.shaderMat );
+  segR1.screenContainer.add( plane );
+
+  segR1.container.add( segR1.screenContainer );
+}
+
+
+// function render() {
+//   requestAnimationFrame( render );
+//   segR1.renderer.render( segR1.scene, segR1.camera );
+// };
+
+
+// window.addEventListener( 'resize', function () {
+//   segR1.camera.aspect = window.innerWidth / window.innerHeight;
+//   segR1.camera.updateProjectionMatrix();
+//   segR1.renderer.setSize( window.innerWidth, window.innerHeight );
+// }, false );
+

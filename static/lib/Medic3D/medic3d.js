@@ -10197,7 +10197,7 @@ function WebGLAttributes( gl ) {
 	function remove( attribute ) {
 
 		if ( attribute.isInterleavedBufferAttribute ) attribute = attribute.data;
-		
+
 		var data = buffers[ attribute.uuid ];
 
 		if ( data ) {
@@ -21220,7 +21220,7 @@ function WebGLClipping() {
 		}
 
 		scope.numPlanes = nPlanes;
-		
+
 		return dstArray;
 
 	}
@@ -50740,6 +50740,8 @@ var ModelsStack = function (_ModelsBase) {
           if (!Number.isNaN(_raw)) {
             _data[4 * coordinate + 2 * channelOffset] = _raw & 0x00FF;
             _data[4 * coordinate + 2 * channelOffset + 1] = _raw >>> 8 & 0x00FF;
+          } else {
+            console.log('_waw = ' + _raw);
           }
 
           // if (!Number.isNaN(raw)) {
@@ -72942,7 +72944,7 @@ exports.UNZIP = 7;
 function Zlib(mode) {
   if (mode < exports.DEFLATE || mode > exports.UNZIP)
     throw new TypeError("Bad argument");
-    
+
   this.mode = mode;
   this.init_done = false;
   this.write_in_progress = false;
@@ -72960,18 +72962,18 @@ Zlib.prototype.init = function(windowBits, level, memLevel, strategy, dictionary
   this.memLevel = memLevel;
   this.strategy = strategy;
   // dictionary not supported.
-  
+
   if (this.mode === exports.GZIP || this.mode === exports.GUNZIP)
     this.windowBits += 16;
-    
+
   if (this.mode === exports.UNZIP)
     this.windowBits += 32;
-    
+
   if (this.mode === exports.DEFLATERAW || this.mode === exports.INFLATERAW)
     this.windowBits = -this.windowBits;
-    
+
   this.strm = new zstream();
-  
+
   switch (this.mode) {
     case exports.DEFLATE:
     case exports.GZIP:
@@ -72997,12 +72999,12 @@ Zlib.prototype.init = function(windowBits, level, memLevel, strategy, dictionary
     default:
       throw new Error("Unknown mode " + this.mode);
   }
-  
+
   if (status !== exports.Z_OK) {
     this._error(status);
     return;
   }
-  
+
   this.write_in_progress = false;
   this.init_done = true;
 };
@@ -73014,31 +73016,31 @@ Zlib.prototype.params = function() {
 Zlib.prototype._writeCheck = function() {
   if (!this.init_done)
     throw new Error("write before init");
-    
+
   if (this.mode === exports.NONE)
     throw new Error("already finalized");
-    
+
   if (this.write_in_progress)
     throw new Error("write already in progress");
-    
+
   if (this.pending_close)
     throw new Error("close is pending");
 };
 
-Zlib.prototype.write = function(flush, input, in_off, in_len, out, out_off, out_len) {    
+Zlib.prototype.write = function(flush, input, in_off, in_len, out, out_off, out_len) {
   this._writeCheck();
   this.write_in_progress = true;
-  
+
   var self = this;
   process.nextTick(function() {
     self.write_in_progress = false;
     var res = self._write(flush, input, in_off, in_len, out, out_off, out_len);
     self.callback(res[0], res[1]);
-    
+
     if (self.pending_close)
       self.close();
   });
-  
+
   return this;
 };
 
@@ -73056,7 +73058,7 @@ Zlib.prototype.writeSync = function(flush, input, in_off, in_len, out, out_off, 
 
 Zlib.prototype._write = function(flush, input, in_off, in_len, out, out_off, out_len) {
   this.write_in_progress = true;
-  
+
   if (flush !== exports.Z_NO_FLUSH &&
       flush !== exports.Z_PARTIAL_FLUSH &&
       flush !== exports.Z_SYNC_FLUSH &&
@@ -73065,18 +73067,18 @@ Zlib.prototype._write = function(flush, input, in_off, in_len, out, out_off, out
       flush !== exports.Z_BLOCK) {
     throw new Error("Invalid flush value");
   }
-  
+
   if (input == null) {
     input = new Buffer(0);
     in_len = 0;
     in_off = 0;
   }
-  
+
   if (out._set)
     out.set = out._set;
   else
     out.set = bufferSet;
-  
+
   var strm = this.strm;
   strm.avail_in = in_len;
   strm.input = input;
@@ -73084,7 +73086,7 @@ Zlib.prototype._write = function(flush, input, in_off, in_len, out, out_off, out
   strm.avail_out = out_len;
   strm.output = out;
   strm.next_out = out_off;
-  
+
   switch (this.mode) {
     case exports.DEFLATE:
     case exports.GZIP:
@@ -73100,11 +73102,11 @@ Zlib.prototype._write = function(flush, input, in_off, in_len, out, out_off, out
     default:
       throw new Error("Unknown mode " + this.mode);
   }
-  
+
   if (status !== exports.Z_STREAM_END && status !== exports.Z_OK) {
     this._error(status);
   }
-  
+
   this.write_in_progress = false;
   return [strm.avail_in, strm.avail_out];
 };
@@ -73114,15 +73116,15 @@ Zlib.prototype.close = function() {
     this.pending_close = true;
     return;
   }
-  
+
   this.pending_close = false;
-  
+
   if (this.mode === exports.DEFLATE || this.mode === exports.GZIP || this.mode === exports.DEFLATERAW) {
     zlib_deflate.deflateEnd(this.strm);
   } else {
     zlib_inflate.inflateEnd(this.strm);
   }
-  
+
   this.mode = exports.NONE;
 };
 
@@ -73137,7 +73139,7 @@ Zlib.prototype.reset = function() {
       var status = zlib_inflate.inflateReset(this.strm);
       break;
   }
-  
+
   if (status !== exports.Z_OK) {
     this._error(status);
   }
@@ -73145,7 +73147,7 @@ Zlib.prototype.reset = function() {
 
 Zlib.prototype._error = function(status) {
   this.onerror(msg[status] + ': ' + this.strm.msg, status);
-  
+
   this.write_in_progress = false;
   if (this.pending_close)
     this.close();
@@ -79458,7 +79460,7 @@ jpeg.lossless.Decoder.prototype.outputRGB = function (PRED) {
 };
 
 jpeg.lossless.Decoder.prototype.setValue8 = function (index, val) {
-    this.outputData[index] = val; 
+    this.outputData[index] = val;
 };
 
 jpeg.lossless.Decoder.prototype.getValue8 = function (index) {
@@ -79474,13 +79476,13 @@ var littleEndian = (function() {
 
 if (littleEndian) {
     // just reading from an array is fine then. Int16Array will use platform endianness.
-    jpeg.lossless.Decoder.prototype.setValue16 = jpeg.lossless.Decoder.prototype.setValue8; 
+    jpeg.lossless.Decoder.prototype.setValue16 = jpeg.lossless.Decoder.prototype.setValue8;
     jpeg.lossless.Decoder.prototype.getValue16 = jpeg.lossless.Decoder.prototype.getValue8;
-} 
+}
 else {
-    // If platform is big-endian, we will need to convert to little-endian 
+    // If platform is big-endian, we will need to convert to little-endian
     jpeg.lossless.Decoder.prototype.setValue16 = function (index, val) {
-        this.outputData[index] = ((val & 0xFF) << 8) | ((val >> 8) & 0xFF); 
+        this.outputData[index] = ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
     };
 
     jpeg.lossless.Decoder.prototype.getValue16 = function (index) {
@@ -89903,12 +89905,12 @@ var dataFileListRE = /^LIST(?: (\d+))?$/;
 // TODO: For now this only supports serializing "inline" files, or files for which you have already prepared the data.
 module.exports.serialize = function (nrrdOrg) {
     var i, buffer, arr, totalLen = 1, nrrd = {}, prop, nativeType, nativeSize, bufferData, arrData, line, lines = [], header;
-    
+
     // Copy nrrdOrg to nrrd to allow modifications without altering the original
     for(prop in nrrdOrg) {
         nrrd[prop] = nrrdOrg[prop];
     }
-    
+
     // For saving files we allow inferring certain information if it is not explicitly given.
     // Also we normalize some fields to make our own lives easier.
     if (nrrd.sizes===undefined) { // 'sizes' should ALWAYS be given
@@ -89956,7 +89958,7 @@ module.exports.serialize = function (nrrdOrg) {
     } else if ((typeof nrrd.endian) == "string" || nrrd.endian instanceof String) {
         nrrd.endian = parseNRRDEndian(nrrd.endian);
     }
-    
+
     // Try to infer spatial dimension
     var spaceDimension = undefined;
     if (nrrd.spaceDimension!==undefined) {
@@ -90009,7 +90011,7 @@ module.exports.serialize = function (nrrdOrg) {
             console.warn("Unrecognized space: " + nrrd.space);
         }
     }
-    
+
     // Now check that we have a valid nrrd structure.
     checkNRRD(nrrd);
 
@@ -90038,7 +90040,7 @@ module.exports.serialize = function (nrrdOrg) {
     } else {
         throw new Error("Will not serialize an empty NRRD file!");
     }
-    
+
     // Make sure we have the correct buffer in bufferData.
     if (nrrd.data) {
         switch(nrrd.encoding) {
@@ -90065,11 +90067,11 @@ module.exports.serialize = function (nrrdOrg) {
     } else if (nrrd.buffer) {
         bufferData = nrrd.buffer;
     }
-    
+
     // Start header
     lines.push("NRRD0005"); // TODO: Adjust version based on features that are actually used and/or the version specified by the user (if any).
     lines.push("# Generated by nrrd-js");
-    
+
     // Put in dimension and space dimension (the NRRD spec requires that these are present before any lists whose length depends on them)
     var firstProps = ['dimension', 'spaceDimension', 'space'];
     for(i=0; i<firstProps.length; i++) {
@@ -90078,7 +90080,7 @@ module.exports.serialize = function (nrrdOrg) {
         line = serializeField(prop, nrrd[prop], nrrd.dimension, spaceDimension);
         if (line!==undefined) lines.push(line);
     }
-    
+
     // Put in field specifications
     for(prop in nrrd) {
         if (nrrd[prop] === undefined) continue; // Skip things we explicitly set to undefined.
@@ -90086,13 +90088,13 @@ module.exports.serialize = function (nrrdOrg) {
         line = serializeField(prop, nrrd[prop], nrrd.dimension, spaceDimension);
         if (line!==undefined) lines.push(line);
     }
-    
+
     // Put in keys (if any)
     if (nrrd.keys) for(prop in nrrd.keys) {
         if (prop.indexOf(":=")>=0) throw new Error("The combination ':=' is not allowed in an NRRD key!");
         lines.push(prop + ":=" + escapeValue(nrrd[prop]));
     }
-    
+
     // Put in data file list (if any)
     if (nrrd.dataFile && nrrd.dataFile.length) {
         lines.push("data file: LIST");
@@ -90101,7 +90103,7 @@ module.exports.serialize = function (nrrdOrg) {
         lines.push("data file: LIST " + nrrd.dataFile.subdim);
         Array.prototype.push.apply(lines, nrrd.dataFile.files);
     }
-    
+
     // Put in empty line and inline data (if we have inline data) and convert lines to buffer
     if (bufferData && !('dataFile' in nrrd)) {
         lines.push("");
@@ -90123,7 +90125,7 @@ module.exports.serialize = function (nrrdOrg) {
             arr[i] = header.charCodeAt(i);
         }
     }
-    
+
     return buffer;
 };
 
@@ -90152,10 +90154,10 @@ module.exports.parse = function (buffer) {
         } else if (buf8[i] == 13) { // We hit a CR
             i++; // Move forward just once
         } else {
-            i += 2; // Move forward two places, 
+            i += 2; // Move forward two places,
         }
     }
-    
+
     // Now split up the header and data
     if (dataStart === undefined) {
         header = String.fromCharCode.apply(null, buf8);
@@ -90163,7 +90165,7 @@ module.exports.parse = function (buffer) {
         header = String.fromCharCode.apply(null, buf8.subarray(0,dataStart));
         ret.buffer = buffer.slice(dataStart);
     }
-    
+
     // Split header into lines, remove comments (and blank lines) and check magic.
     // All remaining lines except the first should be field specifications or key/value pairs.
     // TODO: This explicitly removes any whitespace at the end of lines, however, I am not sure that this is actually desired behaviour for all kinds of lines.
@@ -90211,7 +90213,7 @@ module.exports.parse = function (buffer) {
 
     // Make sure the file satisfies the requirements of the NRRD format
     checkNRRD(ret);
-    
+
     // "Parse" data
     if ('dataFile' in ret) {
         console.warn("No support for external data yet!");
@@ -90229,7 +90231,7 @@ module.exports.parse = function (buffer) {
             console.warn("Unsupported NRRD encoding: " + ret.encoding);
         }
     }
-    
+
     return ret;
 };
 
@@ -90982,7 +90984,7 @@ function checkNRRD(ret) {
     } else if (ret.sizes===undefined) {
         throw new Error("Sizes missing from NRRD file!");
     }
-    
+
     // Sometimes necessary fields
     if (ret.type != 'block' && ret.type != 'int8' && ret.type != 'uint8' &&
           ret.encoding != 'ascii' && ret.endian === undefined) {
@@ -90990,7 +90992,7 @@ function checkNRRD(ret) {
     } else if (ret.type == 'block' && ret.blockSize === undefined) {
         throw new Error("Missing block size in NRRD file!");
     }
-    
+
     // Check dimension and per-axis field lengths
     if (ret.dimension === 0) {
         throw new Error("Zero-dimensional NRRD file?");
@@ -91013,9 +91015,9 @@ function checkNRRD(ret) {
     } else if (ret.kinds && ret.dimension != ret.kinds.length) {
         throw new Error("Length of 'kinds' is different from 'dimension' in an NRRD file!");
     }
-    
+
     // TODO: Check space/orientation fields.
-    
+
     // We should either have inline data or external data
     if ((ret.data === undefined || ret.data.length === 0) && (ret.buffer === undefined || ret.buffer.byteLength === 0) && ret.dataFile === undefined) {
         throw new Error("NRRD file has neither inline or external data!");
