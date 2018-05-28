@@ -1,16 +1,100 @@
 import JSZIP from 'jszip';
-import * as THREE from 'three';
+// import * as THREE from 'three';
 // import Medic3D from '../../../../Medic3D/dist/medic3d'
 // for release
 import Medic3D from '../../../static/lib/Medic3D/medic3d'
 import Request from 'request';
-import shaders from '../../../static/lib/shaders';
+import * as THREE from '../../../static/lib/three.min';
 import dat from '../../../static/lib/dat.gui.min';
 var PNG = require('pngjs').PNG;
 
 
 // standard global variables
 let ready = false;
+let bok = 1;
+
+const shaders = {
+  vertex : `
+precision highp float;
+varying  vec2 vUv;
+varying  vec4 worldCoord;
+
+void main()
+{
+  vUv = uv;
+  vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+  gl_Position = projectionMatrix * mvPosition;
+
+
+  worldCoord = modelMatrix * vec4( position, 1.0 );
+}
+`,
+
+  fragment : `
+  precision highp float;
+
+  // a max number we allow, can be upt to 16
+  const int maxNbOfTextures = 1;
+
+  // Number of texture used with this dataset
+  // cannot be higher than maxNbOfTextures
+  uniform float nbOfTextureUsed;
+
+  // size of the mosaic
+  uniform float nbSlicePerRow;
+  uniform float nbSlicePerCol;
+  // not necessary equal to nbSlicePerRow*nbSlicePerCol because last line
+  // is not necessary full
+  uniform float nbSliceTotal;
+
+  uniform float indexSliceToDisplay;
+
+  // space length
+  uniform float xspaceLength;
+  uniform float yspaceLength;
+  uniform float zspaceLength;
+
+  // a texture will contain a certain number of slices
+  uniform sampler2D textures[maxNbOfTextures];
+
+
+  // Shared with the vertex shader
+  varying  vec4 worldCoord;
+  varying  vec2 vUv;
+
+  float myMod(float x, float y){
+    return x - (y * float(int(x/y)));
+  }
+
+  /**
+  * Returns accurate MOD when arguments are approximate integers.
+  */
+  float modI(float a,float b) {
+      float m = a - floor( ( a + 0.5 ) / b) * b;
+      return floor( m + 0.5 );
+  }
+
+
+  void main( void ) {
+
+    // step to jump from a slice to another on a unit-sized texture
+    float sliceWidth = 1.0 / nbSlicePerRow;
+    float sliceHeight = 1.0 / nbSlicePerCol;
+
+    // row/col index of the slice within the grid of slices
+    // (0.5 rounding is mandatory to deal with float as integers)
+    float rowTexture = nbSlicePerCol - 1.0 - floor( (indexSliceToDisplay + 0.5) / nbSlicePerRow);
+    float colTexture = modI( indexSliceToDisplay, nbSlicePerRow );
+
+    vec2 posInTexture = vec2(
+      sliceWidth * colTexture + vUv.x * sliceWidth ,
+      sliceHeight * rowTexture + vUv.y * sliceHeight
+    );
+
+    gl_FragColor = texture2D(textures[0], posInTexture);
+  }
+`
+}
 
 // 3d renderer
 const r0 = {
@@ -130,6 +214,7 @@ export function init () {
       r1.controls.update();
       r2.controls.update();
       r3.controls.update();
+      segR1.controls.update();
 
       r0.light.position.copy(r0.camera.position);
       r0.renderer.render(r0.scene, r0.camera);
@@ -338,18 +423,23 @@ export function loadZip (uploadedFile, cb) {
             initHelpersLocalizerAll(stack);
 
             // add click event
-            r0.domElement.addEventListener('click', onClick);
-            r1.domElement.addEventListener('click', onClick);
-            r2.domElement.addEventListener('click', onClick);
-            r3.domElement.addEventListener('click', onClick);
+            // r0.domElement.addEventListener('click', onClick);
+            // r1.domElement.addEventListener('click', onClick);
+            // r2.domElement.addEventListener('click', onClick);
+            // r3.domElement.addEventListener('click', onClick);
+            segR1.domElement.addEventListener('click', onClick);
             // add scroll event
-            r1.controls.addEventListener('OnScroll', onScroll);
-            r2.controls.addEventListener('OnScroll', onScroll);
-            r3.controls.addEventListener('OnScroll', onScroll);
+            // r1.controls.addEventListener('OnScroll', onScroll);
+            // r2.controls.addEventListener('OnScroll', onScroll);
+            // r3.controls.addEventListener('OnScroll', onScroll);
+            segR1.controls.addEventListener('OnScroll', onScroll);
             // add others event
-            r1.controls.addEventListener('mousedown', onDown);
-            r1.controls.addEventListener('mousemove', onMove);
-            r1.controls.addEventListener('mouseup', onUp);
+            // r1.controls.addEventListener('mousedown', onDown);
+            // r1.controls.addEventListener('mousemove', onMove);
+            // r1.controls.addEventListener('mouseup', onUp);
+            segR1.controls.addEventListener('mousedown', onDown);
+            segR1.controls.addEventListener('mousemove', onMove);
+            segR1.controls.addEventListener('mouseup', onUp);
 
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
@@ -702,7 +792,15 @@ function onScroll (event) {
       stackHelper = r3.stackHelper;
       msg.view = 'r3';
       break;
+    case segR1.domId:
+      var uniforms = segR1.shaderMat.uniforms;
+      bok = bok++;
+      uniforms.indexSliceToDisplay.value = bok;
+      break;
     default:
+      var uniforms = segR1.shaderMat.uniforms;
+      bok = bok + 1;
+      uniforms.indexSliceToDisplay.value = bok;
       // console.log('No matched ID');
       return;
   }
@@ -755,6 +853,17 @@ function windowResize2D (rendererObj) {
   computeOffset(rendererObj);
 }
 
+function windowResize2DSeg (rendererObj) {
+  rendererObj.camera.canvas = {
+    width: rendererObj.domElement.clientWidth,
+    height: rendererObj.domElement.clientHeight
+  };
+  rendererObj.camera.fitBox(2, 1);
+  rendererObj.renderer.setSize(rendererObj.domElement.clientWidth, rendererObj.domElement.clientHeight);
+
+  computeOffset(rendererObj);
+}
+
 function onWindowResize () {
   // update 3D
   r0.camera.aspect = r0.domElement.clientWidth / r0.domElement.clientHeight;
@@ -765,6 +874,7 @@ function onWindowResize () {
   windowResize2D(r1);
   windowResize2D(r2);
   windowResize2D(r3);
+  // windowResize2DSeg(segR1);
 
   computeOffset(r0);
 }
@@ -1049,8 +1159,8 @@ function clearWidgets () {
 }
 
 function initSegment(){
-  // var domElement = document.getElementById('layout-area');
-  segR1.domElement = document.getElementsByClassName("layout-area")[0];
+  segR1.domElement = document.getElementsByClassName('layout-area')[0]
+  // segR1.domElement = document.getElementById("seg");
   // init renderer
   segR1.renderer = new THREE.WebGLRenderer( { antialias: false } );
   // segR1.renderer.setPixelRatio( window.devicePixelRatio );
@@ -1059,21 +1169,11 @@ function initSegment(){
   segR1.renderer.setClearColor(0x121212, 1);
   segR1.renderer.domElement.id = segR1.targetID;
   segR1.domElement.appendChild( segR1.renderer.domElement );
+  // document.body.appendChild( segR1.renderer.domElement );
 
   // THREE environment
   segR1.scene = new THREE.Scene();
-//    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-//   segR1.camera = new THREE.OrthographicCamera(
-//     segR1.renderer.domElement.clientWidth / -2,
-//     segR1.renderer.domElement.clientWidth / 2,
-//     segR1.renderer.domElement.clientHeight / -2,
-//     segR1.renderer.domElement.clientHeight / 2,
-//     1,
-//     1000);
-
-  // var orbit = new THREE.OrbitControls( segR1.camera, segR1.renderer.domElement );
-//    var orbit = new THREE.TrackballControls( segR1.camera, segR1.renderer.domElement );
-  // camera
+   // segR1.camera = new THREE.PerspectiveCamera( 175, window.innerWidth / window.innerHeight, 0.1, 1000 );
   segR1.camera = new Medic3D.Cameras.Orthographic(
     segR1.domElement.clientWidth / -2,
     segR1.domElement.clientWidth / 2,
@@ -1094,7 +1194,7 @@ function initSegment(){
   initScreen();
   initBox();
 
-
+  computeOffset(segR1)
 }
 
 
@@ -1137,6 +1237,9 @@ function initScreen(){
   mosaicTexture.magFilter = THREE.NearestFilter;
   mosaicTexture.minFilter = THREE.NearestFilter;
   //mosaicTexture.flipY = false;
+
+  var vertex = shaders.vertex;
+  var fragment = shaders.fragment;
 
   segR1.shaderMat = new THREE.ShaderMaterial( {
     uniforms: {
