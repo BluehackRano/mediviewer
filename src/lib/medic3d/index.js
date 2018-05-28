@@ -171,6 +171,7 @@ const r3 = {
 };
 
 const segR1 = {
+  domId: r1.domId,
   domElement: null,
   targetID: 11,
   gui: null,
@@ -186,7 +187,12 @@ const segR1 = {
   container : null,
   shaderMat : null,
   boxHelper : null,
-  screenContainer : null
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  }
 }
 
 let gDicomStack = null;
@@ -263,7 +269,7 @@ export function init () {
   initRenderer2D(r2);
   initRenderer2D(r1);
 
-  initSegment();
+  initSegment(segR1);
   // start rendering loop
   animate();
 }
@@ -423,15 +429,15 @@ export function loadZip (uploadedFile, cb) {
             initHelpersLocalizerAll(stack);
 
             // add click event
-            // r0.domElement.addEventListener('click', onClick);
-            // r1.domElement.addEventListener('click', onClick);
-            // r2.domElement.addEventListener('click', onClick);
-            // r3.domElement.addEventListener('click', onClick);
+            r0.domElement.addEventListener('click', onClick);
+            r1.domElement.addEventListener('click', onClick);
+            r2.domElement.addEventListener('click', onClick);
+            r3.domElement.addEventListener('click', onClick);
             segR1.domElement.addEventListener('click', onClick);
             // add scroll event
-            // r1.controls.addEventListener('OnScroll', onScroll);
-            // r2.controls.addEventListener('OnScroll', onScroll);
-            // r3.controls.addEventListener('OnScroll', onScroll);
+            r1.controls.addEventListener('OnScroll', onScroll);
+            r2.controls.addEventListener('OnScroll', onScroll);
+            r3.controls.addEventListener('OnScroll', onScroll);
             segR1.controls.addEventListener('OnScroll', onScroll);
             // add others event
             // r1.controls.addEventListener('mousedown', onDown);
@@ -783,6 +789,12 @@ function onScroll (event) {
     case r1.domId:
       stackHelper = r1.stackHelper;
       msg.view = 'r1';
+
+      // onScroll for seg
+      var uniforms = segR1.shaderMat.uniforms;
+      bok = bok + 1;
+      uniforms.indexSliceToDisplay.value = bok;
+
       break;
     case r2.domId:
       stackHelper = r2.stackHelper;
@@ -792,15 +804,15 @@ function onScroll (event) {
       stackHelper = r3.stackHelper;
       msg.view = 'r3';
       break;
-    case segR1.domId:
-      var uniforms = segR1.shaderMat.uniforms;
-      bok = bok++;
-      uniforms.indexSliceToDisplay.value = bok;
-      break;
+    // case segR1.domId:
+    //   var uniforms = segR1.shaderMat.uniforms;
+    //   bok = bok++;
+    //   uniforms.indexSliceToDisplay.value = bok;
+    //   break;
     default:
-      var uniforms = segR1.shaderMat.uniforms;
-      bok = bok + 1;
-      uniforms.indexSliceToDisplay.value = bok;
+      // var uniforms = segR1.shaderMat.uniforms;
+      // bok = bok + 1;
+      // uniforms.indexSliceToDisplay.value = bok;
       // console.log('No matched ID');
       return;
   }
@@ -1158,6 +1170,61 @@ function clearWidgets () {
   }
 }
 
+/**
+ * rano
+ */
+function initSegment(rendererObj){
+  if (rendererObj.domElement === null) {
+    rendererObj.domElement = document.getElementById(rendererObj.domId);
+  } else {
+    return;
+  }
+
+  // segR1.domElement = document.getElementsByClassName('layout-area')[0]
+  // segR1.domElement = document.getElementById("seg");
+  // init renderer
+  rendererObj.renderer = new THREE.WebGLRenderer( { antialias: false } );
+  // segR1.renderer.setPixelRatio( window.devicePixelRatio );
+  rendererObj.renderer.localClippingEnabled = true;
+  rendererObj.renderer.setSize(rendererObj.domElement.clientWidth, rendererObj.domElement.clientHeight);
+  rendererObj.renderer.setClearColor(0x121212, 1);
+  rendererObj.renderer.domElement.id = rendererObj.targetID;
+  rendererObj.domElement.appendChild( rendererObj.renderer.domElement );
+
+  // style
+  for(var prop in rendererObj.style) {
+    rendererObj.renderer.domElement.style[prop] = rendererObj.style[prop];
+  }
+  // TODO: remove this
+  rendererObj.renderer.domElement.style.opacity = '0.5'
+
+  // THREE environment
+  rendererObj.scene = new THREE.Scene();
+  // segR1.camera = new THREE.PerspectiveCamera( 175, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  rendererObj.camera = new Medic3D.Cameras.Orthographic(
+    rendererObj.domElement.clientWidth / -2,
+    rendererObj.domElement.clientWidth / 2,
+    rendererObj.domElement.clientHeight / 2,
+    rendererObj.domElement.clientHeight / -2,
+    1, 1000);
+
+  // controls
+  rendererObj.controls = new Medic3D.Controls.TrackballOrtho(rendererObj.camera, rendererObj.domElement);
+  rendererObj.controls.staticMoving = true;
+  rendererObj.controls.noRotate = true;
+  rendererObj.camera.controls = rendererObj.controls;
+
+  rendererObj.container = new THREE.Object3D();
+  rendererObj.scene.add( rendererObj.container );
+
+  initGui();    // TODO : initGui(rendererObj)
+  initScreen(); // TODO : initScreen(rendererObj)
+  initBox();    // TODO : initBox(rendererObj)
+
+  computeOffset(rendererObj)
+}
+
+/*
 function initSegment(){
   segR1.domElement = document.getElementsByClassName('layout-area')[0]
   // segR1.domElement = document.getElementById("seg");
@@ -1196,7 +1263,7 @@ function initSegment(){
 
   computeOffset(segR1)
 }
-
+*/
 
 function initGui(){
   segR1.gui = new dat.GUI();

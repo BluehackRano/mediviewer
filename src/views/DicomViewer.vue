@@ -4,35 +4,23 @@
     <section class="viewer-area">
       <div class="container is-fluid is-marginless app-content">
 
-        <div class="layout-area"
-          @mousemove="onMouseMove"
-          @mousedown.left="mousedownLeft"
-          @mousedown.middle="mousedownMiddle"
-          @mousedown.right="mousedownRight"
-          @mouseup.left="mouseupLeft"
-          @mouseup.middle="isMouseDown = false, mouseLastPosition = {}"
-          @mouseup.right="isMouseDown = false, mouseLastPosition = {}"
-          @mouseenter="isMouseDown = false, mouseLastPosition = {}"
-          @mouseleave="isMouseDown = false, mouseLastPosition = {}"
-          @mouseout="isMouseDown = false, mouseLastPosition = {}">
-          >
-
+        <div class="layout-area">
           <div id="layout-1-1" class="layouts"
                ref="layout1By1"
                v-if="currentLayout.name === '1By1' || currentLayout.name === '2By2' || currentLayout.name === '3By'"
                :class="{ active: $refs.layout1By1 === focusedCanvas }"
-               :style="layout_1_1.style">
-               <!--@mousemove="onMouseMove"-->
-               <!--@mousedown.left="mousedownLeft"-->
-               <!--@mousedown.middle="mousedownMiddle"-->
-               <!--@mousedown.right="mousedownRight"-->
-               <!--@mouseup.left="mouseupLeft"-->
-               <!--@mouseup.middle="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseup.right="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseenter="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseleave="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseout="isMouseDown = false, mouseLastPosition = {}"-->
-          <!--&gt;-->
+               :style="layout_1_1.style"
+               @mousemove="onMouseMove"
+               @mousedown.left="mousedownLeft"
+               @mousedown.middle="mousedownMiddle"
+               @mousedown.right="mousedownRight"
+               @mouseup.left="mouseupLeft"
+               @mouseup.middle="isMouseDown = false, mouseLastPosition = {}"
+               @mouseup.right="isMouseDown = false, mouseLastPosition = {}"
+               @mouseenter="isMouseDown = false, mouseLastPosition = {}"
+               @mouseleave="isMouseDown = false, mouseLastPosition = {}"
+               @mouseout="isMouseDown = false, mouseLastPosition = {}"
+          >
             <tag-info
               class="tags-info-view"
               v-show="showTags"
@@ -54,18 +42,18 @@
                ref="layout1By2"
                v-show="currentLayout.name === '2By2' || currentLayout.name === '3By'"
                :class="{ active: $refs.layout1By2 === focusedCanvas }"
-               :style="layout_1_2.style">
-               <!--@mousemove="onMouseMove"-->
-               <!--@mousedown.left="mousedownLeft"-->
-               <!--@mousedown.middle="mousedownMiddle"-->
-               <!--@mousedown.right="mousedownRight"-->
-               <!--@mouseup.left="mouseupLeft"-->
-               <!--@mouseup.middle="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseup.right="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseenter="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseleave="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseout="isMouseDown = false, mouseLastPosition = {}"-->
-          <!--&gt;-->
+               :style="layout_1_2.style"
+               @mousemove="onMouseMove"
+               @mousedown.left="mousedownLeft"
+               @mousedown.middle="mousedownMiddle"
+               @mousedown.right="mousedownRight"
+               @mouseup.left="mouseupLeft"
+               @mouseup.middle="isMouseDown = false, mouseLastPosition = {}"
+               @mouseup.right="isMouseDown = false, mouseLastPosition = {}"
+               @mouseenter="isMouseDown = false, mouseLastPosition = {}"
+               @mouseleave="isMouseDown = false, mouseLastPosition = {}"
+               @mouseout="isMouseDown = false, mouseLastPosition = {}"
+          >
             <tag-info
               class="tags-info-view"
               v-show="showTags"
@@ -84,18 +72,18 @@
                ref="layout2By1"
                v-show="currentLayout.name === '2By2' || currentLayout.name === '3By'"
                :class="{ active: $refs.layout2By1 === focusedCanvas }"
-               :style="layout_2_1.style">
-               <!--@mousemove="onMouseMove"-->
-               <!--@mousedown.left="mousedownLeft"-->
-               <!--@mousedown.middle="mousedownMiddle"-->
-               <!--@mousedown.right="mousedownRight"-->
-               <!--@mouseup.left="mouseupLeft"-->
-               <!--@mouseup.middle="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseup.right="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseenter="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseleave="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseout="isMouseDown = false, mouseLastPosition = {}"-->
-          <!--&gt;-->
+               :style="layout_2_1.style"
+               @mousemove="onMouseMove"
+               @mousedown.left="mousedownLeft"
+               @mousedown.middle="mousedownMiddle"
+               @mousedown.right="mousedownRight"
+               @mouseup.left="mouseupLeft"
+               @mouseup.middle="isMouseDown = false, mouseLastPosition = {}"
+               @mouseup.right="isMouseDown = false, mouseLastPosition = {}"
+               @mouseenter="isMouseDown = false, mouseLastPosition = {}"
+               @mouseleave="isMouseDown = false, mouseLastPosition = {}"
+               @mouseout="isMouseDown = false, mouseLastPosition = {}"
+          >
             <tag-info
               class="tags-info-view"
               v-show="showTags"
@@ -115,18 +103,18 @@
                ref="layout2By2"
                v-show="currentLayout.name === '2By2' || currentLayout.name === '3By'"
                :class="{ active: $refs.layout2By2 === focusedCanvas }"
-               :style="layout_2_2.style">
-               <!--@mousemove="onMouseMove"-->
-               <!--@mousedown.left="mousedownLeft"-->
-               <!--@mousedown.middle="mousedownMiddle"-->
-               <!--@mousedown.right="mousedownRight"-->
-               <!--@mouseup.left="mouseupLeft"-->
-               <!--@mouseup.middle="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseup.right="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseenter="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseleave="isMouseDown = false, mouseLastPosition = {}"-->
-               <!--@mouseout="isMouseDown = false, mouseLastPosition = {}"-->
-          <!--&gt;-->
+               :style="layout_2_2.style"
+               @mousemove="onMouseMove"
+               @mousedown.left="mousedownLeft"
+               @mousedown.middle="mousedownMiddle"
+               @mousedown.right="mousedownRight"
+               @mouseup.left="mouseupLeft"
+               @mouseup.middle="isMouseDown = false, mouseLastPosition = {}"
+               @mouseup.right="isMouseDown = false, mouseLastPosition = {}"
+               @mouseenter="isMouseDown = false, mouseLastPosition = {}"
+               @mouseleave="isMouseDown = false, mouseLastPosition = {}"
+               @mouseout="isMouseDown = false, mouseLastPosition = {}"
+          >
             <tag-info
               class="tags-info-view"
               v-show="showTags"
@@ -532,10 +520,10 @@
         .layouts {
           position: absolute;
           padding: 0;
-          display: none;
           border: 3px solid #424242;
           background-color: $layouts-bg-color;
           overflow: hidden;
+          /*display: none;*/
 
           .tags-info-view {
             position: absolute;
