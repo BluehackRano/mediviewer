@@ -191,7 +191,8 @@ const segR1 = {
     position: 'absolute',
     top: 0,
     left: 0
-  }
+  },
+  offset: null
 }
 
 let gDicomStack = null;
@@ -429,6 +430,8 @@ export function loadZip (uploadedFile, cb) {
             combineMpr(r0, r1, stack);
             combineMpr(r0, r2, stack);
             combineMpr(r0, r3, stack);
+            combineMprSeg(r0, segR1, stack);
+
 
             initHelpersLocalizerAll(stack);
 
@@ -469,6 +472,11 @@ export function loadZip (uploadedFile, cb) {
 function combineMpr (target, plane, stack) {
   initHelpersStack(plane, stack);
   target.scene.add(plane.scene);
+}
+
+function combineMprSeg (target, plane, stack) {
+  initHelpersStackSeg(plane, stack);
+  // target.scene.add(plane.scene);
 }
 
 function initHelpersLocalizerAll (stack) {
@@ -763,6 +771,42 @@ function initHelpersStack (rendererObj, stack) {
   rendererObj.stackHelper.orientation = rendererObj.camera.stackOrientation;
   rendererObj.stackHelper.index = Math.floor(rendererObj.stackHelper.orientationMaxIndex / 2);  // move to mid of slice
   rendererObj.scene.add(rendererObj.stackHelper); // stackHelper extends THREE.Object3D
+}
+
+function initHelpersStackSeg (rendererObj, stack) {
+
+  rendererObj.stackHelper = new Medic3D.Helpers.Stack(stack); // create texture, bbox, slice
+  // set camera
+  let worldbb = stack.worldBoundingBox();
+  let lpsDims = new THREE.Vector3(
+    (worldbb[1] - worldbb[0]) / 2,
+    (worldbb[3] - worldbb[2]) / 2,
+    (worldbb[5] - worldbb[4]) / 2
+  );
+
+  let center = stack.worldCenter().clone();
+  center.x = 0;
+  center.y = 0;
+
+  let box = {
+    center: center,
+    halfDimensions:
+      new THREE.Vector3(lpsDims.x + 10, lpsDims.y + 10, lpsDims.z + 10)
+  };
+
+  // init and zoom
+  let canvas = {
+    width: rendererObj.domElement.clientWidth,
+    height: rendererObj.domElement.clientHeight
+  };
+
+  // rendererObj.camera.directions = [stack.xCosine, stack.yCosine, stack.zCosine];
+  rendererObj.camera.box = box;
+  rendererObj.camera.canvas = canvas;
+  // rendererObj.camera.orientation = rendererObj.sliceOrientation;
+  rendererObj.camera.update();
+  rendererObj.camera.fitBox(2, 1);  // direction, factor
+  // rendererObj.scene.add(rendererObj.stackHelper); // stackHelper extends THREE.Object3D
 }
 
 function initHelpersLocalizer (rendererObj, stack, referencePlane, localizers) {
@@ -1256,7 +1300,7 @@ function initSegment(rendererObj){
 
   initGui();    // TODO : initGui(rendererObj)
   initScreen(); // TODO : initScreen(rendererObj)
-  initBox();    // TODO : initBox(rendererObj)
+  // initBox();    // TODO : initBox(rendererObj)
 
   computeOffset(rendererObj)
 }
