@@ -11,7 +11,6 @@ var PNG = require('pngjs').PNG;
 
 // standard global variables
 let ready = false;
-let bok = 1;
 
 const shaders = {
   vertex : `
@@ -229,7 +228,7 @@ export function init () {
       renderDo(r1);
       renderDo(r2);
       renderDo(r3);
-      renderSeg();
+      renderSeg(segR1);
 
     }
     // request new frame
@@ -238,8 +237,13 @@ export function init () {
     });
   }
 
-  function renderSeg() {
-    segR1.renderer.render( segR1.scene, segR1.camera );
+  function renderSeg(render) {
+    render.renderer.clear();
+    render.renderer.render( segR1.scene, segR1.camera );
+
+    // mesh
+    render.renderer.clearDepth();
+    render.renderer.render(render.scene, render.camera);
   };
 
   function renderDo (render) {
@@ -440,9 +444,9 @@ export function loadZip (uploadedFile, cb) {
             r3.controls.addEventListener('OnScroll', onScroll);
             segR1.controls.addEventListener('OnScroll', onScroll);
             // add others event
-            // r1.controls.addEventListener('mousedown', onDown);
-            // r1.controls.addEventListener('mousemove', onMove);
-            // r1.controls.addEventListener('mouseup', onUp);
+            r1.controls.addEventListener('mousedown', onDown);
+            r1.controls.addEventListener('mousemove', onMove);
+            r1.controls.addEventListener('mouseup', onUp);
             segR1.controls.addEventListener('mousedown', onDown);
             segR1.controls.addEventListener('mousemove', onMove);
             segR1.controls.addEventListener('mouseup', onUp);
@@ -790,11 +794,6 @@ function onScroll (event) {
       stackHelper = r1.stackHelper;
       msg.view = 'r1';
 
-      // onScroll for seg
-      var uniforms = segR1.shaderMat.uniforms;
-      bok = bok + 1;
-      uniforms.indexSliceToDisplay.value = bok;
-
       break;
     case r2.domId:
       stackHelper = r2.stackHelper;
@@ -828,6 +827,10 @@ function onScroll (event) {
     }
     stackHelper.index -= 1;
   }
+  // onScroll for seg
+  var uniforms = segR1.shaderMat.uniforms;
+  uniforms.indexSliceToDisplay.value = stackHelper.index - 130;
+
   // console.log('stackHelper ' + stackHelper.index);
   // onGreenChanged();
   // onRedChanged();
@@ -886,7 +889,7 @@ function onWindowResize () {
   windowResize2D(r1);
   windowResize2D(r2);
   windowResize2D(r3);
-  // windowResize2DSeg(segR1);
+  windowResize2DSeg(segR1);
 
   computeOffset(r0);
 }
@@ -941,6 +944,7 @@ export function Zoom (id, action) {
  */
 function CameraCtrl2D (id, action) {
   let selected = getView(id);
+  let seg = null;
   if (selected === null) {
     return;
   }
@@ -951,8 +955,25 @@ function CameraCtrl2D (id, action) {
   } else {
     val = 0.1;
   }
+
+  switch (id) {
+    case r1.domId:
+      seg = segR1;
+      break;
+    case r2.domId:
+      seg = segR1;
+      break;
+    case r3.domId:
+      seg = segR1;
+      break;
+    default:
+    // console.log('unselected or r1 is selected');
+  }
   selected.camera.zoom += val;
   selected.camera.updateProjectionMatrix();
+
+  seg.camera.zoom += val;
+  seg.camera.updateProjectionMatrix();
 }
 
 function CameraCtrl3D (delta) {
@@ -961,11 +982,26 @@ function CameraCtrl3D (delta) {
 
 export function Fit (id) {
   let selected = getView(id);
+  let seg = null;
   if (selected === null) {
     return;
   }
+  switch (id) {
+    case r1.domId:
+      seg = segR1;
+      break;
+    case r2.domId:
+      seg = segR1;
+      break;
+    case r3.domId:
+      seg = segR1;
+      break;
+    default:
+    // console.log('unselected or r1 is selected');
+  }
 
   selected.camera.fitBox(2, 0.9);
+  seg.camera.fitBox(2, 0.9);
 }
 
 /**
@@ -1011,6 +1047,7 @@ export function CameraCtrl (enable) {
   r1.controls.viewcontrol = enable;
   r2.controls.viewcontrol = enable;
   r3.controls.viewcontrol = enable;
+  segR1.controls.viewcontrol = enable;
 }
 
 export function adjustBrightness (delta) {
@@ -1183,11 +1220,11 @@ function initSegment(rendererObj){
   // segR1.domElement = document.getElementsByClassName('layout-area')[0]
   // segR1.domElement = document.getElementById("seg");
   // init renderer
-  rendererObj.renderer = new THREE.WebGLRenderer( { antialias: false } );
+  rendererObj.renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );
   // segR1.renderer.setPixelRatio( window.devicePixelRatio );
   rendererObj.renderer.localClippingEnabled = true;
   rendererObj.renderer.setSize(rendererObj.domElement.clientWidth, rendererObj.domElement.clientHeight);
-  rendererObj.renderer.setClearColor(0x121212, 1);
+  rendererObj.renderer.setClearColor(0x000000, 0);
   rendererObj.renderer.domElement.id = rendererObj.targetID;
   rendererObj.domElement.appendChild( rendererObj.renderer.domElement );
 
