@@ -169,6 +169,36 @@ const r3 = {
   offset: null
 };
 
+const segDummy = {
+  domId: null,
+  domElement: null,
+  targetID: null,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR1 = {
+
+}
+
 const segR11 = {
   domId: r1.domId,
   domElement: null,
@@ -271,6 +301,210 @@ const segR14 = {
   },
   offset: null
 }
+const segR21 = {
+  domId: r2.domId,
+  domElement: null,
+  targetID: 21,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+const segR22 = {
+  domId: r2.domId,
+  domElement: null,
+  targetID: 22,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR23 = {
+  domId: r2.domId,
+  domElement: null,
+  targetID: 23,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR24 = {
+  domId: r2.domId,
+  domElement: null,
+  targetID: 24,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+const segR31 = {
+  domId: r3.domId,
+  domElement: null,
+  targetID: 31,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+const segR32 = {
+  domId: r3.domId,
+  domElement: null,
+  targetID: 32,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR33 = {
+  domId: r3.domId,
+  domElement: null,
+  targetID: 33,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR34 = {
+  domId: r3.domId,
+  domElement: null,
+  targetID: 34,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
 
 let gDicomStack = null;
 function getDicomStack () {
@@ -302,6 +536,16 @@ export function init () {
       segR13.controls.update();
       segR14.controls.update();
 
+      segR21.controls.update();
+      segR22.controls.update();
+      segR23.controls.update();
+      segR24.controls.update();
+
+      segR31.controls.update();
+      segR32.controls.update();
+      segR33.controls.update();
+      segR34.controls.update();
+
       r0.light.position.copy(r0.camera.position);
       r0.renderer.render(r0.scene, r0.camera);
 
@@ -313,6 +557,16 @@ export function init () {
       renderSeg(segR12);
       renderSeg(segR13);
       renderSeg(segR14);
+
+      renderSeg(segR21);
+      renderSeg(segR22);
+      renderSeg(segR23);
+      renderSeg(segR24);
+
+      renderSeg(segR31);
+      renderSeg(segR32);
+      renderSeg(segR33);
+      renderSeg(segR34);
 
     }
     // request new frame
@@ -352,6 +606,16 @@ export function init () {
     clearThree(segR12.scene);
     clearThree(segR13.scene);
     clearThree(segR14.scene);
+
+    clearThree(segR21.scene);
+    clearThree(segR22.scene);
+    clearThree(segR23.scene);
+    clearThree(segR24.scene);
+
+    clearThree(segR31.scene);
+    clearThree(segR32.scene);
+    clearThree(segR33.scene);
+    clearThree(segR34.scene);
   } else {
     // console.log('First time');
   }
@@ -365,7 +629,17 @@ export function init () {
   initSegment(segR13);
   initSegment(segR14);
 
-  initGui();    // TODO : initGui(rendererObj)
+  initSegment(segR21);
+  initSegment(segR22);
+  initSegment(segR23);
+  initSegment(segR24);
+
+  initSegment(segR31);
+  initSegment(segR32);
+  initSegment(segR33);
+  initSegment(segR34);
+
+  // initGui();    // TODO : initGui(rendererObj)
   // start rendering loop
   animate();
 }
@@ -526,6 +800,16 @@ export function loadZip (uploadedFile, cb) {
             combineMprSeg(r0, segR13, stack);
             combineMprSeg(r0, segR14, stack);
 
+            combineMprSeg(r0, segR21, stack);
+            combineMprSeg(r0, segR22, stack);
+            combineMprSeg(r0, segR23, stack);
+            combineMprSeg(r0, segR24, stack);
+
+            combineMprSeg(r0, segR31, stack);
+            combineMprSeg(r0, segR32, stack);
+            combineMprSeg(r0, segR33, stack);
+            combineMprSeg(r0, segR34, stack);
+
 
             initHelpersLocalizerAll(stack);
 
@@ -562,6 +846,32 @@ export function loadZip (uploadedFile, cb) {
             segR14.controls.addEventListener('mousedown', onDown);
             segR14.controls.addEventListener('mousemove', onMove);
             segR14.controls.addEventListener('mouseup', onUp);
+
+            segR21.controls.addEventListener('mousedown', onDown);
+            segR21.controls.addEventListener('mousemove', onMove);
+            segR21.controls.addEventListener('mouseup', onUp);
+            segR22.controls.addEventListener('mousedown', onDown);
+            segR22.controls.addEventListener('mousemove', onMove);
+            segR22.controls.addEventListener('mouseup', onUp);
+            segR23.controls.addEventListener('mousedown', onDown);
+            segR23.controls.addEventListener('mousemove', onMove);
+            segR23.controls.addEventListener('mouseup', onUp);
+            segR24.controls.addEventListener('mousedown', onDown);
+            segR24.controls.addEventListener('mousemove', onMove);
+            segR24.controls.addEventListener('mouseup', onUp);
+
+            segR31.controls.addEventListener('mousedown', onDown);
+            segR31.controls.addEventListener('mousemove', onMove);
+            segR31.controls.addEventListener('mouseup', onUp);
+            segR32.controls.addEventListener('mousedown', onDown);
+            segR32.controls.addEventListener('mousemove', onMove);
+            segR32.controls.addEventListener('mouseup', onUp);
+            segR33.controls.addEventListener('mousedown', onDown);
+            segR33.controls.addEventListener('mousemove', onMove);
+            segR33.controls.addEventListener('mouseup', onUp);
+            segR34.controls.addEventListener('mousedown', onDown);
+            segR34.controls.addEventListener('mousemove', onMove);
+            segR34.controls.addEventListener('mouseup', onUp);
 
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
@@ -982,35 +1292,136 @@ function onScroll (event) {
     stackHelper.index -= 1;
   }
   // onScroll for seg
+  // var uniforms = null;
+  // if (stackHelper.index < 64) {
+  //   uniforms = segR11.shaderMat.uniforms;
+  //   uniforms.indexSliceToDisplay.value = stackHelper.index;
+  //
+  //   segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  // } else if (64 <= stackHelper.index && stackHelper.index < 64*2) {
+  //   uniforms = segR12.shaderMat.uniforms;
+  //   uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+  //
+  //   segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  // } else if (64*2 <= stackHelper.index && stackHelper.index < 64*3) {
+  //   uniforms = segR13.shaderMat.uniforms;
+  //   uniforms.indexSliceToDisplay.value = stackHelper.index - 64*2;
+  //
+  //   segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  // } else if (64*3 <= stackHelper.index && stackHelper.index < 64*4) {
+  //   uniforms = segR14.shaderMat.uniforms;
+  //   uniforms.indexSliceToDisplay.value = stackHelper.index- 64*3;
+  //
+  //   segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  //   segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  // }
+
+
   var uniforms = null;
-  if (stackHelper.index < 64) {
-    uniforms = segR11.shaderMat.uniforms;
-    uniforms.indexSliceToDisplay.value = stackHelper.index;
+  switch (id) {
+    case r1.domId:
+      if (stackHelper.index < 64) {
+        uniforms = segR11.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index;
 
-    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64 <= stackHelper.index && stackHelper.index < 64*2) {
-    uniforms = segR12.shaderMat.uniforms;
-    uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+        segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+        uniforms = segR12.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
 
-    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64*2 <= stackHelper.index && stackHelper.index < 64*3) {
-    uniforms = segR13.shaderMat.uniforms;
-    uniforms.indexSliceToDisplay.value = stackHelper.index - 64*2;
+        segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+        uniforms = segR13.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
 
-    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64*3 <= stackHelper.index && stackHelper.index < 64*4) {
-    uniforms = segR14.shaderMat.uniforms;
-    uniforms.indexSliceToDisplay.value = stackHelper.index- 64*3;
+        segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+        uniforms = segR14.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
 
-    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      }
+
+      break;
+    case r2.domId:
+      if (stackHelper.index < 64) {
+        uniforms = segR21.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+        segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+        uniforms = segR22.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+        segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+        uniforms = segR23.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+
+        segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+        uniforms = segR24.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+
+        segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      }
+      break;
+    case r3.domId:
+      if (stackHelper.index < 64) {
+        uniforms = segR31.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+        segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+        uniforms = segR32.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+        segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+        uniforms = segR33.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+
+        segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+        uniforms = segR34.shaderMat.uniforms;
+        uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+
+        segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+      }
+      break;
+    default:
+      return;
   }
 
   // console.log('stackHelper ' + stackHelper.index);
@@ -1075,6 +1486,21 @@ function onWindowResize () {
   windowResize2DSeg(segR12);
   windowResize2DSeg(segR13);
   windowResize2DSeg(segR14);
+
+  windowResize2DSeg(segR21);
+  windowResize2DSeg(segR22);
+  windowResize2DSeg(segR23);
+  windowResize2DSeg(segR24);
+
+  windowResize2DSeg(segR31);
+  windowResize2DSeg(segR32);
+  windowResize2DSeg(segR33);
+  windowResize2DSeg(segR34);
+
+  windowResize2DSeg(segR41);
+  windowResize2DSeg(segR42);
+  windowResize2DSeg(segR43);
+  windowResize2DSeg(segR44);
 
   computeOffset(r0);
 }
@@ -1149,10 +1575,16 @@ function CameraCtrl2D (id, action) {
       segCameraCtrl2D(segR14, val)
       break;
     case r2.domId:
-      // seg = segR11;
+      segCameraCtrl2D(segR21, val)
+      segCameraCtrl2D(segR22, val)
+      segCameraCtrl2D(segR23, val)
+      segCameraCtrl2D(segR24, val)
       break;
     case r3.domId:
-      // seg = segR11;
+      segCameraCtrl2D(segR31, val)
+      segCameraCtrl2D(segR32, val)
+      segCameraCtrl2D(segR33, val)
+      segCameraCtrl2D(segR34, val)
       break;
     default:
     // console.log('unselected or r1 is selected');
@@ -1185,10 +1617,16 @@ export function Fit (id) {
       segFitBox(segR14)
       break;
     case r2.domId:
-      seg = segR11;
+      segFitBox(segR21)
+      segFitBox(segR22)
+      segFitBox(segR23)
+      segFitBox(segR24)
       break;
     case r3.domId:
-      seg = segR11;
+      segFitBox(segR31)
+      segFitBox(segR32)
+      segFitBox(segR33)
+      segFitBox(segR34)
       break;
     default:
     // console.log('unselected or r1 is selected');
@@ -1248,6 +1686,24 @@ export function CameraCtrl (enable) {
   segR12.controls.viewcontrol = enable;
   segR13.controls.viewcontrol = enable;
   segR14.controls.viewcontrol = enable;
+  segCameraCtrl(segR11, enable);
+  segCameraCtrl(segR12, enable);
+  segCameraCtrl(segR13, enable);
+  segCameraCtrl(segR14, enable);
+
+  segCameraCtrl(segR21, enable);
+  segCameraCtrl(segR22, enable);
+  segCameraCtrl(segR23, enable);
+  segCameraCtrl(segR24, enable);
+
+  segCameraCtrl(segR31, enable);
+  segCameraCtrl(segR32, enable);
+  segCameraCtrl(segR33, enable);
+  segCameraCtrl(segR34, enable);
+}
+
+function segCameraCtrl(render, enable) {
+  render.controls.viewcontrol = enable;
 }
 
 export function adjustBrightness (delta) {
