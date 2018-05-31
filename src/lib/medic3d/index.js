@@ -169,7 +169,7 @@ const r3 = {
   offset: null
 };
 
-const segR1 = {
+const segR11 = {
   domId: r1.domId,
   domElement: null,
   targetID: 11,
@@ -178,7 +178,84 @@ const segR1 = {
   spaceLength : {
     x: 256,
     y: 256,
-    z: 24
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+const segR12 = {
+  domId: r1.domId,
+  domElement: null,
+  targetID: 11,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR13 = {
+  domId: r1.domId,
+  domElement: null,
+  targetID: 11,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
+  },
+  renderer : null,
+  scene : null,
+  camera : null,
+  container : null,
+  shaderMat : null,
+  boxHelper : null,
+  screenContainer : null,
+  style: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  offset: null
+}
+
+const segR14 = {
+  domId: r1.domId,
+  domElement: null,
+  targetID: 11,
+  gui: null,
+  guiParam : {},
+  spaceLength : {
+    x: 256,
+    y: 256,
+    z: 64
   },
   renderer : null,
   scene : null,
@@ -220,7 +297,10 @@ export function init () {
       r1.controls.update();
       r2.controls.update();
       r3.controls.update();
-      segR1.controls.update();
+      segR11.controls.update();
+      segR12.controls.update();
+      segR13.controls.update();
+      segR14.controls.update();
 
       r0.light.position.copy(r0.camera.position);
       r0.renderer.render(r0.scene, r0.camera);
@@ -229,7 +309,10 @@ export function init () {
       renderDo(r1);
       renderDo(r2);
       renderDo(r3);
-      renderSeg(segR1);
+      renderSeg(segR11);
+      renderSeg(segR12);
+      renderSeg(segR13);
+      renderSeg(segR14);
 
     }
     // request new frame
@@ -240,7 +323,7 @@ export function init () {
 
   function renderSeg(render) {
     render.renderer.clear();
-    render.renderer.render( segR1.scene, segR1.camera );
+    render.renderer.render( render.scene, render.camera );
 
     // mesh
     render.renderer.clearDepth();
@@ -265,7 +348,10 @@ export function init () {
     clearThree(r2.scene);
     clearThree(r3.scene);
 
-    clearThree(segR1.scene);
+    clearThree(segR11.scene);
+    clearThree(segR12.scene);
+    clearThree(segR13.scene);
+    clearThree(segR14.scene);
   } else {
     // console.log('First time');
   }
@@ -274,7 +360,12 @@ export function init () {
   initRenderer2D(r2);
   initRenderer2D(r1);
 
-  initSegment(segR1);
+  initSegment(segR11);
+  initSegment(segR12);
+  initSegment(segR13);
+  initSegment(segR14);
+
+  initGui();    // TODO : initGui(rendererObj)
   // start rendering loop
   animate();
 }
@@ -430,7 +521,10 @@ export function loadZip (uploadedFile, cb) {
             combineMpr(r0, r1, stack);
             combineMpr(r0, r2, stack);
             combineMpr(r0, r3, stack);
-            combineMprSeg(r0, segR1, stack);
+            combineMprSeg(r0, segR11, stack);
+            combineMprSeg(r0, segR12, stack);
+            combineMprSeg(r0, segR13, stack);
+            combineMprSeg(r0, segR14, stack);
 
 
             initHelpersLocalizerAll(stack);
@@ -440,19 +534,34 @@ export function loadZip (uploadedFile, cb) {
             r1.domElement.addEventListener('click', onClick);
             r2.domElement.addEventListener('click', onClick);
             r3.domElement.addEventListener('click', onClick);
-            segR1.domElement.addEventListener('click', onClick);
+            segR11.domElement.addEventListener('click', onClick);
+            segR12.domElement.addEventListener('click', onClick);
+            segR13.domElement.addEventListener('click', onClick);
+            segR14.domElement.addEventListener('click', onClick);
             // add scroll event
             r1.controls.addEventListener('OnScroll', onScroll);
             r2.controls.addEventListener('OnScroll', onScroll);
             r3.controls.addEventListener('OnScroll', onScroll);
-            segR1.controls.addEventListener('OnScroll', onScroll);
+            segR11.controls.addEventListener('OnScroll', onScroll);
+            segR12.controls.addEventListener('OnScroll', onScroll);
+            segR13.controls.addEventListener('OnScroll', onScroll);
+            segR14.controls.addEventListener('OnScroll', onScroll);
             // add others event
             r1.controls.addEventListener('mousedown', onDown);
             r1.controls.addEventListener('mousemove', onMove);
             r1.controls.addEventListener('mouseup', onUp);
-            segR1.controls.addEventListener('mousedown', onDown);
-            segR1.controls.addEventListener('mousemove', onMove);
-            segR1.controls.addEventListener('mouseup', onUp);
+            segR11.controls.addEventListener('mousedown', onDown);
+            segR11.controls.addEventListener('mousemove', onMove);
+            segR11.controls.addEventListener('mouseup', onUp);
+            segR12.controls.addEventListener('mousedown', onDown);
+            segR12.controls.addEventListener('mousemove', onMove);
+            segR12.controls.addEventListener('mouseup', onUp);
+            segR13.controls.addEventListener('mousedown', onDown);
+            segR13.controls.addEventListener('mousemove', onMove);
+            segR13.controls.addEventListener('mouseup', onUp);
+            segR14.controls.addEventListener('mousedown', onDown);
+            segR14.controls.addEventListener('mousemove', onMove);
+            segR14.controls.addEventListener('mouseup', onUp);
 
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
@@ -858,6 +967,7 @@ function onScroll (event) {
       // uniforms.indexSliceToDisplay.value = bok;
       // console.log('No matched ID');
       return;
+
   }
 
   if (event.delta > 0) {
@@ -872,8 +982,36 @@ function onScroll (event) {
     stackHelper.index -= 1;
   }
   // onScroll for seg
-  var uniforms = segR1.shaderMat.uniforms;
-  uniforms.indexSliceToDisplay.value = stackHelper.index - 130;
+  var uniforms = null;
+  if (0 < stackHelper.index && stackHelper.index < 64) {
+    uniforms = segR11.shaderMat.uniforms;
+    uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  } else if (64 < stackHelper.index && stackHelper.index < 64*2) {
+    uniforms = segR12.shaderMat.uniforms;
+    uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  } else if (64*2 < stackHelper.index && stackHelper.index < 64*3) {
+    uniforms = segR13.shaderMat.uniforms;
+    uniforms.indexSliceToDisplay.value = stackHelper.index - 64*2;
+
+    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  } else if (64*3 < stackHelper.index && stackHelper.index < 64*4) {
+    uniforms = segR14.shaderMat.uniforms;
+    uniforms.indexSliceToDisplay.value = stackHelper.index- 64*3;
+
+    segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+    segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+  }
 
   // console.log('stackHelper ' + stackHelper.index);
   // onGreenChanged();
@@ -933,7 +1071,10 @@ function onWindowResize () {
   windowResize2D(r1);
   windowResize2D(r2);
   windowResize2D(r3);
-  windowResize2DSeg(segR1);
+  windowResize2DSeg(segR11);
+  windowResize2DSeg(segR12);
+  windowResize2DSeg(segR13);
+  windowResize2DSeg(segR14);
 
   computeOffset(r0);
 }
@@ -1002,13 +1143,16 @@ function CameraCtrl2D (id, action) {
 
   switch (id) {
     case r1.domId:
-      seg = segR1;
+      seg1 = segR11;
+      seg2 = segR12;
+      seg3 = segR13;
+      seg4 = segR14;
       break;
     case r2.domId:
-      seg = segR1;
+      // seg = segR11;
       break;
     case r3.domId:
-      seg = segR1;
+      // seg = segR11;
       break;
     default:
     // console.log('unselected or r1 is selected');
@@ -1016,8 +1160,14 @@ function CameraCtrl2D (id, action) {
   selected.camera.zoom += val;
   selected.camera.updateProjectionMatrix();
 
-  seg.camera.zoom += val;
-  seg.camera.updateProjectionMatrix();
+  seg1.camera.zoom += val;
+  seg1.camera.updateProjectionMatrix();
+  seg2.camera.zoom += val;
+  seg2.camera.updateProjectionMatrix();
+  seg3.camera.zoom += val;
+  seg3.camera.updateProjectionMatrix();
+  seg4.camera.zoom += val;
+  seg4.camera.updateProjectionMatrix();
 }
 
 function CameraCtrl3D (delta) {
@@ -1032,13 +1182,13 @@ export function Fit (id) {
   }
   switch (id) {
     case r1.domId:
-      seg = segR1;
+      seg = segR11;
       break;
     case r2.domId:
-      seg = segR1;
+      seg = segR11;
       break;
     case r3.domId:
-      seg = segR1;
+      seg = segR11;
       break;
     default:
     // console.log('unselected or r1 is selected');
@@ -1091,7 +1241,10 @@ export function CameraCtrl (enable) {
   r1.controls.viewcontrol = enable;
   r2.controls.viewcontrol = enable;
   r3.controls.viewcontrol = enable;
-  segR1.controls.viewcontrol = enable;
+  segR11.controls.viewcontrol = enable;
+  segR12.controls.viewcontrol = enable;
+  segR13.controls.viewcontrol = enable;
+  segR14.controls.viewcontrol = enable;
 }
 
 export function adjustBrightness (delta) {
@@ -1277,7 +1430,7 @@ function initSegment(rendererObj){
     rendererObj.renderer.domElement.style[prop] = rendererObj.style[prop];
   }
   // TODO: remove this
-  rendererObj.renderer.domElement.style.opacity = '0.5'
+  // rendererObj.renderer.domElement.style.opacity = '0.2'
 
   // THREE environment
   rendererObj.scene = new THREE.Scene();
@@ -1298,8 +1451,7 @@ function initSegment(rendererObj){
   rendererObj.container = new THREE.Object3D();
   rendererObj.scene.add( rendererObj.container );
 
-  initGui();    // TODO : initGui(rendererObj)
-  initScreen(); // TODO : initScreen(rendererObj)
+  initScreen(rendererObj); // TODO : initScreen(rendererObj)
   // initBox();    // TODO : initBox(rendererObj)
 
   computeOffset(rendererObj)
@@ -1347,13 +1499,13 @@ function initSegment(){
 */
 
 function initGui(){
-  segR1.gui = new dat.GUI();
-  segR1.guiParam.sliceIndex = 5;
-  segR1.gui.add(segR1.guiParam, 'sliceIndex', 0, 24)
+  segR11.gui = new dat.GUI();
+  segR11.guiParam.sliceIndex = 5;
+  segR11.gui.add(segR11.guiParam, 'sliceIndex', 0, 3)
     .step(1)
     .name("Slice")
     .onChange(function(indexSliceToDisplay){
-      var uniforms = segR1.shaderMat.uniforms;
+      var uniforms = segR11.shaderMat.uniforms;
       uniforms.indexSliceToDisplay.value = indexSliceToDisplay;
 
     })
@@ -1366,30 +1518,30 @@ function initGui(){
 function initBox(xspaceLength, yspaceLength, zspaceLength){
   var boxMaterial = new THREE.MeshBasicMaterial();
   var boxGeom = new THREE.CubeGeometry(
-    segR1.spaceLength.x,
-    segR1.spaceLength.y,
-    segR1.spaceLength.z
+    segR11.spaceLength.x,
+    segR11.spaceLength.y,
+    segR11.spaceLength.z
   );
   var boxMesh = new THREE.Mesh( boxGeom, boxMaterial )
 //    boxHelper = new THREE.EdgesHelper( boxMesh, 0xff9999 );
 //    container.add( boxHelper );
   // adjust the camera to the box
-  segR1.camera.position.z = segR1.spaceLength.z;
+  segR11.camera.position.z = segR11.spaceLength.z;
 }
 
 
-function initScreen(){
-  segR1.screenContainer = new THREE.Object3D();
+function initScreen(render){
+  render.screenContainer = new THREE.Object3D();
 
-  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/merge_from_ofoct.png" )
-  mosaicTexture.magFilter = THREE.NearestFilter;
-  mosaicTexture.minFilter = THREE.NearestFilter;
+  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_64.png" )
+  mosaicTexture.magFilter = THREE.LinearFilter;
+  mosaicTexture.minFilter = THREE.LinearFilter;
   //mosaicTexture.flipY = false;
 
   var vertex = shaders.vertex;
   var fragment = shaders.fragment;
 
-  segR1.shaderMat = new THREE.ShaderMaterial( {
+  render.shaderMat = new THREE.ShaderMaterial( {
     uniforms: {
       // the textures
       nbOfTextureUsed: {
@@ -1404,32 +1556,32 @@ function initScreen(){
       // the number of slice per column
       nbSlicePerCol: {
         type: "f",
-        value: 24.0
+        value: 64.0
       },
       // the number of slice in total
       nbSliceTotal: {
         type: "f",
-        value: segR1.spaceLength.z  // because along zspace
+        value: render.spaceLength.z  // because along zspace
       },
       // the index of the slice to display
       indexSliceToDisplay: {
         type: "f",
-        value: segR1.guiParam.sliceIndex
+        value: render.guiParam.sliceIndex
       },
       // xspace length
       xspaceLength: {
         type: "f",
-        value: segR1.spaceLength.x
+        value: render.spaceLength.x
       },
       // yspace length
       yspaceLength: {
         type: "f",
-        value: segR1.spaceLength.y
+        value: render.spaceLength.y
       },
       // zspace length
       zspaceLength: {
         type: "f",
-        value: segR1.spaceLength.z
+        value: render.spaceLength.z
       },
       textures: {
         type: "t",
@@ -1444,11 +1596,11 @@ function initScreen(){
   });
 
 
-  var geometry = new THREE.PlaneBufferGeometry( segR1.spaceLength.x, segR1.spaceLength.y, 1 );
-  var plane = new THREE.Mesh( geometry, segR1.shaderMat );
-  segR1.screenContainer.add( plane );
+  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, render.spaceLength.y, 1 );
+  var plane = new THREE.Mesh( geometry, render.shaderMat );
+  render.screenContainer.add( plane );
 
-  segR1.container.add( segR1.screenContainer );
+  render.container.add( render.screenContainer );
 }
 
 
