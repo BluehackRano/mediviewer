@@ -197,7 +197,7 @@ const segR11 = {
 const segR12 = {
   domId: r1.domId,
   domElement: null,
-  targetID: 11,
+  targetID: 12,
   gui: null,
   guiParam : {},
   spaceLength : {
@@ -223,7 +223,7 @@ const segR12 = {
 const segR13 = {
   domId: r1.domId,
   domElement: null,
-  targetID: 11,
+  targetID: 13,
   gui: null,
   guiParam : {},
   spaceLength : {
@@ -249,7 +249,7 @@ const segR13 = {
 const segR14 = {
   domId: r1.domId,
   domElement: null,
-  targetID: 11,
+  targetID: 14,
   gui: null,
   guiParam : {},
   spaceLength : {
@@ -542,10 +542,10 @@ export function loadZip (uploadedFile, cb) {
             r1.controls.addEventListener('OnScroll', onScroll);
             r2.controls.addEventListener('OnScroll', onScroll);
             r3.controls.addEventListener('OnScroll', onScroll);
-            segR11.controls.addEventListener('OnScroll', onScroll);
-            segR12.controls.addEventListener('OnScroll', onScroll);
-            segR13.controls.addEventListener('OnScroll', onScroll);
-            segR14.controls.addEventListener('OnScroll', onScroll);
+            // segR11.controls.addEventListener('OnScroll', onScroll);
+            // segR12.controls.addEventListener('OnScroll', onScroll);
+            // segR13.controls.addEventListener('OnScroll', onScroll);
+            // segR14.controls.addEventListener('OnScroll', onScroll);
             // add others event
             r1.controls.addEventListener('mousedown', onDown);
             r1.controls.addEventListener('mousemove', onMove);
@@ -983,28 +983,28 @@ function onScroll (event) {
   }
   // onScroll for seg
   var uniforms = null;
-  if (0 < stackHelper.index && stackHelper.index < 64) {
+  if (stackHelper.index < 64) {
     uniforms = segR11.shaderMat.uniforms;
     uniforms.indexSliceToDisplay.value = stackHelper.index;
 
     segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64 < stackHelper.index && stackHelper.index < 64*2) {
+  } else if (64 <= stackHelper.index && stackHelper.index < 64*2) {
     uniforms = segR12.shaderMat.uniforms;
     uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
 
     segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64*2 < stackHelper.index && stackHelper.index < 64*3) {
+  } else if (64*2 <= stackHelper.index && stackHelper.index < 64*3) {
     uniforms = segR13.shaderMat.uniforms;
     uniforms.indexSliceToDisplay.value = stackHelper.index - 64*2;
 
     segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
     segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
-  } else if (64*3 < stackHelper.index && stackHelper.index < 64*4) {
+  } else if (64*3 <= stackHelper.index && stackHelper.index < 64*4) {
     uniforms = segR14.shaderMat.uniforms;
     uniforms.indexSliceToDisplay.value = stackHelper.index- 64*3;
 
@@ -1143,10 +1143,10 @@ function CameraCtrl2D (id, action) {
 
   switch (id) {
     case r1.domId:
-      seg1 = segR11;
-      seg2 = segR12;
-      seg3 = segR13;
-      seg4 = segR14;
+      segCameraCtrl2D(segR11, val)
+      segCameraCtrl2D(segR12, val)
+      segCameraCtrl2D(segR13, val)
+      segCameraCtrl2D(segR14, val)
       break;
     case r2.domId:
       // seg = segR11;
@@ -1160,14 +1160,11 @@ function CameraCtrl2D (id, action) {
   selected.camera.zoom += val;
   selected.camera.updateProjectionMatrix();
 
-  seg1.camera.zoom += val;
-  seg1.camera.updateProjectionMatrix();
-  seg2.camera.zoom += val;
-  seg2.camera.updateProjectionMatrix();
-  seg3.camera.zoom += val;
-  seg3.camera.updateProjectionMatrix();
-  seg4.camera.zoom += val;
-  seg4.camera.updateProjectionMatrix();
+}
+
+function segCameraCtrl2D(render, val) {
+  render.camera.zoom += val;
+  render.camera.updateProjectionMatrix();
 }
 
 function CameraCtrl3D (delta) {
@@ -1182,7 +1179,10 @@ export function Fit (id) {
   }
   switch (id) {
     case r1.domId:
-      seg = segR11;
+      segFitBox(segR11)
+      segFitBox(segR12)
+      segFitBox(segR13)
+      segFitBox(segR14)
       break;
     case r2.domId:
       seg = segR11;
@@ -1195,7 +1195,10 @@ export function Fit (id) {
   }
 
   selected.camera.fitBox(2, 0.9);
-  seg.camera.fitBox(2, 0.9);
+}
+
+function segFitBox(render) {
+  render.camera.fitBox(2, 0.9);
 }
 
 /**
@@ -1533,7 +1536,7 @@ function initBox(xspaceLength, yspaceLength, zspaceLength){
 function initScreen(render){
   render.screenContainer = new THREE.Object3D();
 
-  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_64.png" )
+  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_" + render.targetID + ".png" )
   mosaicTexture.magFilter = THREE.LinearFilter;
   mosaicTexture.minFilter = THREE.LinearFilter;
   //mosaicTexture.flipY = false;
@@ -1596,7 +1599,7 @@ function initScreen(render){
   });
 
 
-  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, render.spaceLength.y, 1 );
+  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, -render.spaceLength.y, 1 );
   var plane = new THREE.Mesh( geometry, render.shaderMat );
   render.screenContainer.add( plane );
 
