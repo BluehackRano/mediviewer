@@ -818,10 +818,10 @@ export function loadZip (uploadedFile, cb) {
             r1.domElement.addEventListener('click', onClick);
             r2.domElement.addEventListener('click', onClick);
             r3.domElement.addEventListener('click', onClick);
-            segR11.domElement.addEventListener('click', onClick);
-            segR12.domElement.addEventListener('click', onClick);
-            segR13.domElement.addEventListener('click', onClick);
-            segR14.domElement.addEventListener('click', onClick);
+            // segR11.domElement.addEventListener('click', onClick);
+            // segR12.domElement.addEventListener('click', onClick);
+            // segR13.domElement.addEventListener('click', onClick);
+            // segR14.domElement.addEventListener('click', onClick);
             // add scroll event
             r1.controls.addEventListener('OnScroll', onScroll);
             r2.controls.addEventListener('OnScroll', onScroll);
@@ -834,44 +834,44 @@ export function loadZip (uploadedFile, cb) {
             r1.controls.addEventListener('mousedown', onDown);
             r1.controls.addEventListener('mousemove', onMove);
             r1.controls.addEventListener('mouseup', onUp);
-            segR11.controls.addEventListener('mousedown', onDown);
-            segR11.controls.addEventListener('mousemove', onMove);
-            segR11.controls.addEventListener('mouseup', onUp);
-            segR12.controls.addEventListener('mousedown', onDown);
-            segR12.controls.addEventListener('mousemove', onMove);
-            segR12.controls.addEventListener('mouseup', onUp);
-            segR13.controls.addEventListener('mousedown', onDown);
-            segR13.controls.addEventListener('mousemove', onMove);
-            segR13.controls.addEventListener('mouseup', onUp);
-            segR14.controls.addEventListener('mousedown', onDown);
-            segR14.controls.addEventListener('mousemove', onMove);
-            segR14.controls.addEventListener('mouseup', onUp);
-
-            segR21.controls.addEventListener('mousedown', onDown);
-            segR21.controls.addEventListener('mousemove', onMove);
-            segR21.controls.addEventListener('mouseup', onUp);
-            segR22.controls.addEventListener('mousedown', onDown);
-            segR22.controls.addEventListener('mousemove', onMove);
-            segR22.controls.addEventListener('mouseup', onUp);
-            segR23.controls.addEventListener('mousedown', onDown);
-            segR23.controls.addEventListener('mousemove', onMove);
-            segR23.controls.addEventListener('mouseup', onUp);
-            segR24.controls.addEventListener('mousedown', onDown);
-            segR24.controls.addEventListener('mousemove', onMove);
-            segR24.controls.addEventListener('mouseup', onUp);
-
-            segR31.controls.addEventListener('mousedown', onDown);
-            segR31.controls.addEventListener('mousemove', onMove);
-            segR31.controls.addEventListener('mouseup', onUp);
-            segR32.controls.addEventListener('mousedown', onDown);
-            segR32.controls.addEventListener('mousemove', onMove);
-            segR32.controls.addEventListener('mouseup', onUp);
-            segR33.controls.addEventListener('mousedown', onDown);
-            segR33.controls.addEventListener('mousemove', onMove);
-            segR33.controls.addEventListener('mouseup', onUp);
-            segR34.controls.addEventListener('mousedown', onDown);
-            segR34.controls.addEventListener('mousemove', onMove);
-            segR34.controls.addEventListener('mouseup', onUp);
+            // segR11.controls.addEventListener('mousedown', onDown);
+            // segR11.controls.addEventListener('mousemove', onMove);
+            // segR11.controls.addEventListener('mouseup', onUp);
+            // segR12.controls.addEventListener('mousedown', onDown);
+            // segR12.controls.addEventListener('mousemove', onMove);
+            // segR12.controls.addEventListener('mouseup', onUp);
+            // segR13.controls.addEventListener('mousedown', onDown);
+            // segR13.controls.addEventListener('mousemove', onMove);
+            // segR13.controls.addEventListener('mouseup', onUp);
+            // segR14.controls.addEventListener('mousedown', onDown);
+            // segR14.controls.addEventListener('mousemove', onMove);
+            // segR14.controls.addEventListener('mouseup', onUp);
+            //
+            // segR21.controls.addEventListener('mousedown', onDown);
+            // segR21.controls.addEventListener('mousemove', onMove);
+            // segR21.controls.addEventListener('mouseup', onUp);
+            // segR22.controls.addEventListener('mousedown', onDown);
+            // segR22.controls.addEventListener('mousemove', onMove);
+            // segR22.controls.addEventListener('mouseup', onUp);
+            // segR23.controls.addEventListener('mousedown', onDown);
+            // segR23.controls.addEventListener('mousemove', onMove);
+            // segR23.controls.addEventListener('mouseup', onUp);
+            // segR24.controls.addEventListener('mousedown', onDown);
+            // segR24.controls.addEventListener('mousemove', onMove);
+            // segR24.controls.addEventListener('mouseup', onUp);
+            //
+            // segR31.controls.addEventListener('mousedown', onDown);
+            // segR31.controls.addEventListener('mousemove', onMove);
+            // segR31.controls.addEventListener('mouseup', onUp);
+            // segR32.controls.addEventListener('mousedown', onDown);
+            // segR32.controls.addEventListener('mousemove', onMove);
+            // segR32.controls.addEventListener('mouseup', onUp);
+            // segR33.controls.addEventListener('mousedown', onDown);
+            // segR33.controls.addEventListener('mousemove', onMove);
+            // segR33.controls.addEventListener('mouseup', onUp);
+            // segR34.controls.addEventListener('mousedown', onDown);
+            // segR34.controls.addEventListener('mousemove', onMove);
+            // segR34.controls.addEventListener('mouseup', onUp);
 
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
@@ -2049,13 +2049,16 @@ function initScreen(render){
     transparent: true
   });
 
+  var x = render.spaceLength.x;
   var y= render.spaceLength.y;
 
   if (render.domId == r1.domId) {
     y = -y;
+  } else if (render.domId == r2.domId) {
+    x = -x;
   }
 
-  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, y, 1 );
+  var geometry = new THREE.PlaneBufferGeometry( x, y, 1 );
   var plane = new THREE.Mesh( geometry, render.shaderMat );
   render.screenContainer.add( plane );
 
