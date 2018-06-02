@@ -1497,11 +1497,6 @@ function onWindowResize () {
   windowResize2DSeg(segR33);
   windowResize2DSeg(segR34);
 
-  windowResize2DSeg(segR41);
-  windowResize2DSeg(segR42);
-  windowResize2DSeg(segR43);
-  windowResize2DSeg(segR44);
-
   computeOffset(r0);
 }
 
@@ -2054,8 +2049,13 @@ function initScreen(render){
     transparent: true
   });
 
+  var y= render.spaceLength.y;
 
-  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, -render.spaceLength.y, 1 );
+  if (render.domId == r1.domId) {
+    y = -y;
+  }
+
+  var geometry = new THREE.PlaneBufferGeometry( render.spaceLength.x, y, 1 );
   var plane = new THREE.Mesh( geometry, render.shaderMat );
   render.screenContainer.add( plane );
 
