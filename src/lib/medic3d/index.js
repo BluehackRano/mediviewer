@@ -1587,6 +1587,9 @@ function CameraCtrl2D (id, action) {
   selected.camera.zoom += val;
   selected.camera.updateProjectionMatrix();
 
+  computeOffset(r1)
+  computeOffset(r2)
+  computeOffset(r3)
 }
 
 function segCameraCtrl2D(render, val) {
