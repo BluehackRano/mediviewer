@@ -382,4 +382,26 @@
 */
     }
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #3b3a40;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #787782;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    border-radius: 10px;
+  }
 </style>
