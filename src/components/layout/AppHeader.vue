@@ -38,11 +38,12 @@
           <!--</router-link>-->
         </div>
 
-        <!--<div class="nav-right">-->
-          <!--<a class="button nav-help-button">-->
-            <!--Help-->
-          <!--</a>-->
-        <!--</div>-->
+        <div class="nav-right">
+          <a class="button nav-help-button"
+             @click="helpButtonClicked">
+            Help
+          </a>
+        </div>
       </nav>
 
     </div>
@@ -76,6 +77,9 @@
       },
       segmentationFileUploaded (segmentationFile) {
         this.segmentationFile = segmentationFile
+      },
+      helpButtonClicked () {
+        this.$bus.$emit(busType.SHOW_HELP_POPUP, null)
       }
     }
   }
