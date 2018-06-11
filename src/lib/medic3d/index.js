@@ -11,6 +11,7 @@ var PNG = require('pngjs').PNG;
 
 // standard global variables
 let ready = false;
+let aDicomRawData = null
 
 const shaders = {
   vertex : `
@@ -965,6 +966,9 @@ function extractZip (zip, type, sort) {
 
   return Promise.all(loadData)
     .then(function (rawdata) {
+      // for Dicom Tag parsing
+      aDicomRawData = rawdata[0]
+
       return rawdata
     })
 }
@@ -2081,3 +2085,13 @@ function initScreen(render){
 //   segR1.renderer.setSize( window.innerWidth, window.innerHeight );
 // }, false );
 
+export function parseDicomTags () {
+  return new Promise((resolve, reject) => {
+    if (aDicomRawData) {
+      let ParsersDicom = Medic3D.Parsers.Dicom
+      resolve(new ParsersDicom(aDicomRawData, 'dicom_parse_id_01'))
+    } else {
+      reject(new Error('Dicom file not found.'))
+    }
+  })
+}
