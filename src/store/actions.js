@@ -15,13 +15,20 @@ export default {
   segmentationVisibleToggle: ({ commit }, segItem) => {
     if (segItem) {
       segItem.visible = segItem.visible || false
+      segItem.selected = segItem.visible
+      commit(mutationType.SEGMENTATION_SELECTED_TOGGLE, segItem)
       commit(mutationType.SEGMENTATION_VISIBLE_TOGGLE, segItem)
     }
   },
   segmentationSelectedToggle: ({ commit }, segItem) => {
     if (segItem) {
       segItem.selected = segItem.selected || false
+      segItem.visible = segItem.selected
       commit(mutationType.SEGMENTATION_SELECTED_TOGGLE, segItem)
+      commit(mutationType.SEGMENTATION_VISIBLE_TOGGLE, segItem)
     }
+  },
+  segmentationToggleAll: ({ commit }, show) => {
+    commit(mutationType.SEGMENTATION_TOGGLE_ALL, show)
   }
 }

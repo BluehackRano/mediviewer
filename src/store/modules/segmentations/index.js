@@ -185,6 +185,12 @@ const mutations = {
         state.items[segItem.index].selected = segItem.selected
       }
     }
+  },
+  [types.SEGMENTATION_TOGGLE_ALL] (state, show) {
+    for (let i = 0; i < state.items.length; i++) {
+      state.items[i].visible = show
+      state.items[i].selected = show
+    }
   }
 }
 
