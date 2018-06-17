@@ -12,6 +12,9 @@ export default {
       commit(mutationType.SHOW_TAGS_MENU_TOGGLE, menuItem)
     }
   },
+  showAnalysisReportPopupToggle: ({ commit }, show) => {
+    commit(mutationType.SHOW_ANALYSIS_REPORT_POPUP, show)
+  },
   segmentationVisibleToggle: ({ commit }, segItem) => {
     if (segItem) {
       segItem.visible = segItem.visible || false

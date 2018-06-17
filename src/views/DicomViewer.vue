@@ -136,7 +136,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapGetters, mapActions} from 'vuex'
   import * as mutationType from '@/store/mutation-types'
   import * as busType from '@/util/bus/bus-types'
 
@@ -159,7 +159,10 @@
         currentMenu: 'currentMenu',
         focusedCanvas: 'focusedCanvas',
         showTags: 'showTags'
-      })
+      }),
+      ...mapGetters([
+        'showAnalysisReportPopup'
+      ])
     },
     data () {
       return {
@@ -201,6 +204,9 @@
       this.initLayouts()
     },
     methods: {
+      ...mapActions([
+        'showAnalysisReportPopupToggle'
+      ]),
       setUploadedFile (uploadedFile) {
 //        console.log('setUploadedFile')
         var temp = uploadedFile.name.split('.');
@@ -375,7 +381,25 @@
 //            console.log('#SegmentationResultOveray')
             break;
           case 'AnalysisReport':
-//            console.log('#AnalysisReport')
+            if (!this.showAnalysisReportPopup) {
+              var canvas1 = document.getElementById('1')
+              var image1 = canvas1.toDataURL()
+
+              var canvas2 = document.getElementById('2')
+              var image2 = canvas2.toDataURL()
+
+              var canvas3 = document.getElementById('3')
+              var image3 = canvas3.toDataURL()
+
+              // TODO: Merge dicom image and seg image
+
+              this.$store.commit(mutationType.SET_CAPTURED_IMAGE, {
+                layout1: image1,
+                layout2: image2,
+                layout3: image3
+              })
+            }
+            this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
             break;
           case 'OpenSegmentations':
 //            console.log('#OpenSegmentations')

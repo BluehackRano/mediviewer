@@ -14,7 +14,21 @@
       </div>
       <div class="report-body">
         <div class="report-body-left">
-
+          <div class="top">
+            <img
+              v-if="capturedImage.layout1"
+              :src="capturedImage.layout1" alt="Please wait ...">
+          </div>
+          <div class="center">
+            <img
+              v-if="capturedImage.layout2"
+              :src="capturedImage.layout2" alt="Please wait ...">
+          </div>
+          <div class="bottom">
+            <img
+              v-if="capturedImage.layout3"
+              :src="capturedImage.layout3" alt="Please wait ...">
+          </div>
         </div>
         <div class="report-body-center">
           <div class="container">
@@ -36,11 +50,16 @@
 </template>
 
 <script>
+  import {mapGetters, mapActions} from 'vuex'
   import * as busType from '@/util/bus/bus-types'
 
   export default {
     name: 'AnalysisReportPopup',
     computed: {
+      ...mapGetters([
+        'showAnalysisReportPopup',
+        'capturedImage'
+      ])
     },
     data () {
       return {
@@ -72,6 +91,9 @@
 //      })
     },
     methods: {
+      ...mapActions([
+        'showAnalysisReportPopupToggle'
+      ]),
       dicomFileUploaded (dicomFile) {
         this.resetReportImageWithFileName(dicomFile.name)
       },
@@ -97,7 +119,8 @@
         }
       },
       closePopup (e) {
-        this.$bus.$emit(busType.SHOW_ANALYSIS_REPORT_POPUP, false)
+//        this.$bus.$emit(busType.SHOW_ANALYSIS_REPORT_POPUP, false)
+        this.showAnalysisReportPopupToggle(false)
         e.stopPropagation()
       },
       stopMovable (e) {
@@ -165,6 +188,33 @@
           width: 30%;
           height: 100%;
           background-color: gray;
+
+          .top {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 33.3%;
+            background-color: red;
+          }
+
+          .center {
+            position: absolute;
+            left: 0;
+            top: 33.3%;
+            width: 100%;
+            height: 33.3%;
+            background-color: yellow;
+          }
+
+          .bottom {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 33.3%;
+            background-color: blue;
+          }
         }
 
         .report-body-center {

@@ -13,5 +13,11 @@ export default {
   },
   SET_SHOW_TAGS (state, showTags) {
     state.showTags = showTags
+  },
+  SHOW_ANALYSIS_REPORT_POPUP (state, showAnalysisReportPopup) {
+    state.showAnalysisReportPopup = showAnalysisReportPopup
+  },
+  SET_CAPTURED_IMAGE (state, capturedImage) {
+    state.capturedImage = capturedImage
   }
 }
