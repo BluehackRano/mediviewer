@@ -2,9 +2,9 @@
   <vue-draggable-resizable
     class="report-popup"
     :parent="true"
-    :resizable="false"
-    :x="247" :y="85" :z="2000"
-    :w="700" :h="800">
+    :resizable="true"
+    :x="30" :y="30" :z="2000"
+    :w="popupWidth" :h="popupHeight">
     <div class="report-popup-inner">
       <div class="report-header">
         <span>Analysis Report</span>
@@ -13,9 +13,23 @@
              @mousedown="stopMovable">
       </div>
       <div class="report-body">
-        <img
-          v-if="reportImg"
-          :src="reportImg" alt="Please wait ...">
+        <div class="report-body-left">
+
+        </div>
+        <div class="report-body-center">
+          <div class="container">
+            <div class="inner">
+              <img
+                v-if="reportImg"
+                :src="reportImg" alt="Please wait ...">
+              <img
+                v-if="reportImg"
+                :src="reportImg" alt="Please wait ...">
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </vue-draggable-resizable>
@@ -26,13 +40,36 @@
 
   export default {
     name: 'AnalysisReportPopup',
+    computed: {
+    },
     data () {
       return {
-        reportImg: null
+        reportImg: null,
+        popupWidth: 0,
+        popupHeight: 0
       }
     },
+//    watch: {
+//      windowWidth (newWidth, oldWidth) {
+//        this.popupWidth = newWidth
+//      },
+//      windowHeight (newHeight, oldHeight) {
+//        this.popupHeight = newHeight
+//      }
+//    },
     created () {
       this.$bus.$on(busType.FILE_UPLOADED, this.dicomFileUploaded)
+
+      this.popupWidth = window.innerWidth - 60
+      this.popupHeight = window.innerHeight - 60
+    },
+    mounted () {
+//      this.$nextTick(() => {
+//        window.addEventListener('resize', () => {
+//          this.windowWidth = window.innerWidth
+//          this.windowHeight = window.innerHeight
+//        });
+//      })
     },
     methods: {
       dicomFileUploaded (dicomFile) {
@@ -122,13 +159,48 @@
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
 
-        img {
-          width: 700px;
-          /*height: 850px;*/
-          top: 0;
-          bottom: 0;
-          margin: 0;
-          pointer-events: none;
+        .report-body-left {
+          position: absolute;
+          left: 0;
+          width: 30%;
+          height: 100%;
+          background-color: gray;
+        }
+
+        .report-body-center {
+          position: absolute;
+          left: 30%;
+          width: 70%;
+          height: 100%;
+
+          .container {
+            position: absolute;
+            left: 5%;
+            top: 5%;
+            width: 90%;
+            height: 90%;
+            border: 1px solid gray;
+            overflow-x: auto;
+            overflow-y: auto;
+
+            .inner {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 2000px;
+              height: 2000px;
+
+              img {
+                /*position: absolute;*/
+                /*width: 800px;*/
+                /*height: 850px;*/
+                pointer-events: none;
+              }
+            }
+
+
+          }
+
         }
       }
 
@@ -139,5 +211,28 @@
       -ms-user-select: none;
       user-select: none;
     }
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #3b3a40;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #787782;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    border-radius: 10px;
   }
 </style>
