@@ -494,7 +494,9 @@
       },
       loadAutoSegmentation () {
         this.loadingSpinner.loading = true
-        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/seg/' + this.dicom_name + '-seg.zip', true)
+//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/seg/' + this.dicom_name + '-seg.zip', true)
+        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/data.zip', true)
+//        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=B8AB54', true)
           .then(() => {
             this.loadingSpinner.loading = false;
           });
