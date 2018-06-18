@@ -16,26 +16,26 @@
         <div class="report-body-left">
           <div class="top">
             <img
-              v-if="capturedImage.layout1.dicom"
+              v-if="capturedImage.layout1"
               :src="capturedImage.layout1.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout1.seg"
+              v-if="capturedImage.layout1"
               :src="capturedImage.layout1.seg" alt="Please wait ...">
           </div>
           <div class="center">
             <img
-              v-if="capturedImage.layout2.dicom"
+              v-if="capturedImage.layout2"
               :src="capturedImage.layout2.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout2.seg"
+              v-if="capturedImage.layout2"
               :src="capturedImage.layout2.seg" alt="Please wait ...">
           </div>
           <div class="bottom">
             <img
-              v-if="capturedImage.layout3.dicom"
+              v-if="capturedImage.layout3"
               :src="capturedImage.layout3.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout3.seg"
+              v-if="capturedImage.layout3"
               :src="capturedImage.layout3.seg" alt="Please wait ...">
           </div>
         </div>
