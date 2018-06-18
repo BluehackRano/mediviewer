@@ -4,7 +4,7 @@
     :parent="true"
     :resizable="false"
     :x="0" :y="0" :z="2000"
-    :w="420" :h="320">
+    :w="420" :h="400">
     <div class="help-popup-inner">
       <div class="help-header">
         <span>HELP</span>
