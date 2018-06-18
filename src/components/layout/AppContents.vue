@@ -109,6 +109,13 @@
           }
           this.$bus.$emit(busType.MENU_CLICKED, menu)
         } else if (keyCode === 48) { // 0
+          this.$store.commit(mutationType.SELECT_CANVAS, document.getElementById('layout-1-1'))
+        } else if (keyCode === 49) { // 1
+          this.$store.commit(mutationType.SELECT_CANVAS, document.getElementById('layout-1-2'))
+        } else if (keyCode === 50) { // 2
+          this.$store.commit(mutationType.SELECT_CANVAS, document.getElementById('layout-2-1'))
+        } else if (keyCode === 51) { // 3
+          this.$store.commit(mutationType.SELECT_CANVAS, document.getElementById('layout-2-2'))
         }
       }
     },
