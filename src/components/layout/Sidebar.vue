@@ -159,9 +159,9 @@
           case 'SegmentationResultOveray':
             this.$bus.$emit(busType.SHOW_SEGMENTATION_POPUP)
             break
-          case 'AnalysisReport':
-            this.$bus.$emit(busType.SHOW_ANALYSIS_REPORT_POPUP)
-            break
+//          case 'AnalysisReport':
+//            this.$bus.$emit(busType.SHOW_ANALYSIS_REPORT_POPUP)
+//            break
           case 'OpenSegmentations':
             this.openSegmentations()
             break

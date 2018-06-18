@@ -669,7 +669,8 @@ function initRenderer3D (renderObj) {
 
   if (renderObj.renderer === null) {
     renderObj.renderer = new THREE.WebGLRenderer({
-      antialias: true
+      antialias: true,
+      preserveDrawingBuffer: true
     });
     renderObj.renderer.setSize(renderObj.domElement.clientWidth, renderObj.domElement.clientHeight);
     renderObj.renderer.setClearColor(renderObj.color, 1);
@@ -729,7 +730,8 @@ function initRenderer2D (rendererObj) {
   }
 
   rendererObj.renderer = new THREE.WebGLRenderer({
-    antialias: true
+    antialias: true,
+    preserveDrawingBuffer: true
   });
   rendererObj.renderer.autoClear = false;
   rendererObj.renderer.localClippingEnabled = true;

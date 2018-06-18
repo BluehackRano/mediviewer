@@ -17,7 +17,18 @@ const state = {
   focusedCanvas: {},
   currentAction: {},
   currentSelect: {},
-  showTags: false
+  showTags: false,
+  showAnalysisReportPopup: false,
+  capturedImage: {
+    layout1: null,
+    layout2: null,
+    layout3: null
+  }
+}
+
+const getters = {
+  showAnalysisReportPopup: state => state.showAnalysisReportPopup,
+  capturedImage: state => state.capturedImage
 }
 
 const store = new Vuex.Store({
@@ -26,6 +37,7 @@ const store = new Vuex.Store({
     menus,
     segmentations
   },
+  getters,
   actions,
   mutations
 })

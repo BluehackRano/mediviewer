@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   import * as busType from '@/util/bus/bus-types'
 
   import SegmentationPopup from '@/components/popups/SegmentationPopup'
@@ -23,11 +24,16 @@
 
   export default {
     name: 'AppContents',
+    computed: {
+      ...mapGetters({
+        showAnalysisReportPopup: 'showAnalysisReportPopup'
+      })
+    },
     data () {
       return {
         isFileUploaded: false,
         showSegmentationPopup: false,
-        showAnalysisReportPopup: false,
+//        showAnalysisReportPopup: false,
         showHelpPopup: false
       }
     },

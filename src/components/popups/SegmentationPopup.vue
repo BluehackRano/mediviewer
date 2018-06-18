@@ -3,8 +3,8 @@
     class="seg-popup"
     :parent="true"
     :x="250" :y="125" :z="2000"
-    :w="350" :h="400"
-    :minw="350" :minh="400">
+    :w="350" :h="500"
+    :minw="350" :minh="500">
     <div class="seg-popup-inner">
       <div class="seg-header">
         <span>Segmentation Result Overay</span>
@@ -23,12 +23,23 @@
             <img v-show="segmentation.visible" :src="`/static/images/icons/svg/btn-check-checkbox.svg`"
                  @click="setSegmentationVisible($event, index, segmentation)">
             <img v-show="segmentation.visible === false" :src="`/static/images/icons/svg/btn-uncheck-checkbox.svg`"
-              @click="setSegmentationVisible($event, index, segmentation)">
+                 @click="setSegmentationVisible($event, index, segmentation)">
             <span>{{ segmentation.meta.label }}</span>
             <div class="seg-color"
               :style="{ backgroundColor: segmentation.meta.color }"
               ></div>
           </div>
+        </div>
+      </div>
+      <div class="seg-footer">
+        <div class="show-all"
+             @click="segmentationToggleAll(true)">
+          <span>Show All</span>
+        </div>
+        <div class="divider"></div>
+        <div class="hide-all"
+             @click="segmentationToggleAll(false)">
+          <span>Hide All</span>
         </div>
       </div>
     </div>
@@ -49,7 +60,8 @@
     methods: {
       ...mapActions([
         'segmentationVisibleToggle',
-        'segmentationSelectedToggle'
+        'segmentationSelectedToggle',
+        'segmentationToggleAll'
       ]),
       closePopup (e) {
         this.$bus.$emit(busType.SHOW_SEGMENTATION_POPUP, false)
@@ -82,6 +94,7 @@
 
   .seg-popup {
     box-shadow: 5px 5px 30px black;
+    border-radius: 5px;
 
     .seg-popup-inner {
       width: 100%;
@@ -121,7 +134,7 @@
         position: absolute;
         width: 100%;
         top: 48px;
-        bottom: 0;
+        bottom: 50px;
         background-color: #383838;
         overflow-y: auto;
         overflow-x: hidden;
@@ -195,6 +208,97 @@
             }
           }
         }
+      }
+
+      .seg-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        background-color: #696969;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+
+        .show-all {
+          position: absolute;
+          width: 50%;
+          height: 50px;
+          border-bottom-left-radius: 5px;
+          background-color: #696969;
+          text-align: center;
+          cursor: pointer;
+          color: #ffffff;
+
+          &:hover {
+            color: #383838;
+          }
+
+          span {
+            line-height: 50px;
+            font-family: AppleSDGothicNeo;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0;
+          }
+        }
+
+        .hide-all {
+          position: absolute;
+          left: 50%;
+          width: 50%;
+          height: 50px;
+          border-bottom-right-radius: 5px;
+          background-color: #696969;
+          text-align: center;
+          cursor: pointer;
+          color: #ffffff;
+
+          &:hover {
+            color: #383838;
+          }
+
+          span {
+            line-height: 50px;
+            font-family: AppleSDGothicNeo;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0;
+          }
+        }
+
+        .divider {
+          position: absolute;
+          left: 50%;
+          margin-left: -1px;
+          margin-top: 7px;
+          width: 2px;
+          height: 35px;
+          background-color: #4d4d4d;
+          text-align: center;
+        }
+      }
+
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #3b3a40;
+      }
+
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #696969;
+        border-radius: 10px;
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        border-radius: 10px;
+        cursor: pointer;
       }
 
       -webkit-touch-callout: none;
