@@ -373,6 +373,10 @@
             break;
           case 'AnalysisReport':
             if (!this.showAnalysisReportPopup) {
+              if (!Medic3D.getReports() || Medic3D.getReports().length === 0) {
+                alert('Error: No segmentation data.')
+                return
+              }
               this.captureDicomImage()
             }
             this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
