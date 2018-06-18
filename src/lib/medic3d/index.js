@@ -13,6 +13,7 @@ var PNG = require('pngjs').PNG;
 let ready = false;
 let aDicomRawData = null
 let shouldShowSegmentation = false;
+let reports = [];
 
 const shaders = {
   vertex : `
@@ -986,6 +987,7 @@ function extractZip (zip, type, sort) {
 function extractReportZip (zip, type, sort) {
   var files = Object.keys(zip.files)
   var loadData = [256];
+  var reportData = [];
 
   files.forEach(function (filename) {
     if (filename.includes("out")) {
@@ -993,10 +995,12 @@ function extractReportZip (zip, type, sort) {
       var name = fName.split('.');
       var index = name[0].split('_')[1];
       loadData[parseInt(index)] = zip.files[filename].async(type);
+    } else if (filename.includes("report_images")) {
+      reportData.push(zip.files[filename].async(type));
     }
   })
 
-  return Promise.all(loadData)
+  return Promise.all(reportData.concat(loadData))
     .then(function (rawdata) {
       return rawdata
     })
@@ -1112,19 +1116,21 @@ export function loadSegmentationLocal (segUrl) {
         })
         .then(function (data) {
           // console.log('Loaded seg. ' + data.length);
+          reports = data.slice(0, 9);
 
-          segR11.texture = data[0];
-          segR12.texture = data[1];
-          segR13.texture = data[2];
-          segR14.texture = data[3];
-          segR21.texture = data[4];
-          segR22.texture = data[5];
-          segR23.texture = data[6];
-          segR24.texture = data[7];
-          segR31.texture = data[8];
-          segR32.texture = data[9];
-          segR33.texture = data[10];
-          segR34.texture = data[11];
+          segR11.texture = data[10];
+          segR12.texture = data[11];
+          segR13.texture = data[12];
+          segR14.texture = data[13];
+          segR21.texture = data[14];
+          segR22.texture = data[15];
+          segR23.texture = data[16];
+          segR24.texture = data[17];
+          segR31.texture = data[18];
+          segR32.texture = data[19];
+          segR33.texture = data[20];
+          segR34.texture = data[21];
+
 
           var stack = getDicomStack();
           if (stack !== null) {
@@ -2184,4 +2190,8 @@ export function parseDicomTags () {
       reject(new Error('Dicom file not found.'))
     }
   })
+}
+
+export function getReports() {
+  return reports;
 }
