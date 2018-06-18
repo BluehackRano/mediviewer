@@ -15,7 +15,8 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
+  import * as mutationType from '@/store/mutation-types'
   import * as busType from '@/util/bus/bus-types'
 
   import SegmentationPopup from '@/components/popups/SegmentationPopup'
@@ -26,6 +27,7 @@
     name: 'AppContents',
     computed: {
       ...mapGetters({
+        menus: 'menus',
         showAnalysisReportPopup: 'showAnalysisReportPopup'
       })
     },
@@ -83,6 +85,16 @@
           }
           this.$bus.$emit(busType.MENU_CLICKED, menu)
         } else if (keyCode === 83) { // s
+        } else if (keyCode === 84) { // t : Show/Hide Tags
+          for (let i = 0; i < this.menus.length; i++) {
+            if (this.menus[i].name === 'ShowTagsToggle') {
+              this.$store.commit(mutationType.SET_SHOW_TAGS, !this.menus[i].toggle)
+              this.showTagsToggle({
+                name: this.menus[i].name,
+                toggle: !this.menus[i].toggle
+              })
+            }
+          }
         } else if (keyCode === 90) { // z
         } else if (keyCode === 187) { // + : ZoomIn
           let menu = {
@@ -101,6 +113,9 @@
       }
     },
     methods: {
+      ...mapActions([
+        'showTagsToggle'
+      ]),
       showSegmentationPopupToggle (show) {
         if (show) {
           this.showSegmentationPopup = show
