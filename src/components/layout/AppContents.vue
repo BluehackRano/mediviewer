@@ -58,7 +58,7 @@
           return
         }
         let keyCode = e.keyCode
-        console.log(keyCode)
+//        console.log(keyCode)
         if (keyCode === 80) { // p : Pan
           let menu = {
             name: 'Pan',
