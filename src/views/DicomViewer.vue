@@ -382,22 +382,7 @@
             break;
           case 'AnalysisReport':
             if (!this.showAnalysisReportPopup) {
-              var canvas1 = document.getElementById('1')
-              var image1 = canvas1.toDataURL()
-
-              var canvas2 = document.getElementById('2')
-              var image2 = canvas2.toDataURL()
-
-              var canvas3 = document.getElementById('3')
-              var image3 = canvas3.toDataURL()
-
-              // TODO: Merge dicom image and seg image
-
-              this.$store.commit(mutationType.SET_CAPTURED_IMAGE, {
-                layout1: image1,
-                layout2: image2,
-                layout3: image3
-              })
+              this.captureDicomImage()
             }
             this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
             break;
@@ -522,6 +507,63 @@
           .then(() => {
             this.loadingSpinner.loading = false;
           });
+      },
+      captureDicomImage () {
+        var canvas1 = document.getElementById('1')
+        var dicomImage1 = canvas1.toDataURL()
+        var segImage1 = this.getSegImageWithDicomCanvasId('1')
+
+        var canvas2 = document.getElementById('2')
+        var dicomImage2 = canvas2.toDataURL()
+        var segImage2 = this.getSegImageWithDicomCanvasId('2')
+
+        var canvas3 = document.getElementById('3')
+        var dicomImage3 = canvas3.toDataURL()
+        var segImage3 = this.getSegImageWithDicomCanvasId('3')
+
+        this.$store.commit(mutationType.SET_CAPTURED_IMAGE, {
+          layout1: {
+            dicom: dicomImage1,
+            seg: segImage1
+          },
+          layout2: {
+            dicom: dicomImage2,
+            seg: segImage2
+          },
+          layout3: {
+            dicom: dicomImage3,
+            seg: segImage3
+          }
+        })
+      },
+      getSegImageWithDicomCanvasId (anId) {
+        if (anId === '1') {
+          return this.getSegImageWithSegCanvasIdAndSliceNum(anId, this.slice_r1)
+        } else if (anId === '2') {
+          return this.getSegImageWithSegCanvasIdAndSliceNum(anId, this.slice_r2)
+        } else if (anId === '3') {
+          return this.getSegImageWithSegCanvasIdAndSliceNum(anId, this.slice_r3)
+        }
+        return null
+      },
+      getSegImageWithSegCanvasIdAndSliceNum (anId, sliceNum) {
+        var segCanvas = null
+        var segImage = null
+        var segId
+        if (sliceNum >= 0 && sliceNum < 64) {
+          segId = anId.concat('1')
+        } else if (sliceNum >= 64 && sliceNum < 128) {
+          segId = anId.concat('2')
+        } else if (sliceNum >= 128 && sliceNum < 192) {
+          segId = anId.concat('3')
+        } else if (sliceNum >= 192 && sliceNum < 256) {
+          segId = anId.concat('4')
+        }
+        segCanvas = document.getElementById(segId)
+        if (segCanvas) {
+          segImage = segCanvas.toDataURL('image/png', 1.0)
+        }
+        return segImage
       }
     }
   }
