@@ -995,7 +995,7 @@ function extractReportZip (zip, type, sort) {
       var name = fName.split('.');
       var index = name[0].split('_')[1];
       loadData[parseInt(index)] = zip.files[filename].async(type);
-    } else if (filename.includes("report_images")) {
+    } else if (filename.includes("report_images") && filename.endsWith("png")) {
       reportData.push(zip.files[filename].async(type));
     }
   })
@@ -1118,18 +1118,18 @@ export function loadSegmentationLocal (segUrl) {
           // console.log('Loaded seg. ' + data.length);
           reports = data.slice(0, 9);
 
-          segR11.texture = data[10];
-          segR12.texture = data[11];
-          segR13.texture = data[12];
-          segR14.texture = data[13];
-          segR21.texture = data[14];
-          segR22.texture = data[15];
-          segR23.texture = data[16];
-          segR24.texture = data[17];
-          segR31.texture = data[18];
-          segR32.texture = data[19];
-          segR33.texture = data[20];
-          segR34.texture = data[21];
+          segR11.texture = data[9];
+          segR12.texture = data[10];
+          segR13.texture = data[11];
+          segR14.texture = data[12];
+          segR21.texture = data[13];
+          segR22.texture = data[14];
+          segR23.texture = data[15];
+          segR24.texture = data[16];
+          segR31.texture = data[17];
+          segR32.texture = data[18];
+          segR33.texture = data[19];
+          segR34.texture = data[20];
 
 
           var stack = getDicomStack();
