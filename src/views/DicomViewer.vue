@@ -220,17 +220,8 @@
 //            console.log('Load completed~~~~~~`');
             this.loadingSpinner.loading = false
             this.$store.commit(mutationType.SET_SHOW_TAGS, true)
-            // todo : showing dicom's tags
-            Medic3D.parseDicomTags()
-              .then((parser) => {
-                // todo : add dicom tags to Vuex
-                console.log('Done parseDicomTags().')
-                console.log('SeriesInstanceUID: ' + parser.seriesInstanceUID())
-                console.log('StudyInstanceUID: ' + parser.studyInstanceUID())
-                console.log('Rows: ' + parser.rows())
-                console.log('Columns: ' + parser.columns())
-                console.log('Ends of parseDicomTags()')
-              })
+
+            this.parseDicomTags()
           })
           .catch((err) => {
             console.log('An error : ' + err);
@@ -507,6 +498,26 @@
           .then(() => {
             this.loadingSpinner.loading = false;
           });
+      },
+      parseDicomTags () {
+        Medic3D.parseDicomTags()
+          .then((parser) => {
+            this.$store.commit(mutationType.SET_TAG_INFO, {
+              studyId: parser.studyInstanceUID() || '-',
+              studyDate: parser.studyDate() || '-',
+              patientName: parser.patientName() || '-',
+              patientId: parser.patientID() || '-',
+              patientSex: parser.patientSex() || '-',
+              patientBirthDate: parser.patientBirthdate() || '-',
+              fieldStrength: parser.studyDate() || '-',
+              scanningSequence: parser.studyDate() || '-',
+              repetitionTime: parser.studyDate() || '-',
+              echoTime: parser.studyDate() || '-',
+              flipAngle: parser.studyDate() || '-',
+              imageDimensions: parser.studyDate() || '-',
+              voxelDimensions: parser.studyDate() || '-'
+            })
+          })
       },
       captureDicomImage () {
         var canvas1 = document.getElementById('1')

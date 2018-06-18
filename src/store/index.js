@@ -18,6 +18,7 @@ const state = {
   currentAction: {},
   currentSelect: {},
   showTags: false,
+  tagInfo: {},
   showAnalysisReportPopup: false,
   capturedImage: {
     layout1: null,
@@ -27,6 +28,7 @@ const state = {
 }
 
 const getters = {
+  tagInfo: state => state.tagInfo,
   showAnalysisReportPopup: state => state.showAnalysisReportPopup,
   capturedImage: state => state.capturedImage
 }
