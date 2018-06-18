@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "buefy": "^0.5.4",
     "dat.gui": "^0.6.1",
     "dicom-parser": "^1.7.5",
