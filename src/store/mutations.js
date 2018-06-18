@@ -19,5 +19,8 @@ export default {
   },
   SET_CAPTURED_IMAGE (state, capturedImage) {
     state.capturedImage = capturedImage
+  },
+  SET_TAG_INFO (state, tagInfo) {
+    state.tagInfo = tagInfo
   }
 }

@@ -4,6 +4,8 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 
+import axios from 'axios'
+
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import 'vue-awesome/icons'
@@ -11,6 +13,8 @@ import Icon from 'vue-awesome/components/Icon'
 import VueDraggableResizable from 'vue-draggable-resizable'
 
 import App from './App'
+
+Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 

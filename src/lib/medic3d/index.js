@@ -1880,7 +1880,7 @@ function initSegment(rendererObj){
   // segR1.domElement = document.getElementsByClassName('layout-area')[0]
   // segR1.domElement = document.getElementById("seg");
   // init renderer
-  rendererObj.renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );
+  rendererObj.renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true, preserveDrawingBuffer: true } );
   // segR1.renderer.setPixelRatio( window.devicePixelRatio );
   rendererObj.renderer.localClippingEnabled = true;
   rendererObj.renderer.setSize(rendererObj.domElement.clientWidth, rendererObj.domElement.clientHeight);

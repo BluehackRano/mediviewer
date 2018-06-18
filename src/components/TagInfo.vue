@@ -1,21 +1,21 @@
 <template>
-  <div v-if="tagData">
+  <div v-if="tagInfo">
     <div class="tags-left-top">
-      Study ID : {{ tagData.studyId }}<br>
-      Study date : {{ tagData.studyDate }}<br>
-      Patient's name : {{ tagData.patientName }}<br>
-      Patient ID : {{ tagData.patientId }}<br>
-      Patient sex : {{ tagData.patientSex }}<br>
-      Patient's birth date : {{ tagData.patientBirthDate }}<br>
+      <span>Study ID : {{ tagInfo.studyId }}</span><br>
+      <span>Study date : {{ tagInfo.studyDate }}</span><br>
+      <span>Patient's name : {{ tagInfo.patientName }}</span><br>
+      <span>Patient ID : {{ tagInfo.patientId }}</span><br>
+      <span>Patient sex : {{ tagInfo.patientSex }}</span><br>
+      <span>Patient's birth date : {{ tagInfo.patientBirthDate }}</span><br>
     </div>
     <div class="tags-right-top">
-      Field strength : {{ tagData.fieldStrength }}<br>
-      Scanning sequence : {{ tagData.scanningSequence }}<br>
-      TR : {{ tagData.repetitionTime }}<br>
-      TE : {{ tagData.echoTime }}<br>
-      Flip angle : {{ tagData.flipAngle }}<br>
-      Image dimensions (Y, Z, X) : <br>{{ tagData.imageDimensions }}<br>
-      Voxel dimensions (Y, Z, X) : <br>{{ tagData.voxelDimensions }}<br>
+      <span>Field strength : {{ tagInfo.fieldStrength }}</span><br>
+      <span>Scanning sequence : {{ tagInfo.scanningSequence }}</span><br>
+      <span>TR : {{ tagInfo.repetitionTime }}</span><br>
+      <span>TE : {{ tagInfo.echoTime }}</span><br>
+      <span>Flip angle : {{ tagInfo.flipAngle }}</span><br>
+      <span>Image dimensions (Y, Z, X) : </span><br><span>{{ tagInfo.imageDimensions }}</span><br>
+      <span>Voxel dimensions (Y, Z, X) : </span><br><span>{{ tagInfo.voxelDimensions }}</span><br>
     </div>
     <div class="tags-left-bottom">
       <div class="tags-left-bottom-inner"
@@ -27,8 +27,10 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   import * as busType from '@/util/bus/bus-types'
-  import * as tagType from '@/data/tags'
+//  import * as tagType from '@/data/tags'
 
   export default {
     name: 'TagInfo',
@@ -38,9 +40,13 @@
         default: null
       }
     },
+    computed: {
+      ...mapGetters([
+        'tagInfo'
+      ])
+    },
     data () {
       return {
-        tagData: null
       }
     },
     created () {
@@ -48,25 +54,25 @@
     },
     methods: {
       dicomFileUploaded (dicomFile) {
-        switch (dicomFile.name) {
-          case 'dicom-001-02.zip':
-            this.tagData = tagType.TAG_001_02
-            break
-          case 'dicom-002-02.zip':
-            this.tagData = tagType.TAG_002_02
-            break
-          case 'dicom-003-02.zip':
-            this.tagData = tagType.TAG_003_02
-            break
-          case 'dicom-004-02.zip':
-            this.tagData = tagType.TAG_004_02
-            break
-          case 'dicom-005-02.zip':
-            this.tagData = tagType.TAG_005_02
-            break
-          default:
-            break;
-        }
+//        switch (dicomFile.name) {
+//          case 'dicom-001-02.zip':
+//            this.tagData = tagType.TAG_001_02
+//            break
+//          case 'dicom-002-02.zip':
+//            this.tagData = tagType.TAG_002_02
+//            break
+//          case 'dicom-003-02.zip':
+//            this.tagData = tagType.TAG_003_02
+//            break
+//          case 'dicom-004-02.zip':
+//            this.tagData = tagType.TAG_004_02
+//            break
+//          case 'dicom-005-02.zip':
+//            this.tagData = tagType.TAG_005_02
+//            break
+//          default:
+//            break;
+//        }
       }
     }
   }
@@ -81,6 +87,8 @@
     height: 40%;
     text-align: left;
     color: #cfcfcf;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .tags-right-top {
@@ -91,6 +99,8 @@
     height: 40%;
     text-align: right;
     color: #cfcfcf;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .tags-left-bottom {
@@ -106,5 +116,9 @@
       position: absolute;
       bottom: 0;
     }
+  }
+
+  span {
+    white-space: nowrap;
   }
 </style>

@@ -16,18 +16,27 @@
         <div class="report-body-left">
           <div class="top">
             <img
-              v-if="capturedImage.layout1"
-              :src="capturedImage.layout1" alt="Please wait ...">
+              v-if="capturedImage.layout1.dicom"
+              :src="capturedImage.layout1.dicom" alt="Please wait ...">
+            <img
+              v-if="capturedImage.layout1.seg"
+              :src="capturedImage.layout1.seg" alt="Please wait ...">
           </div>
           <div class="center">
             <img
-              v-if="capturedImage.layout2"
-              :src="capturedImage.layout2" alt="Please wait ...">
+              v-if="capturedImage.layout2.dicom"
+              :src="capturedImage.layout2.dicom" alt="Please wait ...">
+            <img
+              v-if="capturedImage.layout2.seg"
+              :src="capturedImage.layout2.seg" alt="Please wait ...">
           </div>
           <div class="bottom">
             <img
-              v-if="capturedImage.layout3"
-              :src="capturedImage.layout3" alt="Please wait ...">
+              v-if="capturedImage.layout3.dicom"
+              :src="capturedImage.layout3.dicom" alt="Please wait ...">
+            <img
+              v-if="capturedImage.layout3.seg"
+              :src="capturedImage.layout3.seg" alt="Please wait ...">
           </div>
         </div>
         <div class="report-body-center">
@@ -187,7 +196,8 @@
           left: 0;
           width: 30%;
           height: 100%;
-          background-color: gray;
+          background-color: rgb(32, 31, 36);
+          overflow: hidden;
 
           .top {
             position: absolute;
@@ -195,7 +205,6 @@
             top: 0;
             width: 100%;
             height: 33.3%;
-            background-color: red;
           }
 
           .center {
@@ -204,7 +213,6 @@
             top: 33.3%;
             width: 100%;
             height: 33.3%;
-            background-color: yellow;
           }
 
           .bottom {
@@ -213,7 +221,14 @@
             bottom: 0;
             width: 100%;
             height: 33.3%;
-            background-color: blue;
+          }
+
+          img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            max-width:100%;
+            max-height:100%;
           }
         }
 

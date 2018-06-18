@@ -4,7 +4,7 @@
     :parent="true"
     :resizable="false"
     :x="0" :y="0" :z="2000"
-    :w="420" :h="320">
+    :w="450" :h="500">
     <div class="help-popup-inner">
       <div class="help-header">
         <span>HELP</span>
@@ -23,7 +23,7 @@
           <tbody>
           <tr v-for="aKey in shortKeys">
             <td>{{aKey.key}}</td>
-            <td>{{aKey.function}}</td>
+            <td><span>{{aKey.function}}</span></td>
           </tr>
           </tbody>
         </table>
@@ -41,12 +41,17 @@
     data () {
       return {
         shortKeys: [
+          {key: '0', function: 'Focus on 3D Canvas'},
+          {key: '1', function: 'Focus on Axial Canvas'},
+          {key: '2', function: 'Focus on Sagittal Canvas'},
+          {key: '3', function: 'Focus on Coronal Canvas'},
           {key: 'p', function: 'Pan'},
-          {key: '+', function: 'Zoom In'},
-          {key: '-', function: 'Zoom Out'},
-          {key: 'f', function: 'Fit'},
+          {key: '+', function: 'Zoom In '},
+          {key: '-', function: 'Zoom Out '},
+          {key: 'f', function: 'Fit '},
           {key: 'i', function: 'Invert'},
-          {key: 'b', function: 'Brightness Contrast'}
+          {key: 'b', function: 'Brightness Contrast'},
+          {key: 'f', function: 'Show/Hide Tag Info'}
         ]
       }
     },
