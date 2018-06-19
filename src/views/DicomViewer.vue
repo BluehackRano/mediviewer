@@ -237,6 +237,7 @@
           this.loadingSpinner.loading = false
         }, 5000)
 //        console.log(uploadFile);
+
         Medic3D.loadSegmentation(uploadFile, true);
         // Todo : assign (slice, segmentation)
       },
@@ -365,11 +366,67 @@
         Medic3D.CameraCtrl(false);
         switch (menu.name) {
           case 'BrainRoiSegmentation':
-//            console.log('#BrainRoiSegmentation');
-            this.loadAutoSegmentation();
+//            console.log(this.dicom_name)
+//            return
+
+            // TODO: remove this
+            let fileName = 'ad_4'
+            if (this.dicom_name) {
+//              switch (this.dicom_name) {
+//                case 'ad_1':
+//              }
+              fileName = 'ad_4'
+            } else {
+              alert('Error: No input Dicom file.')
+              return
+            }
+
+            const formData = new FormData();
+            const baseURI = 'http://210.116.109.38:20011';
+            const url = `http://${location.host}/static/nii/${fileName}.nii`
+            fetch(url, { method: 'get' })
+              .then(res => (console.log(res), res.blob()))
+              .then(res => new File([res], `${fileName}.nii`))
+              .then(res => formData.append('data', res))
+              .then(res => {
+                return fetch(
+                  `${baseURI}/analysis/nii`,
+                  { method: 'post', body: formData }
+                )
+              })
+              .then(res => {
+                this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+                  .then((result) => {
+                    if (result.data) {
+                      if (result.data.is_completed) {
+                        this.loadAutoSegmentation(result.data.download_url)
+                      } else {
+                        let anInterval = setInterval(() => {
+                          console.log('loading ....')
+                          this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+                            .then((result) => {
+                              if (result.data) {
+                                if (result.data.is_completed) {
+                                  clearInterval(anInterval)
+                                  console.log(result)
+                                  this.loadAutoSegmentation(result.data.download_url)
+                                } else {
+                                  console.log('Not Yet ..')
+                                }
+                              }
+                            })
+                        }, 10000)
+                      }
+                    }
+                  })
+              })
             break;
           case 'SegmentationResultOveray':
 //            console.log('#SegmentationResultOveray')
+            if (!Medic3D.getReports() || Medic3D.getReports().length === 0) {
+              alert('Error: No segmentation data.')
+              return
+            }
             break;
           case 'AnalysisReport':
             if (!this.showAnalysisReportPopup) {
@@ -377,9 +434,14 @@
                 alert('Error: No segmentation data.')
                 return
               }
-              this.captureDicomImage()
+              const baseURI = 'http://210.116.109.38:20011';
+              this.$http.get(`${baseURI}/analysis/result/1.nii`)
+                .then((result) => {
+                  console.log(result)
+                  this.captureDicomImage()
+                  this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
+                })
             }
-            this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
             break;
           case 'OpenSegmentations':
 //            console.log('#OpenSegmentations')
@@ -496,14 +558,18 @@
 //            console.log('Not Annotation mode');
         }
       },
-      loadAutoSegmentation () {
+      loadAutoSegmentation (url) {
+        console.log(url)
+        return
         this.loadingSpinner.loading = true
+
+
 //        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/seg/' + this.dicom_name + '-seg.zip', true)
-        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
+//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=B8AB54', true)
-          .then(() => {
-            this.loadingSpinner.loading = false;
-          });
+//          .then(() => {
+//            this.loadingSpinner.loading = false;
+//          });
       },
       parseDicomTags () {
         Medic3D.parseDicomTags()
