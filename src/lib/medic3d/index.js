@@ -1002,6 +1002,9 @@ function extractReportZip (zip, type, sort) {
 
   return Promise.all(reportData.concat(loadData))
     .then(function (rawdata) {
+      for (var i=0; i<9; i++) {
+        reports.push(rawdata[i])
+      }
       return rawdata
     })
 }
@@ -1116,7 +1119,7 @@ export function loadSegmentationLocal (segUrl) {
         })
         .then(function (data) {
           // console.log('Loaded seg. ' + data.length);
-          reports = data.slice(0, 9);
+          // reports = data.slice(0, 9);
 
           segR11.texture = data[9];
           segR12.texture = data[10];

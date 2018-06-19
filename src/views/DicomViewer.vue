@@ -563,13 +563,11 @@
         return
         this.loadingSpinner.loading = true
 
-
-//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/seg/' + this.dicom_name + '-seg.zip', true)
-//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
-//        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=B8AB54', true)
-//          .then(() => {
-//            this.loadingSpinner.loading = false;
-//          });
+        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
+//        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
+          .then(() => {
+            this.loadingSpinner.loading = false;
+          });
       },
       parseDicomTags () {
         Medic3D.parseDicomTags()
@@ -590,6 +588,18 @@
               voxelDimensions: parser.studyDate() || '-'
             })
           })
+      },
+      setChartImage () {
+        var reports = [];
+        for (let i = 0; i < Medic3D.getReports().length; i++) {
+          reports.push(Medic3D.getReports()[i]);
+        }
+        let dat = reports[0];
+        let base64 = btoa(String.fromCharCode(...new Uint8Array(dat)));
+
+        var img = document.createElement('img');
+        img.src = 'data:image/png;base64,' + base64;
+        document.body.appendChild(img);
       },
       captureDicomImage () {
         var canvas1 = document.getElementById('1')
