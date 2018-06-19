@@ -118,12 +118,11 @@
                   </tr>
                   </thead>
                   <tbody>
-
-                  <tr v-for="i in 10">
-                    <td>{{ i+1 }}</td>
-                    <td>{{ report['Percentile']['Hippocampus'] }}</td>
-                    <td>{{ report['Percentile']['Hippocampus'] }}</td>
-                    <td>{{ report['Volume']['Hippocampus'] }}</td>
+                  <tr v-for="(value, key, index) in report.Volume">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ key }}</td>
+                    <td>{{ report['Volume'][key] }}</td>
+                    <td>{{ report['Percentile'][key] }}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -517,6 +516,12 @@
 
                   .chart {
                     border: 1px solid black;
+
+                    img {
+                      position: relative;
+                      width: 100%;
+                      height: 100%;
+                    }
                   }
                 }
               }
