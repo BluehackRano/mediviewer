@@ -45,10 +45,10 @@
 
               <div class="contents">
                 <div class="title">
-                  <span>Brain Atrophy Report</span>
+                  <span>{{ report.Title }}</span>
                 </div>
                 <div class="provider">
-                  <span>by VUNO</span>
+                  <span>by {{ report.Provider }}</span>
                 </div>
 
                 <div class="patient-information-text">
@@ -65,10 +65,10 @@
                   </thead>
                   <tbody>
                   <tr>
-                    <td>ididididi</td>
-                    <td>name</td>
-                    <td>Male</td>
-                    <td>29</td>
+                    <td>{{ report['Patient ID'] }}</td>
+                    <td>-</td>
+                    <td>{{ report.Sex }}</td>
+                    <td>{{ report.Age }}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -118,11 +118,12 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>name</td>
-                    <td>Male</td>
-                    <td>29</td>
+
+                  <tr v-for="i in 10">
+                    <td>{{ i+1 }}</td>
+                    <td>{{ report['Percentile']['Hippocampus'] }}</td>
+                    <td>{{ report['Percentile']['Hippocampus'] }}</td>
+                    <td>{{ report['Volume']['Hippocampus'] }}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -130,10 +131,10 @@
 
               <div class="contents">
                 <div class="title">
-                  <span>Brain Atrophy Report</span>
+                  <span>{{ report.Title }}</span>
                 </div>
                 <div class="provider">
-                  <span>by VUNO</span>
+                  <span>by {{ report.Provider }}</span>
                 </div>
 
                 <div class="patient-information-text">
@@ -150,10 +151,10 @@
                   </thead>
                   <tbody>
                   <tr>
-                    <td>1</td>
-                    <td>ididiaaaaaaaaaaaaaaaaaaaaaaaaaaadidiididiaaaaaaaaaaaaaaaaaaaaaaaaaaadidi</td>
-                    <td>Male</td>
-                    <td>29</td>
+                    <td>{{ report['Patient ID'] }}</td>
+                    <td>-</td>
+                    <td>{{ report.Sex }}</td>
+                    <td>{{ report.Age }}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -162,15 +163,12 @@
                   <span>CHARTS</span>
                 </div>
                 <div class="charts-container">
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
-                  <div class="chart"></div>
+                  <div
+                    v-for="aChart in chartReports"
+                    class="chart">
+                    <img
+                      :src="aChart" alt="Please wait ...">
+                  </div>
                 </div>
 
               </div> <!-- end of contents -->
@@ -194,7 +192,9 @@
     computed: {
       ...mapGetters([
         'showAnalysisReportPopup',
-        'capturedImage'
+        'capturedImage',
+        'chartReports',
+        'report'
       ])
     },
     data () {

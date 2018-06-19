@@ -370,12 +370,12 @@
 //            return
 
             // TODO: remove this
-            let fileName = 'ad_4'
+            let fileName = 'ad_2'
             if (this.dicom_name) {
 //              switch (this.dicom_name) {
 //                case 'ad_1':
 //              }
-              fileName = 'ad_4'
+              fileName = this.dicom_name
             } else {
               alert('Error: No input Dicom file.')
               return
@@ -399,6 +399,7 @@
                   .then((result) => {
                     if (result.data) {
                       if (result.data.is_completed) {
+                        this.setReportState(result.data)
                         this.loadAutoSegmentation(result.data.download_url)
                       } else {
                         let anInterval = setInterval(() => {
@@ -410,6 +411,7 @@
                                   clearInterval(anInterval)
                                   console.log(result)
                                   this.loadAutoSegmentation(result.data.download_url)
+                                  this.setReportState(result.data)
                                 } else {
                                   console.log('Not Yet ..')
                                 }
@@ -434,13 +436,19 @@
                 alert('Error: No segmentation data.')
                 return
               }
-              const baseURI = 'http://210.116.109.38:20011';
-              this.$http.get(`${baseURI}/analysis/result/1.nii`)
-                .then((result) => {
-                  console.log(result)
-                  this.captureDicomImage()
-                  this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
-                })
+
+              this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
+              this.captureDicomImage()
+              this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
+
+//              const baseURI = 'http://210.116.109.38:20011';
+//              this.$http.get(`${baseURI}/analysis/result/${this.dicom_name}.nii`)
+//                .then((result) => {
+//                  console.log(result)
+//                  this.setChartImage()
+//                  this.captureDicomImage()
+//                  this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
+//                })
             }
             break;
           case 'OpenSegmentations':
@@ -559,15 +567,16 @@
         }
       },
       loadAutoSegmentation (url) {
-        console.log(url)
-        return
         this.loadingSpinner.loading = true
 
-        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
+        Medic3D.loadSegmentationLocal(url, true)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
           .then(() => {
             this.loadingSpinner.loading = false;
           });
+      },
+      setReportState (data) {
+        this.$store.commit(mutationType.SET_REPORT, data)
       },
       parseDicomTags () {
         Medic3D.parseDicomTags()
@@ -592,14 +601,11 @@
       setChartImage () {
         var reports = [];
         for (let i = 0; i < Medic3D.getReports().length; i++) {
-          reports.push(Medic3D.getReports()[i]);
+          let dat = Medic3D.getReports()[i] // reports[0];
+          let base64 = btoa(String.fromCharCode(...new Uint8Array(dat)));
+          reports.push('data:image/png;base64,' + base64)
         }
-        let dat = reports[0];
-        let base64 = btoa(String.fromCharCode(...new Uint8Array(dat)));
-
-        var img = document.createElement('img');
-        img.src = 'data:image/png;base64,' + base64;
-        document.body.appendChild(img);
+        return reports
       },
       captureDicomImage () {
         var canvas1 = document.getElementById('1')
