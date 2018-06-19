@@ -1169,6 +1169,10 @@ export function loadSegmentationLocal (segUrl) {
             combineMprSeg(r0, segR33, stack);
             combineMprSeg(r0, segR34, stack);
 
+            initSegRender(r1.domId);
+            initSegRender(r2.domId);
+            initSegRender(r3.domId);
+
             resolve(true);
           }
         });
@@ -1329,6 +1333,141 @@ function initHelpersLocalizer (rendererObj, stack, referencePlane, localizers) {
   rendererObj.localizerHelper.canvasHeight = rendererObj.domElement.clientHeight;
   rendererObj.localizerScene = new THREE.Scene();
   rendererObj.localizerScene.add(rendererObj.localizerHelper);
+}
+
+function initSegRender(id) {
+  let stackHelper = null;
+
+  let msg = {
+    type: 'slice'
+  };
+
+  switch (id) {
+    case r1.domId:
+      stackHelper = r1.stackHelper;
+      msg.view = 'r1';
+
+      break;
+    case r2.domId:
+      stackHelper = r2.stackHelper;
+      msg.view = 'r2';
+      break;
+    case r3.domId:
+      stackHelper = r3.stackHelper;
+      msg.view = 'r3';
+      break;
+    default:
+      return;
+
+  }
+
+  stackHelper.index = 128;
+
+  if (shouldShowSegmentation) {
+    var uniforms = null;
+    switch (id) {
+      case r1.domId:
+        if (stackHelper.index < 64) {
+          uniforms = segR11.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+          segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+          uniforms = segR12.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+          segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+          uniforms = segR13.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+
+          segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+          uniforms = segR14.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+
+          segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        }
+
+        break;
+      case r2.domId:
+        if (stackHelper.index < 64) {
+          uniforms = segR21.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+          segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+          uniforms = segR22.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+          segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+          uniforms = segR23.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+
+          segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+          uniforms = segR24.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+
+          segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        }
+        break;
+      case r3.domId:
+        if (stackHelper.index < 64) {
+          uniforms = segR31.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index;
+
+          segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
+          uniforms = segR32.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+
+          segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
+          uniforms = segR33.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+
+          segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR34.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
+          uniforms = segR34.shaderMat.uniforms;
+          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+
+          segR31.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR32.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+          segR33.shaderMat.uniforms.indexSliceToDisplay.value = -1;
+        }
+        break;
+      default:
+        return;
+    }
+  }
+
+  msg.slice = stackHelper.index;
+
+  eventListener(msg);
 }
 
 function onScroll (event) {
