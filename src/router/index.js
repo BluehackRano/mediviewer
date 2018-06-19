@@ -9,7 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/viewer'
+      name: 'DicomViewer',
+      component: DicomViewer
     },
     {
       path: '/viewer',
