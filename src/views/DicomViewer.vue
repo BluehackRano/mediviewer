@@ -364,64 +364,21 @@
           selectId = this.focusedCanvas.id;
         }
         Medic3D.CameraCtrl(false);
+
+        let fileName = null
         switch (menu.name) {
           case 'BrainRoiSegmentation':
-//            console.log(this.dicom_name)
-//            return
-
-            // TODO: remove this
-            let fileName = 'ad_2'
+//            console.log('#BrainRoiSegmentation')
+            fileName = null
             if (this.dicom_name) {
-//              switch (this.dicom_name) {
-//                case 'ad_1':
-//              }
               fileName = this.dicom_name
-            } else {
+            }
+            if (!fileName) {
               alert('Error: No input Dicom file.')
               return
             }
-
-            const formData = new FormData();
-            const baseURI = 'http://210.116.109.38:20011';
-            const url = `http://${location.host}/static/nii/${fileName}.nii`
-            fetch(url, { method: 'get' })
-              .then(res => (console.log(res), res.blob()))
-              .then(res => new File([res], `${fileName}.nii`))
-              .then(res => formData.append('data', res))
-              .then(res => {
-                return fetch(
-                  `${baseURI}/analysis/nii`,
-                  { method: 'post', body: formData }
-                )
-              })
-              .then(res => {
-                this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
-                  .then((result) => {
-                    if (result.data) {
-                      if (result.data.is_completed) {
-                        this.setReportState(result.data)
-                        this.loadAutoSegmentation(result.data.download_url)
-                      } else {
-                        let anInterval = setInterval(() => {
-                          console.log('loading ....')
-                          this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
-                            .then((result) => {
-                              if (result.data) {
-                                if (result.data.is_completed) {
-                                  clearInterval(anInterval)
-                                  console.log(result)
-                                  this.loadAutoSegmentation(result.data.download_url)
-                                  this.setReportState(result.data)
-                                } else {
-                                  console.log('Not Yet ..')
-                                }
-                              }
-                            })
-                        }, 10000)
-                      }
-                    }
-                  })
-              })
+            console.log(fileName)
+            this.fetchBrainRoiSegmentation(fileName)
             break;
           case 'SegmentationResultOveray':
 //            console.log('#SegmentationResultOveray')
@@ -440,19 +397,20 @@
               this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
               this.captureDicomImage()
               this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
-
-//              const baseURI = 'http://210.116.109.38:20011';
-//              this.$http.get(`${baseURI}/analysis/result/${this.dicom_name}.nii`)
-//                .then((result) => {
-//                  console.log(result)
-//                  this.setChartImage()
-//                  this.captureDicomImage()
-//                  this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
-//                })
             }
             break;
           case 'OpenSegmentations':
 //            console.log('#OpenSegmentations')
+            fileName = null
+            if (this.dicom_name) {
+              fileName = this.dicom_name
+            }
+            if (!fileName) {
+              alert('Error: No input Dicom file.')
+              return
+            }
+            console.log(fileName)
+            this.fetchOpenSegmentations(fileName)
             break;
           case 'SaveAsDerived':
 //            console.log('#SaveAsDerived')
@@ -566,13 +524,83 @@
 //            console.log('Not Annotation mode');
         }
       },
-      loadAutoSegmentation (url) {
+      fetchBrainRoiSegmentation (fileName) {
+        const formData = new FormData()
+        const baseURI = 'http://210.116.109.38:20011';
+        const url = `http://${location.host}/static/nii/${fileName}.nii`
+        fetch(url, { method: 'get' })
+          .then(res => (console.log(res), res.blob()))
+          .then(res => new File([res], `${fileName}.nii`))
+          .then(res => formData.append('data', res))
+          .then(res => {
+            return fetch(
+              `${baseURI}/analysis/nii`,
+              { method: 'post', body: formData }
+            )
+          })
+          .then(res => {
+            this.loadingSpinner.loading = true
+            this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+              .then((result) => {
+                if (result.data) {
+                  if (result.data.is_completed) {
+                    this.setReportState(result.data)
+                    this.loadAutoSegmentation(result.data.download_url)
+                  } else {
+                    console.log('Loading ...')
+                    let anInterval = setInterval(() => {
+                      this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+                        .then((result) => {
+                          if (result.data) {
+                            if (result.data.is_completed) {
+                              clearInterval(anInterval)
+                              console.log(result)
+                              this.loadAutoSegmentation(result.data.download_url)
+                              this.setReportState(result.data)
+                            } else {
+                              console.log('Polling for result data ...')
+                            }
+                          }
+                        })
+                        .catch((error) => {
+                          this.loadingSpinner.loading = false
+                        })
+                    }, 10000)
+                  }
+                }
+              })
+              .catch((error) => {
+                this.loadingSpinner.loading = false
+              })
+          })
+      },
+      fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
-
+        const baseURI = 'http://210.116.109.38:20011';
+        this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+          .then((result) => {
+            if (result.data) {
+              if (result.data.is_completed) {
+                console.log(result)
+                this.loadAutoSegmentation(result.data.download_url)
+                this.setReportState(result.data)
+              } else {
+                this.fetchBrainRoiSegmentation(fileName)
+              }
+            }
+          })
+          .catch((error) => {
+            this.loadingSpinner.loading = false
+          })
+      },
+      loadAutoSegmentation (url) {
         Medic3D.loadSegmentationLocal(url, true)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
           .then(() => {
-            this.loadingSpinner.loading = false;
+            this.loadingSpinner.loading = false
+          })
+          .catch((error) => {
+            this.loadingSpinner.loading = false
           });
       },
       setReportState (data) {
