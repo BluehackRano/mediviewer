@@ -783,6 +783,11 @@ function initRenderer2D (rendererObj) {
   computeOffset(rendererObj);
 }
 
+function resetSegmentation() {
+  reports = [];
+  shouldShowSegmentation = false;
+}
+
 export function loadZip (uploadedFile, cb) {
   eventListener = cb;
   return new Promise((resolve, reject) => {
@@ -797,6 +802,8 @@ export function loadZip (uploadedFile, cb) {
         let loader = new LoadersVolume()
         loader.loadZip(buffer)  //
           .then(function () {
+
+            resetSegmentation();
             // {Array.<ModelsSeries>} Array of series properly merged.
             let series = loader.data[0].mergeSeries(loader.data)[0] // loader.data = series
             loader.free()
@@ -2106,7 +2113,7 @@ function clearWidgets () {
  */
 function initSegment(rendererObj){
   if (rendererObj.domElement === null) {
-    rendererObj.domElement = document.getElementById(rendererObj.domId);
+  rendererObj.domElement = document.getElementById(rendererObj.domId);
   } else {
     return;
   }
