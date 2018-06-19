@@ -16,38 +16,165 @@
         <div class="report-body-left">
           <div class="top">
             <img
-              v-if="capturedImage.layout1.dicom"
+              v-if="capturedImage.layout1"
               :src="capturedImage.layout1.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout1.seg"
+              v-if="capturedImage.layout1"
               :src="capturedImage.layout1.seg" alt="Please wait ...">
           </div>
           <div class="center">
             <img
-              v-if="capturedImage.layout2.dicom"
+              v-if="capturedImage.layout2"
               :src="capturedImage.layout2.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout2.seg"
+              v-if="capturedImage.layout2"
               :src="capturedImage.layout2.seg" alt="Please wait ...">
           </div>
           <div class="bottom">
             <img
-              v-if="capturedImage.layout3.dicom"
+              v-if="capturedImage.layout3"
               :src="capturedImage.layout3.dicom" alt="Please wait ...">
             <img
-              v-if="capturedImage.layout3.seg"
+              v-if="capturedImage.layout3"
               :src="capturedImage.layout3.seg" alt="Please wait ...">
           </div>
         </div>
         <div class="report-body-center">
           <div class="container">
             <div class="inner">
-              <img
-                v-if="reportImg"
-                :src="reportImg" alt="Please wait ...">
-              <img
-                v-if="reportImg"
-                :src="reportImg" alt="Please wait ...">
+
+              <div class="contents">
+                <div class="title">
+                  <span>Brain Atrophy Report</span>
+                </div>
+                <div class="provider">
+                  <span>by VUNO</span>
+                </div>
+
+                <div class="patient-information-text">
+                  <span>PATIENT INFORMATION</span>
+                </div>
+                <table class="patient-information-table">
+                  <thead>
+                  <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>ididididi</td>
+                    <td>name</td>
+                    <td>Male</td>
+                    <td>29</td>
+                  </tr>
+                  </tbody>
+                </table>
+
+                <div class="results-text">
+                  <span>RESULTS</span>
+                </div>
+                <div class="results-image-container">
+                  <div class="results-image">
+                    <div class="left">
+                      <img
+                        v-if="capturedImage.layout1"
+                        :src="capturedImage.layout1.dicom" alt="Please wait ...">
+                      <!--<img-->
+                      <!--class="seg"-->
+                      <!--v-if="capturedImage.layout1"-->
+                      <!--:src="capturedImage.layout1.seg" alt="Please wait ...">-->
+                    </div>
+                    <div class="center">
+                      <img
+                        v-if="capturedImage.layout2"
+                        :src="capturedImage.layout2.dicom" alt="Please wait ...">
+                      <!--<img-->
+                      <!--class="seg"-->
+                      <!--v-if="capturedImage.layout2"-->
+                      <!--:src="capturedImage.layout2.seg" alt="Please wait ...">-->
+                    </div>
+                    <div class="right">
+                      <img
+                        v-if="capturedImage.layout3"
+                        :src="capturedImage.layout3.dicom" alt="Please wait ...">
+                      <!--<img-->
+                      <!--class="seg"-->
+                      <!--v-if="capturedImage.layout3"-->
+                      <!--:src="capturedImage.layout3.seg" alt="Please wait ...">-->
+                    </div>
+                  </div>
+                </div>
+
+                <table class="results-table">
+                  <thead>
+                  <tr>
+                    <th class="no">No</th>
+                    <th>Name</th>
+                    <th>Volume</th>
+                    <th>Percentile</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>name</td>
+                    <td>Male</td>
+                    <td>29</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div> <!-- end of contents -->
+
+              <div class="contents">
+                <div class="title">
+                  <span>Brain Atrophy Report</span>
+                </div>
+                <div class="provider">
+                  <span>by VUNO</span>
+                </div>
+
+                <div class="patient-information-text">
+                  <span>PATIENT INFORMATION</span>
+                </div>
+                <table class="patient-information-table">
+                  <thead>
+                  <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Sex</th>
+                    <th>Age</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>ididiaaaaaaaaaaaaaaaaaaaaaaaaaaadidiididiaaaaaaaaaaaaaaaaaaaaaaaaaaadidi</td>
+                    <td>Male</td>
+                    <td>29</td>
+                  </tr>
+                  </tbody>
+                </table>
+
+                <div class="charts-text">
+                  <span>CHARTS</span>
+                </div>
+                <div class="charts-container">
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                  <div class="chart"></div>
+                </div>
+
+              </div> <!-- end of contents -->
+
             </div>
           </div>
         </div>
@@ -252,14 +379,146 @@
               position: absolute;
               left: 0;
               top: 0;
-              width: 2000px;
-              height: 2000px;
+              width: 100%;
+              min-width: 700px;
+              height: 2220px;
 
-              img {
-                /*position: absolute;*/
-                /*width: 800px;*/
-                /*height: 850px;*/
-                pointer-events: none;
+              .contents {
+                margin-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 100%;
+                height: 1100px;
+                background-color: white;
+                /*text-align: center;*/
+
+                .title {
+                  padding-top: 30px;
+                  width: 100%;
+                  height: 50px;
+                  text-align: center;
+
+                  span {
+                    line-height: 30px;
+                    font-family: NotoSansCJKkr;
+                    font-size: 35px;
+                    font-weight: 900;
+                    letter-spacing: 0;
+                  }
+                }
+
+                .provider {
+                  width: 100%;
+                  height: 20px;
+                  text-align: center;
+
+                  span {
+                    line-height: 10px;
+                    font-family: NotoSansCJKkr;
+                    font-size: 20px;
+                    letter-spacing: 0;
+                  }
+                }
+
+                .patient-information-text {
+                  margin-top: 30px;
+                }
+                table.patient-information-table {
+                  position: relative;
+                  width: 100%;
+                  border-radius: 3px;
+
+                  th {
+                    padding: 2px 4px;
+                    height: 10px;
+                    border: 2px solid black;
+                    font-size: 10px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                  }
+
+                  td {
+                    padding: 5px 10px;
+                    border: 2px solid black;
+                    max-width: 30px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  }
+                }
+
+                .results-text {
+                  margin-top: 30px;
+                }
+                .results-image-container {
+                  /*position: absolute;*/
+                  width: 100%;
+                  height: 250px;
+
+                  .results-image {
+                    width: 100%;
+                    height: 250px;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    grid-auto-rows: 250px;
+
+                    div {
+                      border: 1px solid gray;
+
+                      img {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                      }
+                    }
+                  }
+                }
+                table.results-table {
+                  margin-top: 30px;
+                  position: relative;
+                  width: 100%;
+                  border-radius: 3px;
+
+                  th {
+                    padding: 5px 10px;
+                    height: 10px;
+                    border: 2px solid black;
+                    max-width: 30px;
+                    background-color: lightgray;
+                    font-size: 15px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                  }
+
+                  td {
+                    padding: 5px 10px;
+                    border: 2px solid black;
+                    max-width: 30px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  }
+
+                  th.no {
+                    width: 40px;
+                  }
+                }
+
+                .charts-text {
+                  margin-top: 30px;
+                }
+                .charts-container {
+                  width: 100%;
+                  display: grid;
+                  grid-template-columns: repeat(3, 1fr);
+                  grid-auto-rows: 250px;
+
+                  .chart {
+                    border: 1px solid black;
+                  }
+                }
               }
             }
 
@@ -280,8 +539,8 @@
 
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
 
   /* Track */
