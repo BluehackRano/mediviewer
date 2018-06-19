@@ -24,13 +24,17 @@ const state = {
     layout1: null,
     layout2: null,
     layout3: null
-  }
+  },
+  chartReports: [],
+  report: {}
 }
 
 const getters = {
   tagInfo: state => state.tagInfo,
   showAnalysisReportPopup: state => state.showAnalysisReportPopup,
-  capturedImage: state => state.capturedImage
+  capturedImage: state => state.capturedImage,
+  chartReports: state => state.chartReports,
+  report: state => state.report
 }
 
 const store = new Vuex.Store({
