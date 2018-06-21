@@ -2236,9 +2236,9 @@ function initBox(xspaceLength, yspaceLength, zspaceLength){
 function initScreen(render){
   render.screenContainer = new THREE.Object3D();
 
-  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_" + render.targetID + ".png" )
-  // var mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
-  // mosaicTexture.needsUpdate = true;
+  // var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_" + render.targetID + ".png" )
+  var mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
+  mosaicTexture.needsUpdate = true;
   mosaicTexture.magFilter = THREE.LinearFilter;
   mosaicTexture.minFilter = THREE.LinearFilter;
   //mosaicTexture.flipY = false;
