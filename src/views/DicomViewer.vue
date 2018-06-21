@@ -525,6 +525,7 @@
         }
       },
       fetchBrainRoiSegmentation (fileName) {
+        this.loadingSpinner.loading = true
         const formData = new FormData()
         const baseURI = 'http://210.116.109.38:20011';
         const url = `http://${location.host}/static/nii/${fileName}.nii`
@@ -539,7 +540,6 @@
             )
           })
           .then(res => {
-            this.loadingSpinner.loading = true
             this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
               .then((result) => {
                 if (result.data) {
