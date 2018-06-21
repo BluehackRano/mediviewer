@@ -895,6 +895,10 @@ export function loadZip (uploadedFile, cb) {
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
             gDicomStack = stack;
+            r2.camera.rotate();
+            r2.camera.rotate();
+            r3.camera.rotate();
+            r3.camera.rotate();
             resolve(true);
           })
       })
