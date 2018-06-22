@@ -895,10 +895,12 @@ export function loadZip (uploadedFile, cb) {
             window.addEventListener('resize', onWindowResize, false);
             ready = true;
             gDicomStack = stack;
-            r2.camera.rotate();
-            r2.camera.rotate();
-            r3.camera.rotate();
-            r3.camera.rotate();
+            r1.camera.rotate();
+            r1.camera.rotate();
+            // r2.camera.rotate();
+            // r2.camera.rotate();
+            // r3.camera.rotate();
+            // r3.camera.rotate();
             resolve(true);
           })
       })
@@ -2240,9 +2242,9 @@ function initBox(xspaceLength, yspaceLength, zspaceLength){
 function initScreen(render){
   render.screenContainer = new THREE.Object3D();
 
-  // var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/out_" + render.targetID + ".png" )
-  var mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
-  mosaicTexture.needsUpdate = true;
+  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data1/out_" + render.targetID + ".png" )
+  // var mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
+  // mosaicTexture.needsUpdate = true;
   mosaicTexture.magFilter = THREE.LinearFilter;
   mosaicTexture.minFilter = THREE.LinearFilter;
   //mosaicTexture.flipY = false;
@@ -2309,7 +2311,10 @@ function initScreen(render){
 
   if (render.domId == r1.domId) {
     y = -y;
+    x = -x;
   } else if (render.domId == r2.domId) {
+    // x = -x;
+  } else if (render.domId == r3.domId) {
     x = -x;
   }
 
