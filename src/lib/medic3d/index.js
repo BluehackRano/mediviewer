@@ -897,10 +897,10 @@ export function loadZip (uploadedFile, cb) {
             gDicomStack = stack;
             r1.camera.rotate();
             r1.camera.rotate();
-            // r2.camera.rotate();
-            // r2.camera.rotate();
-            // r3.camera.rotate();
-            // r3.camera.rotate();
+            r2.camera.rotate();
+            r2.camera.rotate();
+            r3.camera.rotate();
+            r3.camera.rotate();
             resolve(true);
           })
       })
@@ -2309,11 +2309,11 @@ function initScreen(render){
   var x = render.spaceLength.x;
   var y= render.spaceLength.y;
 
+  y = -y;
   if (render.domId == r1.domId) {
-    y = -y;
     x = -x;
   } else if (render.domId == r2.domId) {
-    // x = -x;
+    x = -x;
   } else if (render.domId == r3.domId) {
     x = -x;
   }
