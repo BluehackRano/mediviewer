@@ -535,7 +535,7 @@
           .then(res => formData.append('data', res))
           .then(res => {
             return fetch(
-              `${baseURI}/analysis/nii`,
+              `${baseURI}/analysis/nii/again`,
               { method: 'post', body: formData }
             )
           })
