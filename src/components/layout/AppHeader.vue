@@ -39,6 +39,9 @@
         </div>
 
         <div class="nav-right">
+          <span class="nav-warning-info-span">
+            해당 프로그램은 Dicom 및 사용자 정보를 서버에 저장하지 않습니다.
+          </span>
           <a class="button nav-help-button"
              @click="helpButtonClicked">
             Help
@@ -162,6 +165,18 @@
     font-size: 15px;
     color: white;
     position: absolute;
+  }
+
+  .nav-warning-info-span {
+    margin-right: 20px;
+    line-height: 80px;
+    font-family: AppleSDGothicNeo;
+    font-size: 12px;
+    font-weight: 800;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #4a4a4a;
   }
 
   .nav-help-button {
