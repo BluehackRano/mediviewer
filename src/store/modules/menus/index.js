@@ -59,6 +59,14 @@ const state = {
     layout,
     Divider,
     {
+      name: 'MaskOpacity',
+      type: 'action',
+      meta: {
+        label: 'Mask Opacity',
+        icon: 'img-over-27-mask-opacity.svg'
+      }
+    },
+    {
       name: 'Pan',
       type: 'select',
       meta: {
