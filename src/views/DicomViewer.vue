@@ -194,6 +194,8 @@
       this.$bus.$on(busType.MENU_CLICKED, this.menuClicked)
       this.$bus.$on(busType.FILE_UPLOADED, this.setUploadedFile)
       this.$bus.$on(busType.FILE_UPLOADED_SEG, this.loadSegmentation)
+      this.$bus.$on(busType.MASK_OPACITY_CHANGED, this.maskOpacityChanged)
+      this.$bus.$on(busType.SET_MASK_VISIBILITY, this.maskVisibilityChanged)
 
       this.mouseTimer = setInterval(() => {
         this.mousemove_ok = true
@@ -357,10 +359,14 @@
       doAction (menu) {
         this.mode = null;
         let selectId;
-        if (this.focusedCanvas.id === null) {
+        if (!this.focusedCanvas) {
           // unselected
-          return;
+          return
         } else {
+          if (this.focusedCanvas.id === null) {
+            // unselected
+            return
+          }
           selectId = this.focusedCanvas.id;
         }
         Medic3D.CameraCtrl(false);
@@ -411,6 +417,22 @@
             }
             console.log(fileName)
             this.fetchOpenSegmentations(fileName)
+            break;
+          case 'MaskOpacity':
+            console.log('#MaskOpacity')
+            if (!this.focusedCanvas) {
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              return
+            }
+            if (!this.focusedCanvas.opacity) {
+              if (state.focusedCanvas.opacity !== 0) {
+                state.focusedCanvas.opacity = 100
+              }
+            }
+            this.$store.commit(mutationType.SET_MASK_OPACITY, this.focusedCanvas.opacity)
+            this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, true)
             break;
           case 'SaveAsDerived':
 //            console.log('#SaveAsDerived')
@@ -509,9 +531,12 @@
       },
       doAnnotation (event) {
         let selectId;
-        if (this.focusedCanvas.id === null) {
+        if (!this.focusedCanvas) {
           // unselected
         } else {
+          if (this.focusedCanvas.id === null) {
+            // unselected
+          }
           selectId = this.focusedCanvas.id;
         }
         switch (this.mode) {
@@ -693,6 +718,46 @@
           segImage = segCanvas.toDataURL('image/png', 1.0)
         }
         return segImage
+      },
+      maskOpacityChanged () {
+        let canvasId = this.focusedCanvas.id
+        let dicomCanvas = null
+        let maskCanvas1 = null
+        let maskCanvas2 = null
+        let maskCanvas3 = null
+        let maskCanvas4 = null
+        if (canvasId === 'layout-1-2') {
+          dicomCanvas = document.getElementById('1')
+          maskCanvas1 = document.getElementById('11')
+          maskCanvas2 = document.getElementById('12')
+          maskCanvas3 = document.getElementById('13')
+          maskCanvas4 = document.getElementById('14')
+        } else if (canvasId === 'layout-2-1') {
+          dicomCanvas = document.getElementById('2')
+          maskCanvas1 = document.getElementById('21')
+          maskCanvas2 = document.getElementById('22')
+          maskCanvas3 = document.getElementById('23')
+          maskCanvas4 = document.getElementById('24')
+        } else if (canvasId === 'layout-2-2') {
+          dicomCanvas = document.getElementById('3')
+          maskCanvas1 = document.getElementById('31')
+          maskCanvas2 = document.getElementById('32')
+          maskCanvas3 = document.getElementById('33')
+          maskCanvas4 = document.getElementById('34')
+        }
+
+        if (dicomCanvas && maskCanvas1 && maskCanvas2 && maskCanvas3 && maskCanvas4) {
+//          dicomCanvas.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas1.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas2.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas3.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas4.style.opacity = this.focusedCanvas.opacity / 100
+        } else {
+          console.log('No Masking Canvas !')
+        }
+      },
+      maskVisibilityChanged (visibility) {
+        console.log(visibility)
       }
     }
   }
@@ -734,6 +799,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
+            z-index: 1999;
             pointer-events: none;
 
             -webkit-touch-callout: none;

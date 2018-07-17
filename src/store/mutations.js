@@ -10,6 +10,14 @@ export default {
   },
   SELECT_CANVAS (state, canvas) {
     state.focusedCanvas = canvas
+    if (state.focusedCanvas) {
+      if (!state.focusedCanvas.opacity) {
+        if (state.focusedCanvas.opacity !== 0) {
+          state.focusedCanvas.opacity = 100
+        }
+      }
+      state.maskOpacity = state.focusedCanvas.opacity
+    }
   },
   SET_SHOW_TAGS (state, showTags) {
     state.showTags = showTags
@@ -29,5 +37,15 @@ export default {
   },
   SET_TAG_INFO (state, tagInfo) {
     state.tagInfo = tagInfo
+  },
+  SET_MASK_OPACITY (state, opacity) {
+    if (opacity < 0) {
+      state.maskOpacity = 0
+    } else if (opacity > 100) {
+      state.maskOpacity = 100
+    } else {
+      state.maskOpacity = opacity
+    }
+    state.focusedCanvas.opacity = state.maskOpacity
   }
 }
