@@ -54,6 +54,7 @@
 </template>
 
 <script>
+  import * as mutationType from '@/store/mutation-types'
   import * as busType from '@/util/bus/bus-types'
 
   export default {
@@ -71,7 +72,14 @@
       logoClicked () {
         this.$router.go('/')
       },
+      resetAndIntializeViews () {
+        // TODO: for reset and initialize views code here.
+        this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, false)
+        this.$store.commit(mutationType.SELECT_CANVAS, null)
+      },
       fileUploaded () {
+        this.resetAndIntializeViews()
+        // .
         this.$bus.$emit(busType.FILE_UPLOADED_SEG, null)
         this.$bus.$emit(busType.FILE_UPLOADED, this.files[0])
       },
