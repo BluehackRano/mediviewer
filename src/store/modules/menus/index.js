@@ -57,6 +57,7 @@ const state = {
     },
     Divider,
     layout.DivideDisplay,
+    layout.ExpandDisplay,
     layout.FlipdDisplay,
     Divider,
     {
