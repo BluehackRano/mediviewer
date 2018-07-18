@@ -358,6 +358,7 @@
       },
       doAction (menu) {
         this.mode = null;
+
         let selectId;
         if (!this.focusedCanvas) {
           // unselected
@@ -373,6 +374,7 @@
 
         let fileName = null
         switch (menu.name) {
+
           case 'BrainRoiSegmentation':
 //            console.log('#BrainRoiSegmentation')
             fileName = null
@@ -399,7 +401,6 @@
                 alert('Error: No segmentation data.')
                 return
               }
-
               this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
               this.captureDicomImage()
               this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
@@ -418,6 +419,26 @@
             console.log(fileName)
             this.fetchOpenSegmentations(fileName)
             break;
+          case 'SaveAsDerived':
+//            console.log('#SaveAsDerived')
+            break;
+          case 'Reload':
+//            console.log('#Reload')
+            break;
+          case 'LoadAnnotation':
+//            console.log('#LoadAnnotation')
+            break;
+          case 'Invert':
+//            console.log('#Invert')
+            Medic3D.Invert();
+            break;
+
+          case 'Horizontal':
+            console.log('#Horizontal')
+            break
+          case 'Vertical':
+            console.log('#Vertical')
+            break
           case 'MaskOpacity':
             console.log('#MaskOpacity')
             if (!this.focusedCanvas) {
@@ -434,9 +455,6 @@
             this.$store.commit(mutationType.SET_MASK_OPACITY, this.focusedCanvas.opacity)
             this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, true)
             break;
-          case 'SaveAsDerived':
-//            console.log('#SaveAsDerived')
-            break;
           case 'ZoomIn':
 //            console.log('#ZoomIn')
             Medic3D.Zoom(selectId, false);
@@ -452,16 +470,7 @@
           case 'OneToOne':
 //            console.log('#OneToOne')
             break;
-          case 'Reload':
-//            console.log('#Reload')
-            break;
-          case 'LoadAnnotation':
-//            console.log('#LoadAnnotation')
-            break;
-          case 'Invert':
-            Medic3D.Invert();
-//            console.log('#Invert')
-            break;
+
           default:
 //            console.log('#Unknow action menu')
         }

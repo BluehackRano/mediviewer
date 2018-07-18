@@ -1,7 +1,7 @@
 import * as types from '../../mutation-types'
 
 import Divider from './divider'
-import layout from './layout'
+import * as layout from './layout'
 import filter from './filter'
 import annotations from './annotations'
 
@@ -56,7 +56,8 @@ const state = {
       }
     },
     Divider,
-    layout,
+    layout.DivideDisplay,
+    layout.FlipdDisplay,
     Divider,
     {
       name: 'MaskOpacity',
