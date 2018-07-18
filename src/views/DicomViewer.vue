@@ -359,17 +359,17 @@
       doAction (menu) {
         this.mode = null;
 
-        let selectId;
-        if (!this.focusedCanvas) {
-          // unselected
-          return
-        } else {
-          if (this.focusedCanvas.id === null) {
-            // unselected
-            return
-          }
-          selectId = this.focusedCanvas.id;
-        }
+        let selectId = null;
+//        if (!this.focusedCanvas) {
+//          // unselected
+//          return
+//        } else {
+//          if (this.focusedCanvas.id === null) {
+//            // unselected
+//            return
+//          }
+//          selectId = this.focusedCanvas.id;
+//        }
         Medic3D.CameraCtrl(false);
 
         let fileName = null
@@ -433,20 +433,41 @@
             Medic3D.Invert();
             break;
 
+          /**
+           * Selecting display needed.
+           */
           case 'Horizontal':
-            console.log('#Horizontal')
-            break
-          case 'Vertical':
-            console.log('#Vertical')
-            break
-          case 'MaskOpacity':
-            console.log('#MaskOpacity')
-            if (!this.focusedCanvas) {
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
               return
             }
             if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
               return
             }
+            console.log('#Horizontal')
+            break
+          case 'Vertical':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+            console.log('#Vertical')
+            break
+          case 'MaskOpacity':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+            console.log('#MaskOpacity')
             if (!this.focusedCanvas.opacity) {
               if (state.focusedCanvas.opacity !== 0) {
                 state.focusedCanvas.opacity = 100
@@ -456,16 +477,43 @@
             this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, true)
             break;
           case 'ZoomIn':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
 //            console.log('#ZoomIn')
+            selectId = this.focusedCanvas.id
             Medic3D.Zoom(selectId, false);
             break;
           case 'ZoomOut':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
 //            console.log('#ZoomOut')
+            selectId = this.focusedCanvas.id
             Medic3D.Zoom(selectId, true);
             break;
           case 'Fit':
-            Medic3D.Fit(selectId);
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
 //            console.log('#Fit')
+            selectId = this.focusedCanvas.id
+            Medic3D.Fit(selectId);
             break;
           case 'OneToOne':
 //            console.log('#OneToOne')
