@@ -26,15 +26,18 @@ const state = {
     layout3: null
   },
   chartReports: [],
-  report: {}
+  report: {},
+  maskOpacity: 100
 }
 
 const getters = {
+  focusedCanvas: state => state.focusedCanvas,
   tagInfo: state => state.tagInfo,
   showAnalysisReportPopup: state => state.showAnalysisReportPopup,
   capturedImage: state => state.capturedImage,
   chartReports: state => state.chartReports,
-  report: state => state.report
+  report: state => state.report,
+  maskOpacity: state => state.maskOpacity
 }
 
 const store = new Vuex.Store({

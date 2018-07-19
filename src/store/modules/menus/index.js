@@ -1,7 +1,7 @@
 import * as types from '../../mutation-types'
 
 import Divider from './divider'
-import layout from './layout'
+import * as layout from './layout'
 import filter from './filter'
 import annotations from './annotations'
 
@@ -56,8 +56,18 @@ const state = {
       }
     },
     Divider,
-    layout,
+    layout.DivideDisplay,
+    layout.ExpandDisplay,
+    layout.FlipdDisplay,
     Divider,
+    {
+      name: 'MaskOpacity',
+      type: 'action',
+      meta: {
+        label: 'Mask Opacity',
+        icon: 'img-over-27-mask-opacity.svg'
+      }
+    },
     {
       name: 'Pan',
       type: 'select',

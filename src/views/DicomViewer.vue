@@ -161,7 +161,8 @@
         showTags: 'showTags'
       }),
       ...mapGetters([
-        'showAnalysisReportPopup'
+        'showAnalysisReportPopup',
+        'menus'
       ])
     },
     data () {
@@ -194,6 +195,8 @@
       this.$bus.$on(busType.MENU_CLICKED, this.menuClicked)
       this.$bus.$on(busType.FILE_UPLOADED, this.setUploadedFile)
       this.$bus.$on(busType.FILE_UPLOADED_SEG, this.loadSegmentation)
+      this.$bus.$on(busType.MASK_OPACITY_CHANGED, this.maskOpacityChanged)
+      this.$bus.$on(busType.SET_MASK_VISIBILITY, this.maskVisibilityChanged)
 
       this.mouseTimer = setInterval(() => {
         this.mousemove_ok = true
@@ -222,6 +225,8 @@
             this.$store.commit(mutationType.SET_SHOW_TAGS, true)
 
             this.parseDicomTags()
+
+            this.setLayoutsSize()
           })
           .catch((err) => {
             console.log('An error : ' + err);
@@ -282,6 +287,59 @@
             bottom: 0
           }
         }
+      },
+      setLayoutsSize () {
+        let canvas0 = document.getElementById('0')
+        canvas0.style.width = '100%'
+        canvas0.style.height = '100%'
+
+        let dicomCanvas1 = document.getElementById('1')
+        let maskCanvas11 = document.getElementById('11')
+        let maskCanvas12 = document.getElementById('12')
+        let maskCanvas13 = document.getElementById('13')
+        let maskCanvas14 = document.getElementById('14')
+        dicomCanvas1.style.width = '100%'
+        dicomCanvas1.style.height = '100%'
+        maskCanvas11.style.width = '100%'
+        maskCanvas11.style.height = '100%'
+        maskCanvas12.style.width = '100%'
+        maskCanvas12.style.height = '100%'
+        maskCanvas13.style.width = '100%'
+        maskCanvas13.style.height = '100%'
+        maskCanvas14.style.width = '100%'
+        maskCanvas14.style.height = '100%'
+
+        let dicomCanvas2 = document.getElementById('2')
+        let maskCanvas21 = document.getElementById('21')
+        let maskCanvas22 = document.getElementById('22')
+        let maskCanvas23 = document.getElementById('23')
+        let maskCanvas24 = document.getElementById('24')
+        dicomCanvas2.style.width = '100%'
+        dicomCanvas2.style.height = '100%'
+        maskCanvas21.style.width = '100%'
+        maskCanvas21.style.height = '100%'
+        maskCanvas22.style.width = '100%'
+        maskCanvas22.style.height = '100%'
+        maskCanvas23.style.width = '100%'
+        maskCanvas23.style.height = '100%'
+        maskCanvas24.style.width = '100%'
+        maskCanvas24.style.height = '100%'
+
+        let dicomCanvas3 = document.getElementById('3')
+        let maskCanvas31 = document.getElementById('31')
+        let maskCanvas32 = document.getElementById('32')
+        let maskCanvas33 = document.getElementById('33')
+        let maskCanvas34 = document.getElementById('34')
+        dicomCanvas3.style.width = '100%'
+        dicomCanvas3.style.height = '100%'
+        maskCanvas31.style.width = '100%'
+        maskCanvas31.style.height = '100%'
+        maskCanvas32.style.width = '100%'
+        maskCanvas32.style.height = '100%'
+        maskCanvas33.style.width = '100%'
+        maskCanvas33.style.height = '100%'
+        maskCanvas34.style.width = '100%'
+        maskCanvas34.style.height = '100%'
       },
       menuClicked (menu) {
         if (menu.type === 'layout') {
@@ -356,17 +414,23 @@
       },
       doAction (menu) {
         this.mode = null;
-        let selectId;
-        if (this.focusedCanvas.id === null) {
-          // unselected
-          return;
-        } else {
-          selectId = this.focusedCanvas.id;
-        }
+
+        let selectId = null;
+//        if (!this.focusedCanvas) {
+//          // unselected
+//          return
+//        } else {
+//          if (this.focusedCanvas.id === null) {
+//            // unselected
+//            return
+//          }
+//          selectId = this.focusedCanvas.id;
+//        }
         Medic3D.CameraCtrl(false);
 
         let fileName = null
         switch (menu.name) {
+
           case 'BrainRoiSegmentation':
 //            console.log('#BrainRoiSegmentation')
             fileName = null
@@ -393,7 +457,6 @@
                 alert('Error: No segmentation data.')
                 return
               }
-
               this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
               this.captureDicomImage()
               this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
@@ -415,21 +478,6 @@
           case 'SaveAsDerived':
 //            console.log('#SaveAsDerived')
             break;
-          case 'ZoomIn':
-//            console.log('#ZoomIn')
-            Medic3D.Zoom(selectId, false);
-            break;
-          case 'ZoomOut':
-//            console.log('#ZoomOut')
-            Medic3D.Zoom(selectId, true);
-            break;
-          case 'Fit':
-            Medic3D.Fit(selectId);
-//            console.log('#Fit')
-            break;
-          case 'OneToOne':
-//            console.log('#OneToOne')
-            break;
           case 'Reload':
 //            console.log('#Reload')
             break;
@@ -437,9 +485,115 @@
 //            console.log('#LoadAnnotation')
             break;
           case 'Invert':
-            Medic3D.Invert();
 //            console.log('#Invert')
+            Medic3D.Invert();
             break;
+
+          /**
+           * Selecting display needed.
+           */
+          case 'Expand':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            console.log('#Expand')
+            selectId = this.focusedCanvas.id
+            this.expandDisplay(selectId)
+            break
+          case 'Restore':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            console.log('#Restore')
+            selectId = this.focusedCanvas.id
+            this.expandDisplay(selectId)
+            this.restoreDisplay(selectId)
+            break
+          case 'Horizontal':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+            console.log('#Horizontal')
+            break
+          case 'Vertical':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+            console.log('#Vertical')
+            break
+          case 'MaskOpacity':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+            console.log('#MaskOpacity')
+            if (!this.focusedCanvas.opacity) {
+              if (state.focusedCanvas.opacity !== 0) {
+                state.focusedCanvas.opacity = 100
+              }
+            }
+            this.$store.commit(mutationType.SET_MASK_OPACITY, this.focusedCanvas.opacity)
+            this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, true)
+            break;
+          case 'ZoomIn':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+//            console.log('#ZoomIn')
+            selectId = this.focusedCanvas.id
+            Medic3D.Zoom(selectId, false);
+            break;
+          case 'ZoomOut':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+//            console.log('#ZoomOut')
+            selectId = this.focusedCanvas.id
+            Medic3D.Zoom(selectId, true);
+            break;
+          case 'Fit':
+            if (!this.focusedCanvas || !this.focusedCanvas.id) {
+              alert('Please select a Display.')
+              return
+            }
+            if (this.focusedCanvas.id === 'layout-1-1') {
+              alert('Please select a Non-3D Display.')
+              return
+            }
+//            console.log('#Fit')
+            selectId = this.focusedCanvas.id
+            Medic3D.Fit(selectId);
+            break;
+          case 'OneToOne':
+//            console.log('#OneToOne')
+            break;
+
           default:
 //            console.log('#Unknow action menu')
         }
@@ -509,9 +663,12 @@
       },
       doAnnotation (event) {
         let selectId;
-        if (this.focusedCanvas.id === null) {
+        if (!this.focusedCanvas) {
           // unselected
         } else {
+          if (this.focusedCanvas.id === null) {
+            // unselected
+          }
           selectId = this.focusedCanvas.id;
         }
         switch (this.mode) {
@@ -693,6 +850,124 @@
           segImage = segCanvas.toDataURL('image/png', 1.0)
         }
         return segImage
+      },
+      maskOpacityChanged () {
+        let canvasId = this.focusedCanvas.id
+        let dicomCanvas = null
+        let maskCanvas1 = null
+        let maskCanvas2 = null
+        let maskCanvas3 = null
+        let maskCanvas4 = null
+        if (canvasId === 'layout-1-2') {
+          dicomCanvas = document.getElementById('1')
+          maskCanvas1 = document.getElementById('11')
+          maskCanvas2 = document.getElementById('12')
+          maskCanvas3 = document.getElementById('13')
+          maskCanvas4 = document.getElementById('14')
+        } else if (canvasId === 'layout-2-1') {
+          dicomCanvas = document.getElementById('2')
+          maskCanvas1 = document.getElementById('21')
+          maskCanvas2 = document.getElementById('22')
+          maskCanvas3 = document.getElementById('23')
+          maskCanvas4 = document.getElementById('24')
+        } else if (canvasId === 'layout-2-2') {
+          dicomCanvas = document.getElementById('3')
+          maskCanvas1 = document.getElementById('31')
+          maskCanvas2 = document.getElementById('32')
+          maskCanvas3 = document.getElementById('33')
+          maskCanvas4 = document.getElementById('34')
+        }
+
+        if (dicomCanvas && maskCanvas1 && maskCanvas2 && maskCanvas3 && maskCanvas4) {
+//          dicomCanvas.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas1.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas2.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas3.style.opacity = this.focusedCanvas.opacity / 100
+          maskCanvas4.style.opacity = this.focusedCanvas.opacity / 100
+        } else {
+          console.log('No Masking Canvas !')
+        }
+      },
+      maskVisibilityChanged (visibility) {
+        console.log(visibility)
+      },
+      expandDisplay (selectId) {
+        if (selectId === 'layout-1-1') {
+          this.menus.forEach((value, index) => {
+            if (value.name === 'DivideDisplay') {
+              this.setLayoutsWithMenuName(this.menus[index].children[0])
+              return
+            }
+          })
+        } else {
+          let layout_1_1 = document.getElementById('layout-1-1')
+          let layout_1_2 = document.getElementById('layout-1-2')
+          let layout_2_1 = document.getElementById('layout-2-1')
+          let layout_2_2 = document.getElementById('layout-2-2')
+          layout_1_1.style.visibility = 'hidden'
+          layout_1_2.style.visibility = 'hidden'
+          layout_2_1.style.visibility = 'hidden'
+          layout_2_2.style.visibility = 'hidden'
+
+          if (selectId === 'layout-1-2') {
+            layout_1_2.style.visibility = 'visible'
+            layout_1_2.style.top = 0
+            layout_1_2.style.left = 0
+            layout_1_2.style.right = 0
+            layout_1_2.style.bottom = 0
+          } else if (selectId === 'layout-2-1') {
+            layout_2_1.style.visibility = 'visible'
+            layout_2_1.style.top = 0
+            layout_2_1.style.left = 0
+            layout_2_1.style.right = 0
+            layout_2_1.style.bottom = 0
+          } else if (selectId === 'layout-2-2') {
+            layout_2_2.style.visibility = 'visible'
+            layout_2_2.style.top = 0
+            layout_2_2.style.left = 0
+            layout_2_2.style.right = 0
+            layout_2_2.style.bottom = 0
+          }
+        }
+      },
+      restoreDisplay (selectId) {
+        if (selectId === 'layout-1-1') {
+          this.menus.forEach((value, index) => {
+            if (value.name === 'DivideDisplay') {
+              this.setLayoutsWithMenuName(this.menus[index].children[1])
+              return
+            }
+          })
+        } else {
+          let layout_1_1 = document.getElementById('layout-1-1')
+          let layout_1_2 = document.getElementById('layout-1-2')
+          let layout_2_1 = document.getElementById('layout-2-1')
+          let layout_2_2 = document.getElementById('layout-2-2')
+
+          if (selectId === 'layout-1-2') {
+            layout_1_2.style.visibility = 'visible'
+            layout_1_2.style.top = 0
+            layout_1_2.style.left = '50%'
+            layout_1_2.style.right = 0
+            layout_1_2.style.bottom = '50%'
+          } else if (selectId === 'layout-2-1') {
+            layout_2_1.style.visibility = 'visible'
+            layout_2_1.style.top = '50%'
+            layout_2_1.style.left = 0
+            layout_2_1.style.right = '50%'
+            layout_2_1.style.bottom = 0
+          } else if (selectId === 'layout-2-2') {
+            layout_2_2.style.visibility = 'visible'
+            layout_2_2.style.top = '50%'
+            layout_2_2.style.left = '50%'
+            layout_2_2.style.right = 0
+            layout_2_2.style.bottom = 0
+          }
+          layout_1_1.style.visibility = 'visible'
+          layout_1_2.style.visibility = 'visible'
+          layout_2_1.style.visibility = 'visible'
+          layout_2_2.style.visibility = 'visible'
+        }
       }
     }
   }
@@ -734,6 +1009,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
+            z-index: 1999;
             pointer-events: none;
 
             -webkit-touch-callout: none;

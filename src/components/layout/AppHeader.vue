@@ -39,6 +39,9 @@
         </div>
 
         <div class="nav-right">
+          <span class="nav-warning-info-span">
+            해당 프로그램은 Dicom 및 사용자 정보를 서버에 저장하지 않습니다.
+          </span>
           <a class="button nav-help-button"
              @click="helpButtonClicked">
             Help
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+  import * as mutationType from '@/store/mutation-types'
   import * as busType from '@/util/bus/bus-types'
 
   export default {
@@ -68,7 +72,14 @@
       logoClicked () {
         this.$router.go('/')
       },
+      resetAndIntializeViews () {
+        // TODO: for reset and initialize views code here.
+        this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, false)
+        this.$store.commit(mutationType.SELECT_CANVAS, null)
+      },
       fileUploaded () {
+        this.resetAndIntializeViews()
+        // .
         this.$bus.$emit(busType.FILE_UPLOADED_SEG, null)
         this.$bus.$emit(busType.FILE_UPLOADED, this.files[0])
       },
@@ -162,6 +173,18 @@
     font-size: 15px;
     color: white;
     position: absolute;
+  }
+
+  .nav-warning-info-span {
+    margin-right: 20px;
+    line-height: 80px;
+    font-family: AppleSDGothicNeo;
+    font-size: 12px;
+    font-weight: 800;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #4a4a4a;
   }
 
   .nav-help-button {

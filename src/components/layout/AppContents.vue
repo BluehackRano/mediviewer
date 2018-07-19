@@ -7,6 +7,9 @@
     <segmentation-popup
       v-show="showSegmentationPopup"
     ></segmentation-popup>
+    <mask-opacity-popup
+      v-show="showMaskOpacityPopup">
+    </mask-opacity-popup>
 
     <help-popup
       v-show="showHelpPopup">
@@ -21,6 +24,7 @@
 
   import SegmentationPopup from '@/components/popups/SegmentationPopup'
   import AnalysisReportPopup from '@/components/popups/AnalysisReportPopup'
+  import MaskOpacityPopup from '@/components/popups/MaskOpacityPopup'
   import HelpPopup from '@/components/popups/HelpPopup'
 
   export default {
@@ -28,20 +32,22 @@
     computed: {
       ...mapGetters({
         menus: 'menus',
-        showAnalysisReportPopup: 'showAnalysisReportPopup'
+        showAnalysisReportPopup: 'showAnalysisReportPopup',
+        focusedCanvas: 'focusedCanvas'
       })
     },
     data () {
       return {
         isFileUploaded: false,
         showSegmentationPopup: false,
-//        showAnalysisReportPopup: false,
+        showMaskOpacityPopup: false,
         showHelpPopup: false
       }
     },
     components: {
       SegmentationPopup,
       AnalysisReportPopup,
+      MaskOpacityPopup,
       HelpPopup
     },
     created () {
@@ -50,6 +56,7 @@
       })
       this.$bus.$on(busType.SHOW_SEGMENTATION_POPUP, this.showSegmentationPopupToggle)
       this.$bus.$on(busType.SHOW_ANALYSIS_REPORT_POPUP, this.showAnalysisReportPopupToggle)
+      this.$bus.$on(busType.SHOW_MASK_OPACITY_POPUP, this.showMaskOpacityPopupToggle)
       this.$bus.$on(busType.SHOW_HELP_POPUP, this.showHelpPopupToggle)
     },
     mounted () {
@@ -136,6 +143,14 @@
           return
         }
         this.showAnalysisReportPopup = !this.showAnalysisReportPopup
+      },
+      showMaskOpacityPopupToggle (show) {
+        this.showMaskOpacityPopup = show
+//        if (show) {
+//          this.showMaskOpacityPopup = show
+//          return
+//        }
+//        this.showMaskOpacityPopup = !this.showMaskOpacityPopup
       },
       showHelpPopupToggle (show) {
         if (show) {

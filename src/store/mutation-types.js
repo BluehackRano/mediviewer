@@ -23,3 +23,5 @@ export const SET_CHART_REPORTS = 'SET_CHART_REPORTS'
 export const SET_REPORT = 'SET_REPORT'
 
 export const SET_TAG_INFO = 'SET_TAG_INFO'
+
+export const SET_MASK_OPACITY = 'SET_MASK_OPACITY'

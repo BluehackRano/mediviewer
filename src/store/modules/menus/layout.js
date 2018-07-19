@@ -1,4 +1,4 @@
-export default {
+const DivideDisplay = {
   name: 'DivideDisplay',
   type: 'expand',
   meta: {
@@ -34,3 +34,61 @@ export default {
     // }
   ]
 }
+
+const ExpandDisplay = {
+  name: 'ExpandDisplay',
+  type: 'expand',
+  meta: {
+    label: 'Expand Display',
+    icon: 'img-over-20-expand-display.svg',
+    expanded: false
+  },
+  children: [
+    {
+      name: 'Expand',
+      type: 'action',
+      meta: {
+        label: 'Expand',
+        icon: 'img-over-21-expand.svg'
+      }
+    },
+    {
+      name: 'Restore',
+      type: 'action',
+      meta: {
+        label: 'Restore',
+        icon: 'img-over-22-unfocus.svg'
+      }
+    }
+  ]
+}
+
+const FlipdDisplay = {
+  name: 'FlipdDisplay',
+  type: 'expand',
+  meta: {
+    label: 'Flip Display',
+    icon: 'img-over-23-flip-display.svg',
+    expanded: false
+  },
+  children: [
+    {
+      name: 'Horizontal',
+      type: 'action',
+      meta: {
+        label: 'Horizontal',
+        icon: 'img-over-24-flip-horizontally.svg'
+      }
+    },
+    {
+      name: 'Vertical',
+      type: 'action',
+      meta: {
+        label: 'Vertical',
+        icon: 'img-over-25-flip-vertically.svg'
+      }
+    }
+  ]
+}
+
+export { DivideDisplay, ExpandDisplay, FlipdDisplay }
