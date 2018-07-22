@@ -18,7 +18,7 @@
     "http": "0.0.0",
     "jszip": "^3.1.4",
     "net": "^1.0.2",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.9.2",
     "pngjs": "^3.3.0",
     "request": "^2.83.0",
     "sass-loader": "^6.0.6",
@@ -30,6 +30,7 @@
     "vue-awesome": "^2.3.3",
     "vue-bulma-expanding": "^0.0.1",
     "vue-draggable-resizable": "^1.5.2",
+    "vue-page-visibility-awesome": "^1.0.3",
     "vue-router": "^3.0.1",
     "vue-spinner": "^1.0.3",
     "vuex": "^3.0.0"

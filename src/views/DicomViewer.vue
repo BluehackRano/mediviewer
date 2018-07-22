@@ -131,12 +131,16 @@
           </div>
         </div>
       </div>
+
+      <VuePageVisibility @documentInactive="documentInactive" @documentActive="documentActive" ></VuePageVisibility>
     </section>
   </div>
 </template>
 
 <script>
   import {mapState, mapGetters, mapActions} from 'vuex'
+  import VuePageVisibility from 'vue-page-visibility-awesome'
+
   import * as mutationType from '@/store/mutation-types'
   import * as busType from '@/util/bus/bus-types'
 
@@ -149,6 +153,7 @@
   export default {
     name: 'DicomViewer',
     components: {
+      VuePageVisibility,
       Sidebar,
       ClipLoader,
       TagInfo
@@ -210,6 +215,14 @@
       ...mapActions([
         'showAnalysisReportPopupToggle'
       ]),
+      documentInactive(){
+        console.log("documentInactive")
+        Medic3D.pause()
+      },
+      documentActive(){
+        console.log("documentActive")
+        Medic3D.resume()
+      },
       setUploadedFile (uploadedFile) {
 //        console.log('setUploadedFile')
         var temp = uploadedFile.name.split('.');

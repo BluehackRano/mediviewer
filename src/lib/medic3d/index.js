@@ -529,6 +529,7 @@ function getDicomStack () {
 // extra variables to show mesh plane intersections in 2D renderers
 let sceneClip = new THREE.Scene();
 let eventListener = null;
+let isPause = false
 
 /**
  * Initialize Render and run animation loop
@@ -538,7 +539,12 @@ export function init () {
    * Called on each animation frame
    */
   // let sl = 0;
+
   function animate () {
+
+    if (isPause) {
+      return
+    }
     // we are ready when both meshes have been loaded
     if (ready) {
       // update each cameras
@@ -2404,4 +2410,12 @@ export function parseDicomTags () {
 
 export function getReports() {
   return reports;
+}
+
+export function pause () {
+  isPause = true
+}
+
+export function resume () {
+  isPause = false
 }
