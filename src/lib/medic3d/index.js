@@ -774,7 +774,7 @@ function initRenderer2D (rendererObj) {
   // controls
   rendererObj.controls = new Medic3D.Controls.TrackballOrtho(rendererObj.camera, rendererObj.domElement);
   rendererObj.controls.staticMoving = true;
-  rendererObj.controls.noRotate = true;
+  rendererObj.controls.noRotate = false;
   rendererObj.camera.controls = rendererObj.controls;
 
   // scene
@@ -1925,6 +1925,58 @@ export function Invert () {
   }
 }
 
+export function Horizontal (id) {
+  switch (id) {
+    case r1.domId:
+      r1.camera.invertColumns();
+      segR11.camera.invertColumns();
+      segR12.camera.invertColumns();
+      segR13.camera.invertColumns();
+      segR14.camera.invertColumns();
+      break;
+    case r2.domId:
+      r2.camera.invertColumns();
+      segR21.camera.invertColumns();
+      segR22.camera.invertColumns();
+      segR23.camera.invertColumns();
+      segR24.camera.invertColumns();
+      break;
+    case r3.domId:
+      r3.camera.invertColumns();
+      segR31.camera.invertColumns();
+      segR32.camera.invertColumns();
+      segR33.camera.invertColumns();
+      segR34.camera.invertColumns();
+      break;
+    default:
+  }
+}
+
+export function Vertical (id) {
+  switch (id) {
+    case r1.domId:
+      r1.camera.invertRows();
+      segR11.camera.invertRows();
+      segR12.camera.invertRows();
+      segR13.camera.invertRows();
+      segR14.camera.invertRows();
+      break;
+    case r2.domId:
+      r2.camera.invertRows();
+      segR22.camera.invertRows();
+      segR23.camera.invertRows();
+      segR24.camera.invertRows();
+      break;
+    case r3.domId:
+      r3.camera.invertRows();
+      segR32.camera.invertRows();
+      segR33.camera.invertRows();
+      segR34.camera.invertRows();
+      break;
+    default:
+  }
+}
+
 export function CameraCtrl (enable) {
   // console.log('#cam ctrl ' + enable)
   r1.controls.viewcontrol = enable;
@@ -2155,7 +2207,7 @@ function initSegment(rendererObj){
   // controls
   rendererObj.controls = new Medic3D.Controls.TrackballOrtho(rendererObj.camera, rendererObj.domElement);
   rendererObj.controls.staticMoving = true;
-  rendererObj.controls.noRotate = true;
+  rendererObj.controls.noRotate = false;
   rendererObj.camera.controls = rendererObj.controls;
 
   rendererObj.container = new THREE.Object3D();

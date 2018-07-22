@@ -521,6 +521,7 @@
               return
             }
             console.log('#Horizontal')
+            Medic3D.Horizontal(this.focusedCanvas.id);
             break
           case 'Vertical':
             if (!this.focusedCanvas || !this.focusedCanvas.id) {
@@ -531,6 +532,7 @@
               alert('Please select a Non-3D Display.')
               return
             }
+            Medic3D.Vertical(this.focusedCanvas.id);
             console.log('#Vertical')
             break
           case 'MaskOpacity':
@@ -733,6 +735,7 @@
       },
       fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
+//        this.loadAutoSegmentation(null)
         const baseURI = 'http://210.116.109.38:20011';
         this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
           .then((result) => {
