@@ -193,7 +193,8 @@
         slice_r1: 122,    // temporary
         slice_r2: 122,    // temporary
         slice_r3: 122,    // temporary
-        dicom_name: null
+        dicom_name: null,
+        baseURI: 'http://210.116.109.40:3000'
       }
     },
     created () {
@@ -446,6 +447,7 @@
 
           case 'BrainRoiSegmentation':
 //            console.log('#BrainRoiSegmentation')
+            console.log(`baseURI: ${this.baseURI}`)
             fileName = null
             if (this.dicom_name) {
               fileName = this.dicom_name
@@ -465,18 +467,25 @@
             }
             break;
           case 'AnalysisReport':
-            if (!this.showAnalysisReportPopup) {
-              if (!Medic3D.getReports() || Medic3D.getReports().length === 0) {
-                alert('Error: No segmentation data.')
-                return
-              }
-              this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
-              this.captureDicomImage()
-              this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
+            if (!this.dicom_name) {
+              alert('Error: No dicom data.')
+              return
             }
+            console.log(`fileid = ${this.dicom_name}.nii`)
+            window.open(`${this.baseURI}/report?fileid=${this.dicom_name}.nii`)
+//            if (!this.showAnalysisReportPopup) {
+//              if (!Medic3D.getReports() || Medic3D.getReports().length === 0) {
+//                alert('Error: No segmentation data.')
+//                return
+//              }
+//              this.$store.commit(mutationType.SET_CHART_REPORTS, this.setChartImage())
+//              this.captureDicomImage()
+//              this.showAnalysisReportPopupToggle(!this.showAnalysisReportPopup)
+//            }
             break;
           case 'OpenSegmentations':
 //            console.log('#OpenSegmentations')
+            console.log(`baseURI: ${this.baseURI}`)
             fileName = null
             if (this.dicom_name) {
               fileName = this.dicom_name
@@ -699,7 +708,7 @@
       fetchBrainRoiSegmentation (fileName) {
         this.loadingSpinner.loading = true
         const formData = new FormData()
-        const baseURI = 'http://210.116.109.38:20011';
+        const baseURI = this.baseURI
         const url = `http://${location.host}/static/nii/${fileName}.nii`
         fetch(url, { method: 'get' })
           .then(res => (console.log(res), res.blob()))
@@ -745,11 +754,14 @@
                 this.loadingSpinner.loading = false
               })
           })
+          .catch((error) => {
+            this.loadingSpinner.loading = false
+          })
       },
       fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
-//        this.loadAutoSegmentation(null)
-        const baseURI = 'http://210.116.109.38:20011';
+        this.loadAutoSegmentation(null)
+        const baseURI = this.baseURI
         this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
           .then((result) => {
             if (result.data) {

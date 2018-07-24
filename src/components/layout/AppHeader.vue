@@ -40,7 +40,7 @@
 
         <div class="nav-right">
           <span class="nav-warning-info-span">
-            해당 프로그램은 Dicom 및 사용자 정보를 서버에 저장하지 않습니다.
+            입력 영상 정보는 분석 이외의 다른 목적으로 사용되지 않습니다.
           </span>
           <a class="button nav-help-button"
              @click="helpButtonClicked">
