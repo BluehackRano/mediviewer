@@ -194,7 +194,7 @@
         slice_r2: 122,    // temporary
         slice_r3: 122,    // temporary
         dicom_name: null,
-        baseURI: 'http://203.255.252.246:3000'
+        baseURI: 'http://210.116.109.40:3000'
       }
     },
     created () {
