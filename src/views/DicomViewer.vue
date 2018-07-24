@@ -447,6 +447,7 @@
 
           case 'BrainRoiSegmentation':
 //            console.log('#BrainRoiSegmentation')
+            console.log(`baseURI: ${this.baseURI}`)
             fileName = null
             if (this.dicom_name) {
               fileName = this.dicom_name
@@ -484,6 +485,7 @@
             break;
           case 'OpenSegmentations':
 //            console.log('#OpenSegmentations')
+            console.log(`baseURI: ${this.baseURI}`)
             fileName = null
             if (this.dicom_name) {
               fileName = this.dicom_name
