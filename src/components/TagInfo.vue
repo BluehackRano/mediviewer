@@ -17,12 +17,38 @@
       <span>Image dimensions (Y, Z, X) : </span><br><span>{{ tagInfo.imageDimensions }}</span><br>
       <span>Voxel dimensions (Y, Z, X) : </span><br><span>{{ tagInfo.voxelDimensions }}</span><br>
     </div>
-    <div class="tags-left-bottom">
-      <div class="tags-left-bottom-inner"
+    <div class="tags-bottom">
+      <div class="tags-bottom-inner"
            v-if="sliceNum">
         {{sliceNum}}/256
       </div>
     </div>
+    <template v-if="canvasId">
+      <template v-if="canvasId === 'layout-1-2' || canvasId === 'layout-2-2'">
+        <div class="left-bottom">
+          <div class="left-bottom-inner"
+               v-if="sliceNum">
+            <template v-if="flip === true">
+              {{ left }}
+            </template>
+            <template v-else-if="flip === false">
+              {{ right }}
+            </template>
+          </div>
+        </div>
+        <div class="right-bottom">
+          <div class="right-bottom-inner"
+               v-if="sliceNum">
+            <template v-if="flip === true">
+              {{ right }}
+            </template>
+            <template v-else-if="flip === false">
+              {{ left }}
+            </template>
+          </div>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 
@@ -38,21 +64,34 @@
       sliceNum: {
         type: Number,
         default: null
+      },
+      canvasId: {
+        type: String,
+        default: null
       }
     },
     computed: {
       ...mapGetters([
-        'tagInfo'
+        'tagInfo',
+        'focusedCanvas'
       ])
     },
     data () {
       return {
+        flip: true,
+        left: 'L',
+        right: 'R'
       }
     },
     created () {
       this.$bus.$on(busType.FILE_UPLOADED, this.dicomFileUploaded)
+      this.$bus.$on(busType.FLIP_HORIZONTAL, this.flipHorizontal)
+      this.$bus.$on(busType.RESET_TAG_INFO, this.resetTagInfo)
     },
     methods: {
+      resetTagInfo () {
+        this.flip = true
+      },
       dicomFileUploaded (dicomFile) {
 //        switch (dicomFile.name) {
 //          case 'dicom-001-02.zip':
@@ -73,6 +112,13 @@
 //          default:
 //            break;
 //        }
+      },
+      flipHorizontal () {
+        console.log(this.canvasId)
+        console.log(this.flip)
+        if (this.canvasId === this.focusedCanvas.id) {
+          this.flip = !this.flip
+        }
       }
     }
   }
@@ -103,18 +149,65 @@
     text-overflow: ellipsis;
   }
 
-  .tags-left-bottom {
+  .tags-bottom {
+    position: absolute;
+    left: 0;
+    bottom: 30px;
+    width: 100%;
+    height: 40%;
+    color: #cfcfcf;
+
+    .tags-bottom-inner {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      text-align: center;
+    }
+  }
+
+  .left-bottom {
     position: absolute;
     left: 30px;
     bottom: 30px;
     width: 40%;
     height: 40%;
-    text-align: left;
     color: #cfcfcf;
 
-    .tags-left-bottom-inner {
+    .left-bottom-inner {
       position: absolute;
+      width: 100%;
       bottom: 0;
+      text-align: left;
+      font-family: AppleSDGothicNeo;
+      font-size: 15px;
+      font-weight: 800;
+      font-style: normal;
+      font-stretch: normal;
+      letter-spacing: normal;
+      color: #4a90e2;
+    }
+  }
+
+  .right-bottom {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    width: 40%;
+    height: 40%;
+    color: #cfcfcf;
+
+    .right-bottom-inner {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      text-align: right;
+      font-family: AppleSDGothicNeo;
+      font-size: 15px;
+      font-weight: 800;
+      font-style: normal;
+      font-stretch: normal;
+      letter-spacing: normal;
+      color: #4a90e2;
     }
   }
 
