@@ -903,6 +903,7 @@ export function loadZip (uploadedFile, cb) {
             gDicomStack = stack;
             // r1.camera.rotate();
             // r1.camera.rotate();
+            r1.camera.invertColumns();
             r2.camera.rotate();
             r2.camera.rotate();
             r3.camera.rotate();
@@ -1191,6 +1192,8 @@ export function loadSegmentationLocal (segUrl) {
             initSegRender(r1.domId);
             initSegRender(r2.domId);
             initSegRender(r3.domId);
+
+            adjustR1Orientation()
 
             resolve(true);
           }
@@ -1981,6 +1984,14 @@ export function Vertical (id) {
       break;
     default:
   }
+}
+
+function  adjustR1Orientation () {
+  // r1.camera.invertRows();
+  segR11.camera.invertRows();
+  segR12.camera.invertRows();
+  segR13.camera.invertRows();
+  segR14.camera.invertRows();
 }
 
 export function CameraCtrl (enable) {
