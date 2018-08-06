@@ -14,6 +14,7 @@ let ready = false;
 let aDicomRawData = null
 let shouldShowSegmentation = false;
 let reports = [];
+let localSegmentFileName = null
 
 const shaders = {
   vertex : `
@@ -1117,7 +1118,7 @@ export function loadSegmentation_org (uploadedFile) {
     });
 }
 
-export function loadSegmentationLocal (segUrl) {
+export function loadSegmentationLocal (segUrl, fileName) {
   return new Promise((resolve, reject) => {
     Request({
       method: 'GET',
@@ -1141,6 +1142,9 @@ export function loadSegmentationLocal (segUrl) {
           // console.log('Loaded seg. ' + data.length);
           // reports = data.slice(0, 9);
 
+          // localSegmentFileName = fileName
+          console.log(localSegmentFileName)
+
           segR11.texture = data[9];
           segR12.texture = data[10];
           segR13.texture = data[11];
@@ -1159,20 +1163,20 @@ export function loadSegmentationLocal (segUrl) {
           if (stack !== null) {
             shouldShowSegmentation = true;
 
-            initScreen(segR11);
-            initScreen(segR12);
-            initScreen(segR13);
-            initScreen(segR14);
+            initScreen(segR11, fileName);
+            initScreen(segR12, fileName);
+            initScreen(segR13, fileName);
+            initScreen(segR14, fileName);
 
-            initScreen(segR21);
-            initScreen(segR22);
-            initScreen(segR23);
-            initScreen(segR24);
+            initScreen(segR21, fileName);
+            initScreen(segR22, fileName);
+            initScreen(segR23, fileName);
+            initScreen(segR24, fileName);
 
-            initScreen(segR31);
-            initScreen(segR32);
-            initScreen(segR33);
-            initScreen(segR34);
+            initScreen(segR31, fileName);
+            initScreen(segR32, fileName);
+            initScreen(segR33, fileName);
+            initScreen(segR34, fileName);
 
             combineMprSeg(r0, segR11, stack);
             combineMprSeg(r0, segR12, stack);
@@ -2308,11 +2312,15 @@ function initBox(xspaceLength, yspaceLength, zspaceLength){
   segR11.camera.position.z = segR11.spaceLength.z;
 }
 
-function initScreen(render){
+function initScreen(render, fileName){
   render.screenContainer = new THREE.Object3D();
 
-  var mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data1/out_" + render.targetID + ".png" )
-  // var mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
+  var mosaicTexture = null
+  if (fileName !== null) {
+    mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/" + fileName + "/out_" + render.targetID + ".png" )
+  } else {
+    // mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
+  }
   // mosaicTexture.needsUpdate = true;
   mosaicTexture.magFilter = THREE.LinearFilter;
   mosaicTexture.minFilter = THREE.LinearFilter;

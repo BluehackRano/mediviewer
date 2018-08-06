@@ -726,7 +726,7 @@
                 if (result.data) {
                   if (result.data.is_completed) {
                     this.setReportState(result.data)
-                    this.loadAutoSegmentation(result.data.download_url)
+                    this.loadAutoSegmentation(result.data.download_url, fileName)
                   } else {
                     console.log('Loading ...')
                     let anInterval = setInterval(() => {
@@ -736,7 +736,7 @@
                             if (result.data.is_completed) {
                               clearInterval(anInterval)
                               console.log(result)
-                              this.loadAutoSegmentation(result.data.download_url)
+                              this.loadAutoSegmentation(result.data.download_url, fileName)
                               this.setReportState(result.data)
                             } else {
                               console.log('Polling for result data ...')
@@ -760,28 +760,28 @@
       },
       fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
-        this.loadAutoSegmentation(null)
-        const baseURI = this.baseURI
-        this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
-          .then((result) => {
-            if (result.data) {
-              if (result.data.is_completed) {
-                console.log(result)
-                this.loadAutoSegmentation(result.data.download_url)
-                this.setReportState(result.data)
-              } else {
-                this.fetchBrainRoiSegmentation(fileName)
-              }
-            }
-          })
-          .catch((error) => {
-            this.loadingSpinner.loading = false
-          })
+        this.loadAutoSegmentation(null, fileName)
+//        const baseURI = this.baseURI
+//        this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
+//          .then((result) => {
+//            if (result.data) {
+//              if (result.data.is_completed) {
+//                console.log(result)
+//                this.loadAutoSegmentation(result.data.download_url)
+//                this.setReportState(result.data)
+//              } else {
+//                this.fetchBrainRoiSegmentation(fileName)
+//              }
+//            }
+//          })
+//          .catch((error) => {
+//            this.loadingSpinner.loading = false
+//          })
       },
-      loadAutoSegmentation (url) {
-        Medic3D.loadSegmentationLocal(url, true)
+      loadAutoSegmentation (url, fileName) {
+//        Medic3D.loadSegmentationLocal(url, true)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
-//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', true)
+        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', fileName)
           .then(() => {
             this.loadingSpinner.loading = false
           })
