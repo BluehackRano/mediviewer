@@ -58,6 +58,7 @@
               class="tags-info-view"
               v-show="showTags"
               :sliceNum="slice_r1"
+              :canvasId="'layout-1-2'"
             ></tag-info>
 
             <div class="loading-spinner-dimmed-view"
@@ -119,6 +120,7 @@
               class="tags-info-view"
               v-show="showTags"
               :sliceNum="slice_r3"
+              :canvasId="'layout-2-2'"
             ></tag-info>
 
             <div class="loading-spinner-dimmed-view"
@@ -543,6 +545,7 @@
               return
             }
             console.log('#Horizontal')
+            this.$bus.$emit(busType.FLIP_HORIZONTAL)
             Medic3D.Horizontal(this.focusedCanvas.id);
             break
           case 'Vertical':

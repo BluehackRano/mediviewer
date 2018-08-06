@@ -75,6 +75,7 @@
       resetAndIntializeViews () {
         // TODO: for reset and initialize views code here.
         this.$bus.$emit(busType.SHOW_MASK_OPACITY_POPUP, false)
+        this.$bus.$emit(busType.RESET_TAG_INFO)
         this.$store.commit(mutationType.SELECT_CANVAS, null)
       },
       fileUploaded () {
