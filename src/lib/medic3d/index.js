@@ -1145,18 +1145,18 @@ export function loadSegmentationLocal (segUrl, fileName) {
           // localSegmentFileName = fileName
           console.log(localSegmentFileName)
 
-          segR11.texture = data[9];
-          segR12.texture = data[10];
-          segR13.texture = data[11];
-          segR14.texture = data[12];
-          segR21.texture = data[13];
-          segR22.texture = data[14];
-          segR23.texture = data[15];
-          segR24.texture = data[16];
-          segR31.texture = data[17];
-          segR32.texture = data[18];
-          segR33.texture = data[19];
-          segR34.texture = data[20];
+          segR11.texture = data[18];
+          segR12.texture = data[19];
+          segR13.texture = data[20];
+          segR14.texture = data[21];
+          segR21.texture = data[22];
+          segR22.texture = data[23];
+          segR23.texture = data[24];
+          segR24.texture = data[25];
+          segR31.texture = data[26];
+          segR32.texture = data[27];
+          segR33.texture = data[28];
+          segR34.texture = data[29];
 
 
           var stack = getDicomStack();
@@ -1197,7 +1197,9 @@ export function loadSegmentationLocal (segUrl, fileName) {
             initSegRender(r2.domId);
             initSegRender(r3.domId);
 
-            adjustR1Orientation()
+            // adjustR1Orientation()
+            adjustR2Orientation()
+            // adjustR1Orientation()
 
             resolve(true);
           }
@@ -1583,28 +1585,28 @@ function onScroll (event) {
       case r1.domId:
         if (stackHelper.index < 64) {
           uniforms = segR11.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index;
+          uniforms.indexSliceToDisplay.value = 64 - stackHelper.index;
 
           segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
           uniforms = segR12.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+          uniforms.indexSliceToDisplay.value = 64*2 - stackHelper.index;
 
           segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR13.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
           uniforms = segR13.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+          uniforms.indexSliceToDisplay.value = 64*3 - stackHelper.index;
 
           segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR14.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
           uniforms = segR14.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+          uniforms.indexSliceToDisplay.value = 64*4 - stackHelper.index;
 
           segR11.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR12.shaderMat.uniforms.indexSliceToDisplay.value = -1;
@@ -1615,28 +1617,28 @@ function onScroll (event) {
       case r2.domId:
         if (stackHelper.index < 64) {
           uniforms = segR21.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index;
+          uniforms.indexSliceToDisplay.value = 64 - stackHelper.index;
 
           segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 <= stackHelper.index && stackHelper.index < 64 * 2) {
           uniforms = segR22.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64;
+          uniforms.indexSliceToDisplay.value = 64*2 - stackHelper.index
 
           segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR23.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 * 2 <= stackHelper.index && stackHelper.index < 64 * 3) {
           uniforms = segR23.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 2;
+          uniforms.indexSliceToDisplay.value = 64*3 - stackHelper.index
 
           segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR24.shaderMat.uniforms.indexSliceToDisplay.value = -1;
         } else if (64 * 3 <= stackHelper.index && stackHelper.index < 64 * 4) {
           uniforms = segR24.shaderMat.uniforms;
-          uniforms.indexSliceToDisplay.value = stackHelper.index - 64 * 3;
+          uniforms.indexSliceToDisplay.value = 64*4 - stackHelper.index
 
           segR21.shaderMat.uniforms.indexSliceToDisplay.value = -1;
           segR22.shaderMat.uniforms.indexSliceToDisplay.value = -1;
@@ -1998,6 +2000,14 @@ function  adjustR1Orientation () {
   segR14.camera.invertRows();
 }
 
+function  adjustR2Orientation () {
+  // r1.camera.invertRows();
+  segR21.camera.invertRows();
+  segR22.camera.invertRows();
+  segR23.camera.invertRows();
+  segR24.camera.invertRows();
+}
+
 export function CameraCtrl (enable) {
   // console.log('#cam ctrl ' + enable)
   r1.controls.viewcontrol = enable;
@@ -2312,16 +2322,38 @@ function initBox(xspaceLength, yspaceLength, zspaceLength){
   segR11.camera.position.z = segR11.spaceLength.z;
 }
 
+function chunkArray(array, chunk_size) {
+  var results = new Uint8Array()
+
+  while (array.length) {
+    results.append(array.slice(0, chunk_size))
+  }
+  return results;
+}
+
+function reversePngArray(data) {
+  var array = new Uint8Array(data.length)
+
+  const old_array = chunkArray(data, 256*256*4)
+  for (var i=0; i < old_array.length; i++) {
+    array.append(old_array[old_array.length - i])
+  }
+  return array
+}
+
 function initScreen(render, fileName){
   render.screenContainer = new THREE.Object3D();
 
   var mosaicTexture = null
   if (fileName !== null) {
-    mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/" + fileName + "/out_" + render.targetID + ".png" )
+    // mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/data/" + fileName + "/out_" + render.targetID + ".png" )
+    // mosaicTexture = THREE.ImageUtils.loadTexture( "../../../static/result/out_" + render.targetID + ".png" )
+    // mosaicTexture = new THREE.DataTexture(reversePngArray(render.texture.data), 256, 256*64, THREE.RGBAFormat );
+    mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
   } else {
-    // mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
+    mosaicTexture = new THREE.DataTexture(render.texture.data, 256, 256*64, THREE.RGBAFormat );
   }
-  // mosaicTexture.needsUpdate = true;
+  mosaicTexture.needsUpdate = true;
   mosaicTexture.magFilter = THREE.LinearFilter;
   mosaicTexture.minFilter = THREE.LinearFilter;
   //mosaicTexture.flipY = false;

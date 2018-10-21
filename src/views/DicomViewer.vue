@@ -784,7 +784,7 @@
       loadAutoSegmentation (url, fileName) {
 //        Medic3D.loadSegmentationLocal(url, true)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
-        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/result.zip', fileName)
+        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/org.zip', fileName)
           .then(() => {
             this.loadingSpinner.loading = false
           })
