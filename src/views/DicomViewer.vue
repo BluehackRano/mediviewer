@@ -401,7 +401,7 @@
 //              console.log(`Down \ndeltaX : ${deltaX} / deltaY : ${deltaY}`)
             }
 
-            if (this.mode === 'BrightnessContrast') {
+            if (this.mode === 'BrightnessContrast' || this.mode === 'WindowLevel') {
 //              console.log('adjust brightnesscontrast');
               Medic3D.adjustBrightness(deltaX);
             }
