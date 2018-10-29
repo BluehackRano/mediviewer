@@ -10,6 +10,15 @@
     <mask-opacity-popup
       v-show="showMaskOpacityPopup">
     </mask-opacity-popup>
+    <div
+      class="pacs-popup-container"
+      v-if="showPacsPopup"
+      @click="pacsPopupContainerClicked">
+      <pacs-popup
+        style="opacity: 1;">
+      </pacs-popup>
+    </div>
+
 
     <help-popup
       v-show="showHelpPopup">
@@ -25,6 +34,7 @@
   import SegmentationPopup from '@/components/popups/SegmentationPopup'
   import AnalysisReportPopup from '@/components/popups/AnalysisReportPopup'
   import MaskOpacityPopup from '@/components/popups/MaskOpacityPopup'
+  import PacsPopup from '@/components/popups/PacsPopup'
   import HelpPopup from '@/components/popups/HelpPopup'
 
   export default {
@@ -41,6 +51,8 @@
         isFileUploaded: false,
         showSegmentationPopup: false,
         showMaskOpacityPopup: false,
+        showPacsPopup: false,
+        showPacsPopupInner: false,
         showHelpPopup: false
       }
     },
@@ -48,6 +60,7 @@
       SegmentationPopup,
       AnalysisReportPopup,
       MaskOpacityPopup,
+      PacsPopup,
       HelpPopup
     },
     created () {
@@ -57,6 +70,7 @@
       this.$bus.$on(busType.SHOW_SEGMENTATION_POPUP, this.showSegmentationPopupToggle)
       this.$bus.$on(busType.SHOW_ANALYSIS_REPORT_POPUP, this.showAnalysisReportPopupToggle)
       this.$bus.$on(busType.SHOW_MASK_OPACITY_POPUP, this.showMaskOpacityPopupToggle)
+      this.$bus.$on(busType.SHOW_PACS_POPUP, this.showPacsPopupToggle)
       this.$bus.$on(busType.SHOW_HELP_POPUP, this.showHelpPopupToggle)
     },
     mounted () {
@@ -152,6 +166,17 @@
 //        }
 //        this.showMaskOpacityPopup = !this.showMaskOpacityPopup
       },
+      showPacsPopupToggle (show) {
+        if (show) {
+          this.showPacsPopup = show
+          return
+        }
+        this.showPacsPopup = !this.showPacsPopup
+      },
+      pacsPopupContainerClicked (e) {
+        e.stopPropagation()
+        e.preventDefault()
+      },
       showHelpPopupToggle (show) {
         if (show) {
           this.showHelpPopup = show
@@ -165,5 +190,14 @@
 
 <style lang="scss" scoped>
   #app-main {
+  }
+  .pacs-popup-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    z-index: 3000;
+    background-color: rgba(0,0,0,0.6);
   }
 </style>

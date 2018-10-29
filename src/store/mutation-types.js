@@ -1,3 +1,7 @@
+export const SET_DICOM_FILE = 'SET_DICOM_FILE'
+
+export const SET_SEG_FILE = 'SET_SEG_FILE'
+
 export const EXPAND_MENU = 'EXPAND_MENU'
 
 export const SELECT_MENU = 'SELECT_MENU'

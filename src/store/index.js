@@ -11,6 +11,8 @@ Vue.use(Vuex)
 
 const state = {
   userId: 'abcd',
+  dicomFile: '',
+  segFile: '',
   currentLayout: {
     name: '2By2'
   },
@@ -31,6 +33,8 @@ const state = {
 }
 
 const getters = {
+  dicomFile: state => state.dicomFile,
+  segFile: state => state.segFile,
   focusedCanvas: state => state.focusedCanvas,
   tagInfo: state => state.tagInfo,
   showAnalysisReportPopup: state => state.showAnalysisReportPopup,

@@ -1,4 +1,10 @@
 export default {
+  SET_DICOM_FILE (state, dicomFile) {
+    state.dicomFile = dicomFile
+  },
+  SET_SEG_FILE (state, segFile) {
+    state.segFile = segFile
+  },
   SET_USER_ID (state, userId) {
     state.userId = userId
   },
