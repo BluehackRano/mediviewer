@@ -766,6 +766,7 @@
       fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
         this.fetchBrainRoiSegmentation(fileName)
+        // this.fetchBrainRoiSegmentation(fileName)
         // this.loadAutoSegmentation(null, fileName)
 //        const baseURI = this.baseURI
 //        this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
@@ -787,7 +788,7 @@
       loadAutoSegmentation (url, fileName) {
        Medic3D.loadSegmentationLocal(url, fileName)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
-//         Medic3D.loadSegmentationLocal('http://' + location.host + '/static/org.zip', fileName)
+//        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/org.zip', fileName)
           .then(() => {
             this.loadingSpinner.loading = false
           })
