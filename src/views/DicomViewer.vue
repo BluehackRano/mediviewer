@@ -401,7 +401,7 @@
 //              console.log(`Down \ndeltaX : ${deltaX} / deltaY : ${deltaY}`)
             }
 
-            if (this.mode === 'BrightnessContrast') {
+            if (this.mode === 'BrightnessContrast' || this.mode === 'WindowLevel') {
 //              console.log('adjust brightnesscontrast');
               Medic3D.adjustBrightness(deltaX);
             }
@@ -474,7 +474,9 @@
               return
             }
             console.log(`fileid = ${this.dicom_name}.nii`)
-            window.open(`${this.baseURI}/report?fileid=${this.dicom_name}.nii`)
+            const reportUrl = 'http://210.116.109.40:3004/api/report?filename='
+            window.open(`${reportUrl}${this.dicom_name}.nii`)
+            // window.open(`${this.baseURI}/report?fileid=${this.dicom_name}.nii`)
 //            if (!this.showAnalysisReportPopup) {
 //              if (!Medic3D.getReports() || Medic3D.getReports().length === 0) {
 //                alert('Error: No segmentation data.')
@@ -763,7 +765,8 @@
       },
       fetchOpenSegmentations (fileName) {
         this.loadingSpinner.loading = true
-        this.loadAutoSegmentation(null, fileName)
+        this.fetchBrainRoiSegmentation(fileName)
+        // this.loadAutoSegmentation(null, fileName)
 //        const baseURI = this.baseURI
 //        this.$http.get(`${baseURI}/analysis/result/${fileName}.nii`)
 //          .then((result) => {
@@ -782,9 +785,9 @@
 //          })
       },
       loadAutoSegmentation (url, fileName) {
-//        Medic3D.loadSegmentationLocal(url, true)
+       Medic3D.loadSegmentationLocal(url, fileName)
 //        Medic3D.loadSegmentationLocal('http://210.116.109.38:20012/zip?fileid=' + fileId, true)
-        Medic3D.loadSegmentationLocal('http://' + location.host + '/static/org.zip', fileName)
+//         Medic3D.loadSegmentationLocal('http://' + location.host + '/static/org.zip', fileName)
           .then(() => {
             this.loadingSpinner.loading = false
           })

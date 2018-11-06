@@ -4,29 +4,28 @@
     <div class="hero-head">
 
       <div class="nav-load-file-area">
-        <b-field class="nav-load-file-b-field">
-          <b-upload v-model="files" accept=".zip" @change.native="fileUploaded">
-            <a class="button nav-load-file-button">
-              <img src="/static/images/icons/img-nor-over-open-dicom.svg">
-              <span>Load Dicom file</span>
-            </a>
-          </b-upload>
-        </b-field>
+        <!--<b-field class="nav-load-file-b-field">-->
+          <!--<b-upload v-model="files" accept=".zip" @change.native="fileUploaded">-->
+            <!--<a class="button nav-load-file-button">-->
+              <!--<img src="/static/images/icons/img-nor-over-open-dicom.svg">-->
+              <!--<span>Load Dicom file</span>-->
+            <!--</a>-->
+          <!--</b-upload>-->
+        <!--</b-field>-->
+        <a
+          class="button nav-load-file-button"
+          @click="loadDicomClicked"
+        >
+          <img src="/static/images/icons/img-nor-over-open-dicom.svg">
+          <span>Load Dicom file</span>
+        </a>
 
         <span class="nav-load-file-label">
-          <template v-if="files && files.length">&nbsp; | &nbsp;Dicom : {{ files[0].name }}</template>
-          <template v-if="segmentationFile">&nbsp; | &nbsp;Segmentation : {{ segmentationFile.name }}</template>
+          <template v-if="dicomFile && dicomFile.name">&nbsp; | &nbsp;Dicom : {{ dicomFile.name }}</template>
+          <!--<template v-if="segmentationFile">&nbsp; | &nbsp;Segmentation : {{ segmentationFile.name }}</template>-->
         </span>
       </div>
 
-      <!--<b-field style="position: fixed; left: 260px; top: 0; height: 52px; width: 250px; z-index: 1025;">-->
-        <!--<b-upload v-model="files" accept=".zip" @change.native="loadSegmetation">-->
-          <!--<a class="button is-white" style="width: 100%; height: 100%;">-->
-            <!--<img src="/static/sample/imgs/folder_open.png" style="width: 24px; height: 24px; top: 0; left: 0;">-->
-            <!--&nbsp;<span>Load Segmentation</span>-->
-          <!--</a>-->
-        <!--</b-upload>-->
-      <!--</b-field>-->
 
       <nav class="nav">
         <div class="nav-left">
@@ -62,15 +61,21 @@
     data () {
       return {
         files: null,
+        dicomFile: null,
         segmentationFile: null
       }
     },
     created () {
+      this.$bus.$on(busType.FILE_UPLOADED, this.setUploadedFile)
       this.$bus.$on(busType.FILE_UPLOADED_SEG, this.segmentationFileUploaded)
     },
     methods: {
       logoClicked () {
         this.$router.go('/')
+      },
+      loadDicomClicked () {
+        console.log('loadDicomClicked')
+        this.$bus.$emit(busType.SHOW_PACS_POPUP, true)
       },
       resetAndIntializeViews () {
         // TODO: for reset and initialize views code here.
@@ -78,14 +83,19 @@
         this.$bus.$emit(busType.RESET_TAG_INFO)
         this.$store.commit(mutationType.SELECT_CANVAS, null)
       },
+      setUploadedFile (uploadedFile) {
+        this.resetAndIntializeViews()
+        this.dicomFile = uploadedFile
+        this.$bus.$emit(busType.FILE_UPLOADED_SEG, null)
+      },
+      /**
+       * DEPRECATED
+       */
       fileUploaded () {
         this.resetAndIntializeViews()
         // .
         this.$bus.$emit(busType.FILE_UPLOADED_SEG, null)
         this.$bus.$emit(busType.FILE_UPLOADED, this.files[0])
-      },
-      loadSegmetation () {
-//        this.$bus.$emit(busType.FILE_UPLOADED_SEG, this.files[0])
       },
       segmentationFileUploaded (segmentationFile) {
         this.segmentationFile = segmentationFile
