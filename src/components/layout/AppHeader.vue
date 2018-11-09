@@ -4,26 +4,54 @@
     <div class="hero-head">
 
       <div class="nav-load-file-area">
-        <!--<b-field class="nav-load-file-b-field">-->
-          <!--<b-upload v-model="files" accept=".zip" @change.native="fileUploaded">-->
-            <!--<a class="button nav-load-file-button">-->
-              <!--<img src="/static/images/icons/img-nor-over-open-dicom.svg">-->
-              <!--<span>Load Dicom file</span>-->
-            <!--</a>-->
-          <!--</b-upload>-->
-        <!--</b-field>-->
-        <a
-          class="button nav-load-file-button"
-          @click="loadDicomClicked"
-        >
-          <img src="/static/images/icons/img-nor-over-open-dicom.svg">
-          <span>Load Dicom file</span>
-        </a>
+        <div class="select-from-area"
+             id="select-from-server-button">
+          <a
+            class="select-from-button"
+            @click="fromServer = true"
+            :class="{ active: fromServer }"
+          >
+            <span>| from Server</span>
+          </a>
+        </div>
+        <div class="select-from-area"
+             id="select-from-local-button">
+          <a
+            class="select-from-button"
+            @click="fromServer = false"
+            :class="{ active: !fromServer }"
+          >
+            <span>| from Local</span>
+          </a>
+        </div>
+        <template v-if="fromServer">
+          <a
+            class="button nav-load-file-button"
+            @click="loadDicomClicked"
+          >
+            <img src="/static/images/icons/img-nor-over-open-dicom.svg">
+            <span>Load Dicom file</span>
+          </a>
+        </template>
+        <template v-else>
+          <b-field class="nav-load-file-b-field">
+            <b-upload v-model="files" accept=".zip" @change.native="fileUploaded">
+              <a class="button nav-load-file-button">
+                <img src="/static/images/icons/img-nor-over-open-dicom.svg">
+                <span>Load Dicom file</span>
+              </a>
+            </b-upload>
+          </b-field>
+        </template>
 
-        <span class="nav-load-file-label">
-          <template v-if="dicomFile && dicomFile.name">&nbsp; | &nbsp;Dicom : {{ dicomFile.name }}</template>
-          <!--<template v-if="segmentationFile">&nbsp; | &nbsp;Segmentation : {{ segmentationFile.name }}</template>-->
-        </span>
+        <template v-if="fromServer">
+          <span v-if="dicomFile && dicomFile.name"
+                class="nav-load-file-label">&nbsp; | &nbsp;Dicom : {{ dicomFile.name }}</span>
+        </template>
+        <template v-else>
+          <span v-if="files && files.length"
+                class="nav-load-file-label">&nbsp; | &nbsp;Dicom : {{ files[0].name }}</span>
+        </template>
       </div>
 
 
@@ -62,7 +90,8 @@
       return {
         files: null,
         dicomFile: null,
-        segmentationFile: null
+        segmentationFile: null,
+        fromServer: true
       }
     },
     created () {
@@ -88,9 +117,6 @@
         this.dicomFile = uploadedFile
         this.$bus.$emit(busType.FILE_UPLOADED_SEG, null)
       },
-      /**
-       * DEPRECATED
-       */
       fileUploaded () {
         this.resetAndIntializeViews()
         // .
@@ -148,35 +174,67 @@
   .nav-load-file-area {
     position: fixed;
     left: $sidebar-width;
+    width: 100vw;
     z-index: 1025;
     display: inline;
-  }
-  .nav-load-file-b-field {
 
-  }
-  .nav-load-file-button {
-    margin-top: 20px;
-    padding: 0 15px 0 0;
-    width: 172px;
-    height: 40px;
-    background-color: $header-load-file-button-normal-color;
-    color: $header-load-file-button-normal-label-color;
-    border: none;
+    .select-from-area {
+      position: absolute;
 
-    span {
-      font-size: 15px;
+      a {
+        color: #4a4a4a;
+
+        &:hover {
+          color: $header-load-file-button-normal-color;
+        }
+        &:active {
+          color: $header-load-file-button-normal-label-color;
+        }
+      }
+      a.active {
+        color: $header-load-file-button-normal-label-color;
+      }
     }
 
-    &:hover {
-      background-color: #4c456d;
+    #select-from-server-button {
+      margin-top: 17px;
+    }
+    #select-from-local-button {
+      margin-top: 38px;
     }
 
-    &:active {
-      background-color: #27305e;
+    .nav-load-file-b-field {
+      position: absolute;
+    }
+
+    .nav-load-file-button {
+      position: absolute;
+      margin-left: 120px;
+      margin-top: 20px;
+      padding: 0 15px 0 0;
+      width: 172px;
+      height: 40px;
+      background-color: $header-load-file-button-normal-color;
+      color: $header-load-file-button-normal-label-color;
+      border: none;
+
+      span {
+        font-size: 15px;
+      }
+
+      &:hover {
+        background-color: #4c456d;
+      }
+
+      &:active {
+        background-color: #27305e;
+      }
     }
   }
+
+
   .nav-load-file-label {
-    margin-left: 177px;
+    margin-left: 297px;
     margin-top: 30px;
     top: 0px;
     width: 800px;
