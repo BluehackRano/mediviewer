@@ -6,11 +6,11 @@
       <div class="nav-load-file-area">
         <div class="select-from-area"
              id="select-from-server-button">
-          <a
-            class="select-from-button"
-            @click="fromServer = true"
-            :class="{ active: fromServer }"
-          >
+          <a style="color: #4a4a4a;">
+            <!--class="select-from-button"-->
+            <!--:class="{ active: fromServer }"-->
+            <!--@click="fromServer = true"-->
+          <!--&gt;-->
             <span>| from Server</span>
           </a>
         </div>
@@ -91,7 +91,7 @@
         files: null,
         dicomFile: null,
         segmentationFile: null,
-        fromServer: true
+        fromServer: false
       }
     },
     created () {
@@ -198,6 +198,25 @@
 
     #select-from-server-button {
       margin-top: 17px;
+
+      /* DELETE below codes later */
+      cursor: not-allowed;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      a {
+        cursor: not-allowed;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
     }
     #select-from-local-button {
       margin-top: 38px;
